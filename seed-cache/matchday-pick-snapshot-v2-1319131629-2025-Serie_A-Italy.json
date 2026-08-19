@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787150692992,
+  "data": {
+    "pick": {
+      "label": "NG · No Goal",
+      "probability": 62.84,
+      "market": "GG/NG",
+      "selection": "ng",
+      "line": null
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:44:52.990Z"
+  }
+}

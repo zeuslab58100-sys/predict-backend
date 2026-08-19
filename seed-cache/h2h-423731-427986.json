@@ -1,0 +1,345 @@
+{
+  "createdAt": 1787139102537,
+  "data": [
+    {
+      "id": 1172858345,
+      "round": "Regular Season - 35",
+      "date": "2026-05-04T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1172607300,
+      "round": "Regular Season - 6",
+      "date": "2025-10-05T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1041576277,
+      "round": "Regular Season - 35",
+      "date": "2025-05-04T16:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 1041349911,
+      "round": "Regular Season - 9",
+      "date": "2024-10-27T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "5 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 895699559,
+      "round": "Regular Season - 28",
+      "date": "2024-03-10T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 895594035,
+      "round": "Regular Season - 15",
+      "date": "2023-12-10T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 750702775,
+      "round": "Regular Season - 37",
+      "date": "2023-05-27T16:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2022
+      }
+    },
+    {
+      "id": 750545340,
+      "round": "Regular Season - 18",
+      "date": "2023-01-15T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2022
+      }
+    },
+    {
+      "id": 622876618,
+      "round": "Regular Season - 36",
+      "date": "2022-05-09T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    },
+    {
+      "id": 622583874,
+      "round": "Regular Season - 1",
+      "date": "2021-08-22T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    }
+  ]
+}

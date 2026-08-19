@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787139047665,
+  "data": [
+    {
+      "id": 1331644733,
+      "round": "Round of 64",
+      "date": "2026-08-16T16:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 735197,
+        "logo": "https://highlightly.net/soccer/images/teams/735197.png",
+        "name": "Juve Stabia"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1352518061,
+      "round": "Club Friendlies",
+      "date": "2026-08-09T18:45:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347583963,
+      "round": "Club Friendlies",
+      "date": "2026-08-01T16:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 431390,
+        "logo": "https://highlightly.net/soccer/images/teams/431390.png",
+        "name": "Benevento"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347539711,
+      "round": "Club Friendlies",
+      "date": "2026-07-29T14:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 742005,
+        "logo": "https://highlightly.net/soccer/images/teams/742005.png",
+        "name": "Sambenedettese"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348823870,
+      "round": "Club Friendlies",
+      "date": "2026-07-26T16:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 432241,
+        "logo": "https://highlightly.net/soccer/images/teams/432241.png",
+        "name": "Ascoli"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

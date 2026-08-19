@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787137973272,
+  "data": [
+    {
+      "id": 1331648137,
+      "round": "Round of 64",
+      "date": "2026-08-17T16:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 433943,
+        "logo": "https://highlightly.net/soccer/images/teams/433943.png",
+        "name": "Cesena"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348883440,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T13:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "homeTeam": {
+        "id": 145454,
+        "logo": "https://highlightly.net/soccer/images/teams/145454.png",
+        "name": "FC Augsburg"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348867271,
+      "round": "Club Friendlies",
+      "date": "2026-08-05T18:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 4",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 458622,
+        "logo": "https://highlightly.net/soccer/images/teams/458622.png",
+        "name": "Celta de Vigo"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347563539,
+      "round": "Club Friendlies",
+      "date": "2026-07-31T17:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 8042734,
+        "logo": "https://highlightly.net/soccer/images/teams/8042734.png",
+        "name": "Folgore Caratese"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1365432837,
+      "round": "Club Friendly",
+      "date": "2026-07-25T16:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "homeTeam": {
+        "id": 14592881,
+        "logo": "https://highlightly.net/soccer/images/teams/14592881.png",
+        "name": "Trento"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

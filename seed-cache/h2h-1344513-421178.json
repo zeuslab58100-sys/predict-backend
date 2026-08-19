@@ -1,0 +1,243 @@
+{
+  "createdAt": 1787151211669,
+  "data": [
+    {
+      "id": 1041584787,
+      "round": "Regular Season - 36",
+      "date": "2025-05-11T10:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 1041404375,
+      "round": "Regular Season - 15",
+      "date": "2024-12-09T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "homeTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 895662966,
+      "round": "Regular Season - 23",
+      "date": "2024-02-03T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 895550634,
+      "round": "Regular Season - 10",
+      "date": "2023-10-29T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "homeTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 750640652,
+      "round": "Regular Season - 29",
+      "date": "2023-04-08T10:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2022
+      }
+    },
+    {
+      "id": 820419248,
+      "round": "2nd Round",
+      "date": "2022-10-19T19:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2022
+      }
+    },
+    {
+      "id": 750412584,
+      "round": "Regular Season - 3",
+      "date": "2022-08-26T16:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "homeTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2022
+      }
+    }
+  ]
+}

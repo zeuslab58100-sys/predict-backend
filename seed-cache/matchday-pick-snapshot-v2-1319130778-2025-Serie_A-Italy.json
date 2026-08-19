@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787150693049,
+  "data": {
+    "pick": {
+      "label": "2 · AC Milan",
+      "probability": 55.26,
+      "market": "1X2",
+      "selection": "away",
+      "line": null
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:44:53.048Z"
+  }
+}

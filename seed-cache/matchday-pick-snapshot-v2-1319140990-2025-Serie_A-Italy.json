@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787151211611,
+  "data": {
+    "pick": {
+      "label": "Tiri in porta Under 8.5",
+      "probability": 56.07,
+      "market": "Tiri in porta",
+      "selection": "under",
+      "line": 8.5
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:53:31.611Z"
+  }
+}

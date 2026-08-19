@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787137973294,
+  "data": [
+    {
+      "id": 1360417043,
+      "round": "Club Friendlies",
+      "date": "2026-08-14T18:45:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 452665,
+        "logo": "https://highlightly.net/soccer/images/teams/452665.png",
+        "name": "Athletic Club"
+      },
+      "homeTeam": {
+        "id": 425433,
+        "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+        "name": "Atalanta"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348889397,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T15:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 425433,
+        "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+        "name": "Atalanta"
+      },
+      "homeTeam": {
+        "id": 148858,
+        "logo": "https://highlightly.net/soccer/images/teams/148858.png",
+        "name": "FC Schalke 04"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347650341,
+      "round": "Club Friendlies",
+      "date": "2026-08-02T13:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 425433,
+        "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+        "name": "Atalanta"
+      },
+      "homeTeam": {
+        "id": 178643,
+        "logo": "https://highlightly.net/soccer/images/teams/178643.png",
+        "name": "Feyenoord"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1365467728,
+      "round": "Club Friendly",
+      "date": "2026-07-26T18:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 746260,
+        "logo": "https://highlightly.net/soccer/images/teams/746260.png",
+        "name": "Arezzo"
+      },
+      "homeTeam": {
+        "id": 425433,
+        "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+        "name": "Atalanta"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1172879620,
+      "round": "Regular Season - 38",
+      "date": "2026-05-22T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 425433,
+        "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+        "name": "Atalanta"
+      },
+      "homeTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    }
+  ]
+}

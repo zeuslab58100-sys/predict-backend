@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787150693025,
+  "data": {
+    "pick": {
+      "label": "Over 2.5",
+      "probability": 60.84,
+      "market": "Under/Over",
+      "selection": "over",
+      "line": 2.5
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:44:53.024Z"
+  }
+}

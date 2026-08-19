@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787139059213,
+  "data": [
+    {
+      "id": 1331643031,
+      "round": "Round of 64",
+      "date": "2026-08-15T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 765833,
+        "logo": "https://highlightly.net/soccer/images/teams/765833.png",
+        "name": "Modena"
+      },
+      "homeTeam": {
+        "id": 440751,
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "name": "Venezia"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348895354,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T16:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 440751,
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "name": "Venezia"
+      },
+      "homeTeam": {
+        "id": 90990,
+        "logo": "https://highlightly.net/soccer/images/teams/90990.png",
+        "name": "Stade Brestois 29"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347630768,
+      "round": "Club Friendlies",
+      "date": "2026-08-01T15:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 440751,
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "name": "Venezia"
+      },
+      "homeTeam": {
+        "id": 905397,
+        "logo": "https://highlightly.net/soccer/images/teams/905397.png",
+        "name": "Saint-Étienne"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347531201,
+      "round": "Club Friendlies",
+      "date": "2026-07-27T18:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 440751,
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "name": "Venezia"
+      },
+      "homeTeam": {
+        "id": 549679,
+        "logo": "https://highlightly.net/soccer/images/teams/549679.png",
+        "name": "Galatasaray"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348780469,
+      "round": "Club Friendlies",
+      "date": "2026-07-23T15:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "8 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1454292,
+        "logo": "https://highlightly.net/soccer/images/teams/1454292.png",
+        "name": "Vis Pesaro"
+      },
+      "homeTeam": {
+        "id": 440751,
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "name": "Venezia"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

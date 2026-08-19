@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787151211598,
+  "data": {
+    "pick": {
+      "label": "2 · Frosinone",
+      "probability": 55.89,
+      "market": "1X2",
+      "selection": "away",
+      "line": null
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:53:31.597Z"
+  }
+}

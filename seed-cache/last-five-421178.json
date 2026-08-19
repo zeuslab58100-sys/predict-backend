@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787136069366,
+  "data": [
+    {
+      "id": 1331642180,
+      "round": "Round of 64",
+      "date": "2026-08-15T16:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 741154,
+        "logo": "https://highlightly.net/soccer/images/teams/741154.png",
+        "name": "Padova"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1360411937,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T20:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 450963,
+        "logo": "https://highlightly.net/soccer/images/teams/450963.png",
+        "name": "Barcelona"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1360409384,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T18:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 56099,
+        "logo": "https://highlightly.net/soccer/images/teams/56099.png",
+        "name": "Nottingham Forest"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1365646438,
+      "round": "Club Friendlies",
+      "date": "2026-08-02T14:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "homeTeam": {
+        "id": 850082,
+        "logo": "https://highlightly.net/soccer/images/teams/850082.png",
+        "name": "Trabzonspor"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1360388960,
+      "round": "Club Friendlies",
+      "date": "2026-08-01T14:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 140348,
+        "logo": "https://highlightly.net/soccer/images/teams/140348.png",
+        "name": "FSV Mainz 05"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

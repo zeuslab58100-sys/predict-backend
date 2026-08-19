@@ -1,0 +1,1467 @@
+{
+  "createdAt": 1787139047457,
+  "data": [
+    {
+      "id": 1208394403,
+      "round": "Regular Season - 38",
+      "date": "2026-05-08T18:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "5 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1441527,
+        "logo": "https://highlightly.net/soccer/images/teams/1441527.png",
+        "name": "Mantova"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208378234,
+      "round": "Regular Season - 36",
+      "date": "2026-04-25T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1346215,
+        "logo": "https://highlightly.net/soccer/images/teams/1346215.png",
+        "name": "Carrarese"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208357810,
+      "round": "Regular Season - 34",
+      "date": "2026-04-10T18:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 445006,
+        "logo": "https://highlightly.net/soccer/images/teams/445006.png",
+        "name": "Palermo"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208351002,
+      "round": "Regular Season - 33",
+      "date": "2026-04-05T15:15:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 741154,
+        "logo": "https://highlightly.net/soccer/images/teams/741154.png",
+        "name": "Padova"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208332280,
+      "round": "Regular Season - 31",
+      "date": "2026-03-18T18:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 433092,
+        "logo": "https://highlightly.net/soccer/images/teams/433092.png",
+        "name": "Bari"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208311005,
+      "round": "Regular Season - 29",
+      "date": "2026-03-08T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 424582,
+        "logo": "https://highlightly.net/soccer/images/teams/424582.png",
+        "name": "Sampdoria"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208307601,
+      "round": "Regular Season - 28",
+      "date": "2026-03-04T19:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 447559,
+        "logo": "https://highlightly.net/soccer/images/teams/447559.png",
+        "name": "Pescara"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208286326,
+      "round": "Regular Season - 26",
+      "date": "2026-02-20T19:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 435645,
+        "logo": "https://highlightly.net/soccer/images/teams/435645.png",
+        "name": "Empoli"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208263349,
+      "round": "Regular Season - 23",
+      "date": "2026-02-07T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 440751,
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "name": "Venezia"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208248882,
+      "round": "Regular Season - 21",
+      "date": "2026-01-24T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 749664,
+        "logo": "https://highlightly.net/soccer/images/teams/749664.png",
+        "name": "Reggiana 1919"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208226756,
+      "round": "Regular Season - 19",
+      "date": "2026-01-10T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1436421,
+        "logo": "https://highlightly.net/soccer/images/teams/1436421.png",
+        "name": "Catanzaro"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208211438,
+      "round": "Regular Season - 17",
+      "date": "2025-12-20T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 439049,
+        "logo": "https://highlightly.net/soccer/images/teams/439049.png",
+        "name": "Spezia"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208196971,
+      "round": "Regular Season - 15",
+      "date": "2025-12-08T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 735197,
+        "logo": "https://highlightly.net/soccer/images/teams/735197.png",
+        "name": "Juve Stabia"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208168888,
+      "round": "Regular Season - 12",
+      "date": "2025-11-08T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 765833,
+        "logo": "https://highlightly.net/soccer/images/teams/765833.png",
+        "name": "Modena"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208156123,
+      "round": "Regular Season - 10",
+      "date": "2025-10-28T19:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 449261,
+        "logo": "https://highlightly.net/soccer/images/teams/449261.png",
+        "name": "Virtus Entella"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208132295,
+      "round": "Regular Season - 8",
+      "date": "2025-10-18T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208120381,
+      "round": "Regular Season - 6",
+      "date": "2025-09-30T18:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 433943,
+        "logo": "https://highlightly.net/soccer/images/teams/433943.png",
+        "name": "Cesena"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208103361,
+      "round": "Regular Season - 4",
+      "date": "2025-09-19T17:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1343662,
+        "logo": "https://highlightly.net/soccer/images/teams/1343662.png",
+        "name": "Sudtirol"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208079533,
+      "round": "Regular Season - 1",
+      "date": "2025-08-24T19:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 450112,
+        "logo": "https://highlightly.net/soccer/images/teams/450112.png",
+        "name": "Avellino"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1216863555,
+      "round": "Club Friendlies 5",
+      "date": "2025-08-14T15:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 18988296,
+        "logo": null,
+        "name": "L'Aquila"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1216742713,
+      "round": "Club Friendlies 5",
+      "date": "2025-08-08T15:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 431390,
+        "logo": "https://highlightly.net/soccer/images/teams/431390.png",
+        "name": "Benevento"
+      },
+      "homeTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208379936,
+      "round": "Regular Season - 37",
+      "date": "2026-05-01T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 735197,
+        "logo": "https://highlightly.net/soccer/images/teams/735197.png",
+        "name": "Juve Stabia"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208362916,
+      "round": "Regular Season - 35",
+      "date": "2026-04-18T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 765833,
+        "logo": "https://highlightly.net/soccer/images/teams/765833.png",
+        "name": "Modena"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208340790,
+      "round": "Regular Season - 32",
+      "date": "2026-03-22T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 1343662,
+        "logo": "https://highlightly.net/soccer/images/teams/1343662.png",
+        "name": "Sudtirol"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208327174,
+      "round": "Regular Season - 30",
+      "date": "2026-03-14T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 433943,
+        "logo": "https://highlightly.net/soccer/images/teams/433943.png",
+        "name": "Cesena"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208299942,
+      "round": "Regular Season - 27",
+      "date": "2026-03-01T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 1436421,
+        "logo": "https://highlightly.net/soccer/images/teams/1436421.png",
+        "name": "Catanzaro"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208284624,
+      "round": "Regular Season - 25",
+      "date": "2026-02-15T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 439049,
+        "logo": "https://highlightly.net/soccer/images/teams/439049.png",
+        "name": "Spezia"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208272710,
+      "round": "Regular Season - 24",
+      "date": "2026-02-11T19:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 450112,
+        "logo": "https://highlightly.net/soccer/images/teams/450112.png",
+        "name": "Avellino"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208251435,
+      "round": "Regular Season - 22",
+      "date": "2026-01-31T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 449261,
+        "logo": "https://highlightly.net/soccer/images/teams/449261.png",
+        "name": "Virtus Entella"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208234415,
+      "round": "Regular Season - 20",
+      "date": "2026-01-17T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208225054,
+      "round": "Regular Season - 18",
+      "date": "2025-12-27T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 435645,
+        "logo": "https://highlightly.net/soccer/images/teams/435645.png",
+        "name": "Empoli"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208201226,
+      "round": "Regular Season - 16",
+      "date": "2025-12-14T16:15:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 447559,
+        "logo": "https://highlightly.net/soccer/images/teams/447559.png",
+        "name": "Pescara"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208189312,
+      "round": "Regular Season - 14",
+      "date": "2025-11-29T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 749664,
+        "logo": "https://highlightly.net/soccer/images/teams/749664.png",
+        "name": "Reggiana 1919"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208182504,
+      "round": "Regular Season - 13",
+      "date": "2025-11-22T18:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 433092,
+        "logo": "https://highlightly.net/soccer/images/teams/433092.png",
+        "name": "Bari"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208157825,
+      "round": "Regular Season - 11",
+      "date": "2025-11-01T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 1346215,
+        "logo": "https://highlightly.net/soccer/images/teams/1346215.png",
+        "name": "Carrarese"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208144209,
+      "round": "Regular Season - 9",
+      "date": "2025-10-25T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 424582,
+        "logo": "https://highlightly.net/soccer/images/teams/424582.png",
+        "name": "Sampdoria"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208127189,
+      "round": "Regular Season - 7",
+      "date": "2025-10-04T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 440751,
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "name": "Venezia"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208109318,
+      "round": "Regular Season - 5",
+      "date": "2025-09-27T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 5",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 1441527,
+        "logo": "https://highlightly.net/soccer/images/teams/1441527.png",
+        "name": "Mantova"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1230556145,
+      "round": "2nd Round",
+      "date": "2025-09-23T15:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208095702,
+      "round": "Regular Season - 3",
+      "date": "2025-09-13T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 741154,
+        "logo": "https://highlightly.net/soccer/images/teams/741154.png",
+        "name": "Padova"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1208085490,
+      "round": "Regular Season - 2",
+      "date": "2025-08-30T19:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 445006,
+        "logo": "https://highlightly.net/soccer/images/teams/445006.png",
+        "name": "Palermo"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1186128839,
+      "round": "1st Round",
+      "date": "2025-08-17T16:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 1344513,
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "name": "Monza"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1209663244,
+      "round": "Club Friendlies 5",
+      "date": "2025-08-03T18:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 436496,
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "name": "Frosinone"
+      },
+      "homeTeam": {
+        "id": 1456845,
+        "logo": "https://highlightly.net/soccer/images/teams/1456845.png",
+        "name": "Rieti"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2025
+      }
+    }
+  ]
+}

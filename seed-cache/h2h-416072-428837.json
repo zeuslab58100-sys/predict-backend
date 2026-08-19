@@ -1,0 +1,345 @@
+{
+  "createdAt": 1787151211608,
+  "data": [
+    {
+      "id": 1172867706,
+      "round": "Regular Season - 36",
+      "date": "2026-05-08T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "homeTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1172697506,
+      "round": "Regular Season - 16",
+      "date": "2025-12-21T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 895671476,
+      "round": "Regular Season - 24",
+      "date": "2024-02-10T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 895560846,
+      "round": "Regular Season - 11",
+      "date": "2023-11-06T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "homeTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 750627887,
+      "round": "Regular Season - 28",
+      "date": "2023-04-03T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2022
+      }
+    },
+    {
+      "id": 750453432,
+      "round": "Regular Season - 7",
+      "date": "2022-09-17T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "homeTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2022
+      }
+    },
+    {
+      "id": 622773647,
+      "round": "Regular Season - 23",
+      "date": "2022-01-23T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "homeTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    },
+    {
+      "id": 622610255,
+      "round": "Regular Season - 4",
+      "date": "2021-09-17T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    },
+    {
+      "id": 518067458,
+      "round": "Regular Season - 24",
+      "date": "2021-03-17T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "homeTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2020
+      }
+    },
+    {
+      "id": 517858963,
+      "round": "Regular Season - 5",
+      "date": "2020-10-23T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 428837,
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "name": "Torino"
+      },
+      "homeTeam": {
+        "id": 416072,
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "name": "Sassuolo"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2020
+      }
+    }
+  ]
+}

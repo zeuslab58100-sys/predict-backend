@@ -1,0 +1,295 @@
+{
+  "createdAt": 1787151211927,
+  "data": {
+    "season": "2026",
+    "historicalSeason": "2025",
+    "leagueName": "Serie A",
+    "countryName": "Italy",
+    "round": 2,
+    "matchesCount": 10,
+    "generatedAt": "2026-08-19T14:53:31.927Z",
+    "description": "Per ogni partita viene mostrato un solo pronostico principale tra 1X2, GG/NG, Under/Over 2.5, Corner, Tiri in porta e Cartellini. A partita conclusa il pronostico viene marcato come preso o sbagliato.",
+    "picks": [
+      {
+        "matchId": 1319133331,
+        "date": "2026-08-28T18:45:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "416923",
+          "name": "AC Milan",
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png"
+        },
+        "awayTeam": {
+          "id": "440751",
+          "name": "Venezia",
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png"
+        },
+        "pick": {
+          "label": "Cartellini Under 4.5",
+          "probability": 60.07,
+          "market": "Cartellini",
+          "selection": "under",
+          "line": 4.5
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.566Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319140990,
+        "date": "2026-08-29T16:30:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "416072",
+          "name": "Sassuolo",
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png"
+        },
+        "awayTeam": {
+          "id": "428837",
+          "name": "Torino",
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png"
+        },
+        "pick": {
+          "label": "Tiri in porta Under 8.5",
+          "probability": 56.07,
+          "market": "Tiri in porta",
+          "selection": "under",
+          "line": 8.5
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.611Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319135884,
+        "date": "2026-08-29T16:30:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "427986",
+          "name": "Fiorentina",
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png"
+        },
+        "awayTeam": {
+          "id": "436496",
+          "name": "Frosinone",
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png"
+        },
+        "pick": {
+          "label": "2 · Frosinone",
+          "probability": 55.89,
+          "market": "1X2",
+          "selection": "away",
+          "line": null
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.597Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319139288,
+        "date": "2026-08-29T16:30:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "1344513",
+          "name": "Monza",
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png"
+        },
+        "awayTeam": {
+          "id": "421178",
+          "name": "Udinese",
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png"
+        },
+        "pick": {
+          "label": "1 · Monza",
+          "probability": 58.24,
+          "market": "1X2",
+          "selection": "home",
+          "line": null
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.677Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319136735,
+        "date": "2026-08-29T18:45:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "422880",
+          "name": "Juventus",
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png"
+        },
+        "awayTeam": {
+          "id": "445857",
+          "name": "Parma",
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png"
+        },
+        "pick": {
+          "label": "Under 2.5",
+          "probability": 67.16,
+          "market": "Under/Over",
+          "selection": "under",
+          "line": 2.5
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.715Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319140139,
+        "date": "2026-08-30T16:30:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "419476",
+          "name": "Napoli",
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png"
+        },
+        "awayTeam": {
+          "id": "762429",
+          "name": "Como",
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png"
+        },
+        "pick": {
+          "label": "Tiri in porta Over 7.5",
+          "probability": 53.38,
+          "market": "Tiri in porta",
+          "selection": "over",
+          "line": 7.5
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.722Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319135033,
+        "date": "2026-08-30T18:45:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "417774",
+          "name": "Cagliari",
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png"
+        },
+        "awayTeam": {
+          "id": "430539",
+          "name": "Inter",
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png"
+        },
+        "pick": {
+          "label": "2 · Inter",
+          "probability": 60.42,
+          "market": "1X2",
+          "selection": "away",
+          "line": null
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.806Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319137586,
+        "date": "2026-08-30T18:45:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "415221",
+          "name": "Lazio",
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png"
+        },
+        "awayTeam": {
+          "id": "422029",
+          "name": "Genoa",
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png"
+        },
+        "pick": {
+          "label": "Cartellini Under 4.5",
+          "probability": 61.43,
+          "market": "Cartellini",
+          "selection": "under",
+          "line": 4.5
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.820Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319138437,
+        "date": "2026-08-31T16:30:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "738601",
+          "name": "Lecce",
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png"
+        },
+        "awayTeam": {
+          "id": "423731",
+          "name": "AS Roma",
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png"
+        },
+        "pick": {
+          "label": "Under 2.5",
+          "probability": 57.54,
+          "market": "Under/Over",
+          "selection": "under",
+          "line": 2.5
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.831Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      },
+      {
+        "matchId": 1319134182,
+        "date": "2026-08-31T18:45:00.000Z",
+        "round": "Regular Season - 2",
+        "homeTeam": {
+          "id": "425433",
+          "name": "Atalanta",
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png"
+        },
+        "awayTeam": {
+          "id": "426284",
+          "name": "Bologna",
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png"
+        },
+        "pick": {
+          "label": "Under 2.5",
+          "probability": 56.54,
+          "market": "Under/Over",
+          "selection": "under",
+          "line": 2.5
+        },
+        "pickGeneratedAt": "2026-08-19T14:53:31.926Z",
+        "modelVersion": "PREDICT v5",
+        "result": {
+          "status": "pending",
+          "settled": false
+        }
+      }
+    ]
+  }
+}

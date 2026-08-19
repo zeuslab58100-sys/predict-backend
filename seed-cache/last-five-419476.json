@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787137914456,
+  "data": [
+    {
+      "id": 1360414490,
+      "round": "Club Friendlies",
+      "date": "2026-08-12T19:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "6 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 956457,
+        "logo": "https://highlightly.net/soccer/images/teams/956457.png",
+        "name": "Aris Thessaloniki"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1360411086,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T19:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 458622,
+        "logo": "https://highlightly.net/soccer/images/teams/458622.png",
+        "name": "Celta de Vigo"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1360397470,
+      "round": "Club Friendlies",
+      "date": "2026-08-05T16:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 619461,
+        "logo": "https://highlightly.net/soccer/images/teams/619461.png",
+        "name": "Osasuna"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1360366834,
+      "round": "Club Friendlies",
+      "date": "2026-07-26T16:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 1346215,
+        "logo": "https://highlightly.net/soccer/images/teams/1346215.png",
+        "name": "Carrarese"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1354703429,
+      "round": "Club Friendlies",
+      "date": "2026-07-22T16:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 746260,
+        "logo": "https://highlightly.net/soccer/images/teams/746260.png",
+        "name": "Arezzo"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

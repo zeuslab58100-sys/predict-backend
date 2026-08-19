@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787137884473,
+  "data": [
+    {
+      "id": 1378322934,
+      "round": "Round of 64",
+      "date": "2026-08-14T16:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 746260,
+        "logo": "https://highlightly.net/soccer/images/teams/746260.png",
+        "name": "Arezzo"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348900460,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T18:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 120,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished after penalties"
+      },
+      "awayTeam": {
+        "id": 72268,
+        "logo": "https://highlightly.net/soccer/images/teams/72268.png",
+        "name": "Nice"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1317390483,
+      "round": "Club Friendlies",
+      "date": "2026-08-02T12:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "homeTeam": {
+        "id": 155666,
+        "logo": "https://highlightly.net/soccer/images/teams/155666.png",
+        "name": "Union Berlin"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1317375165,
+      "round": "Club Friendlies",
+      "date": "2026-07-28T15:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 765833,
+        "logo": "https://highlightly.net/soccer/images/teams/765833.png",
+        "name": "Modena"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1317363251,
+      "round": "Club Friendlies",
+      "date": "2026-07-23T15:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 424582,
+        "logo": "https://highlightly.net/soccer/images/teams/424582.png",
+        "name": "Sampdoria"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

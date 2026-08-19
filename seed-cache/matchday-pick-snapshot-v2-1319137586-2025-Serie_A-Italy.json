@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787151211820,
+  "data": {
+    "pick": {
+      "label": "Cartellini Under 4.5",
+      "probability": 61.43,
+      "market": "Cartellini",
+      "selection": "under",
+      "line": 4.5
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:53:31.820Z"
+  }
+}

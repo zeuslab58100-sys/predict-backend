@@ -1,0 +1,1658 @@
+{
+  "createdAt": 1787139059023,
+  "data": {
+    "id": "440751",
+    "name": "Venezia",
+    "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+    "completedMatches": 38,
+    "summary": {
+      "overall": {
+        "played": 38,
+        "wins": 24,
+        "draws": 10,
+        "losses": 4,
+        "goalsFor": 77,
+        "goalsAgainst": 31,
+        "cleanSheets": 16,
+        "failedToScore": 4,
+        "over15": 34,
+        "over25": 22,
+        "over35": 12,
+        "bothTeamsScore": 21,
+        "points": 82,
+        "pointsPerGame": 2.16,
+        "averageGoalsFor": 2.03,
+        "averageGoalsAgainst": 0.82,
+        "averageTotalGoals": 2.84,
+        "winPercentage": 63.16,
+        "drawPercentage": 26.32,
+        "lossPercentage": 10.53,
+        "cleanSheetPercentage": 42.11,
+        "failedToScorePercentage": 10.53,
+        "over15Percentage": 89.47,
+        "over25Percentage": 57.89,
+        "over35Percentage": 31.58,
+        "bothTeamsScorePercentage": 55.26
+      },
+      "home": {
+        "played": 19,
+        "wins": 17,
+        "draws": 0,
+        "losses": 2,
+        "goalsFor": 44,
+        "goalsAgainst": 12,
+        "cleanSheets": 10,
+        "failedToScore": 1,
+        "over15": 18,
+        "over25": 12,
+        "over35": 6,
+        "bothTeamsScore": 8,
+        "points": 51,
+        "pointsPerGame": 2.68,
+        "averageGoalsFor": 2.32,
+        "averageGoalsAgainst": 0.63,
+        "averageTotalGoals": 2.95,
+        "winPercentage": 89.47,
+        "drawPercentage": 0,
+        "lossPercentage": 10.53,
+        "cleanSheetPercentage": 52.63,
+        "failedToScorePercentage": 5.26,
+        "over15Percentage": 94.74,
+        "over25Percentage": 63.16,
+        "over35Percentage": 31.58,
+        "bothTeamsScorePercentage": 42.11
+      },
+      "away": {
+        "played": 19,
+        "wins": 7,
+        "draws": 10,
+        "losses": 2,
+        "goalsFor": 33,
+        "goalsAgainst": 19,
+        "cleanSheets": 6,
+        "failedToScore": 3,
+        "over15": 16,
+        "over25": 10,
+        "over35": 6,
+        "bothTeamsScore": 13,
+        "points": 31,
+        "pointsPerGame": 1.63,
+        "averageGoalsFor": 1.74,
+        "averageGoalsAgainst": 1,
+        "averageTotalGoals": 2.74,
+        "winPercentage": 36.84,
+        "drawPercentage": 52.63,
+        "lossPercentage": 10.53,
+        "cleanSheetPercentage": 31.58,
+        "failedToScorePercentage": 15.79,
+        "over15Percentage": 84.21,
+        "over25Percentage": 52.63,
+        "over35Percentage": 31.58,
+        "bothTeamsScorePercentage": 68.42
+      }
+    },
+    "matches": [
+      {
+        "id": 1208390999,
+        "round": "Regular Season - 38",
+        "date": "2026-05-08T18:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 445006,
+          "logo": "https://highlightly.net/soccer/images/teams/445006.png",
+          "name": "Palermo"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208382489,
+        "round": "Regular Season - 37",
+        "date": "2026-05-01T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 439049,
+          "logo": "https://highlightly.net/soccer/images/teams/439049.png",
+          "name": "Spezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208372277,
+        "round": "Regular Season - 36",
+        "date": "2026-04-25T15:15:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 435645,
+          "logo": "https://highlightly.net/soccer/images/teams/435645.png",
+          "name": "Empoli"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208362065,
+        "round": "Regular Season - 35",
+        "date": "2026-04-18T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "0 - 3",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 433092,
+          "logo": "https://highlightly.net/soccer/images/teams/433092.png",
+          "name": "Bari"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208355257,
+        "round": "Regular Season - 34",
+        "date": "2026-04-11T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 449261,
+          "logo": "https://highlightly.net/soccer/images/teams/449261.png",
+          "name": "Virtus Entella"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208345896,
+        "round": "Regular Season - 33",
+        "date": "2026-04-06T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 735197,
+          "logo": "https://highlightly.net/soccer/images/teams/735197.png",
+          "name": "Juve Stabia"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208341641,
+        "round": "Regular Season - 32",
+        "date": "2026-03-21T16:15:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208328025,
+        "round": "Regular Season - 31",
+        "date": "2026-03-17T19:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 741154,
+          "logo": "https://highlightly.net/soccer/images/teams/741154.png",
+          "name": "Padova"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208319515,
+        "round": "Regular Season - 30",
+        "date": "2026-03-14T18:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "0 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 424582,
+          "logo": "https://highlightly.net/soccer/images/teams/424582.png",
+          "name": "Sampdoria"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208316111,
+        "round": "Regular Season - 29",
+        "date": "2026-03-07T16:15:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 749664,
+          "logo": "https://highlightly.net/soccer/images/teams/749664.png",
+          "name": "Reggiana 1919"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208304197,
+        "round": "Regular Season - 28",
+        "date": "2026-03-03T19:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "4 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 450112,
+          "logo": "https://highlightly.net/soccer/images/teams/450112.png",
+          "name": "Avellino"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 4,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208299091,
+        "round": "Regular Season - 27",
+        "date": "2026-02-28T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 1343662,
+          "logo": "https://highlightly.net/soccer/images/teams/1343662.png",
+          "name": "Sudtirol"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208287177,
+        "round": "Regular Season - 26",
+        "date": "2026-02-21T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 447559,
+          "logo": "https://highlightly.net/soccer/images/teams/447559.png",
+          "name": "Pescara"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 2,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208281220,
+        "round": "Regular Season - 25",
+        "date": "2026-02-14T18:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "0 - 4",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 433943,
+          "logo": "https://highlightly.net/soccer/images/teams/433943.png",
+          "name": "Cesena"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 4,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208271008,
+        "round": "Regular Season - 24",
+        "date": "2026-02-10T19:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "0 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 765833,
+          "logo": "https://highlightly.net/soccer/images/teams/765833.png",
+          "name": "Modena"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 0,
+          "goalsAgainst": 2,
+          "result": "L"
+        }
+      },
+      {
+        "id": 1208263349,
+        "round": "Regular Season - 23",
+        "date": "2026-02-07T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208254839,
+        "round": "Regular Season - 22",
+        "date": "2026-01-31T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 1346215,
+          "logo": "https://highlightly.net/soccer/images/teams/1346215.png",
+          "name": "Carrarese"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208249733,
+        "round": "Regular Season - 21",
+        "date": "2026-01-24T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 5",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 1441527,
+          "logo": "https://highlightly.net/soccer/images/teams/1441527.png",
+          "name": "Mantova"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 5,
+          "goalsAgainst": 2,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208238670,
+        "round": "Regular Season - 20",
+        "date": "2026-01-17T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 1436421,
+          "logo": "https://highlightly.net/soccer/images/teams/1436421.png",
+          "name": "Catanzaro"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208233564,
+        "round": "Regular Season - 19",
+        "date": "2026-01-10T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 3",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 749664,
+          "logo": "https://highlightly.net/soccer/images/teams/749664.png",
+          "name": "Reggiana 1919"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208219097,
+        "round": "Regular Season - 18",
+        "date": "2025-12-27T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 449261,
+          "logo": "https://highlightly.net/soccer/images/teams/449261.png",
+          "name": "Virtus Entella"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 1,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208215693,
+        "round": "Regular Season - 17",
+        "date": "2025-12-20T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 765833,
+          "logo": "https://highlightly.net/soccer/images/teams/765833.png",
+          "name": "Modena"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208202077,
+        "round": "Regular Season - 16",
+        "date": "2025-12-13T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208192716,
+        "round": "Regular Season - 15",
+        "date": "2025-12-08T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 450112,
+          "logo": "https://highlightly.net/soccer/images/teams/450112.png",
+          "name": "Avellino"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208188461,
+        "round": "Regular Season - 14",
+        "date": "2025-11-29T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 1441527,
+          "logo": "https://highlightly.net/soccer/images/teams/1441527.png",
+          "name": "Mantova"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208178249,
+        "round": "Regular Season - 13",
+        "date": "2025-11-22T16:15:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "0 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 741154,
+          "logo": "https://highlightly.net/soccer/images/teams/741154.png",
+          "name": "Padova"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208173994,
+        "round": "Regular Season - 12",
+        "date": "2025-11-08T18:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 424582,
+          "logo": "https://highlightly.net/soccer/images/teams/424582.png",
+          "name": "Sampdoria"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208163782,
+        "round": "Regular Season - 11",
+        "date": "2025-11-02T14:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 1436421,
+          "logo": "https://highlightly.net/soccer/images/teams/1436421.png",
+          "name": "Catanzaro"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 1,
+          "goalsAgainst": 2,
+          "result": "L"
+        }
+      },
+      {
+        "id": 1208156974,
+        "round": "Regular Season - 10",
+        "date": "2025-10-29T19:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 1343662,
+          "logo": "https://highlightly.net/soccer/images/teams/1343662.png",
+          "name": "Sudtirol"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208143358,
+        "round": "Regular Season - 9",
+        "date": "2025-10-25T15:15:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 1346215,
+          "logo": "https://highlightly.net/soccer/images/teams/1346215.png",
+          "name": "Carrarese"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 2,
+          "goalsAgainst": 3,
+          "result": "L"
+        }
+      },
+      {
+        "id": 1208136550,
+        "round": "Regular Season - 8",
+        "date": "2025-10-19T15:15:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 435645,
+          "logo": "https://highlightly.net/soccer/images/teams/435645.png",
+          "name": "Empoli"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 1,
+          "goalsAgainst": 1,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208127189,
+        "round": "Regular Season - 7",
+        "date": "2025-10-04T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "3 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 3,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208117828,
+        "round": "Regular Season - 6",
+        "date": "2025-09-30T18:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "0 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 445006,
+          "logo": "https://highlightly.net/soccer/images/teams/445006.png",
+          "name": "Palermo"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208113573,
+        "round": "Regular Season - 5",
+        "date": "2025-09-27T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 439049,
+          "logo": "https://highlightly.net/soccer/images/teams/439049.png",
+          "name": "Spezia"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 2,
+          "goalsAgainst": 0,
+          "result": "W"
+        }
+      },
+      {
+        "id": 1208105063,
+        "round": "Regular Season - 4",
+        "date": "2025-09-20T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "1 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 433943,
+          "logo": "https://highlightly.net/soccer/images/teams/433943.png",
+          "name": "Cesena"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 1,
+          "goalsAgainst": 2,
+          "result": "L"
+        }
+      },
+      {
+        "id": 1208091447,
+        "round": "Regular Season - 3",
+        "date": "2025-09-13T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 2",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 447559,
+          "logo": "https://highlightly.net/soccer/images/teams/447559.png",
+          "name": "Pescara"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 2,
+          "goalsAgainst": 2,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208082937,
+        "round": "Regular Season - 2",
+        "date": "2025-08-30T17:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "0 - 0",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 735197,
+          "logo": "https://highlightly.net/soccer/images/teams/735197.png",
+          "name": "Juve Stabia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "away",
+          "goalsFor": 0,
+          "goalsAgainst": 0,
+          "result": "D"
+        }
+      },
+      {
+        "id": 1208081235,
+        "round": "Regular Season - 1",
+        "date": "2025-08-24T17:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": 90,
+          "score": {
+            "current": "2 - 1",
+            "penalties": null
+          },
+          "description": "Finished"
+        },
+        "awayTeam": {
+          "id": 433092,
+          "logo": "https://highlightly.net/soccer/images/teams/433092.png",
+          "name": "Bari"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 116520,
+          "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+          "name": "Serie B",
+          "season": 2025
+        },
+        "predictAnalysis": {
+          "teamId": "440751",
+          "venue": "home",
+          "goalsFor": 2,
+          "goalsAgainst": 1,
+          "result": "W"
+        }
+      }
+    ],
+    "historicalSource": "historical-league",
+    "sourceLeagueName": "Serie B",
+    "sourceSeason": "2025"
+  }
+}

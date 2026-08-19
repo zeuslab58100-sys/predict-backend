@@ -31,6 +31,12 @@ const CACHE_DIR =
     'cache',
   );
 
+const SEED_CACHE_DIR =
+  path.join(
+    __dirname,
+    'seed-cache',
+  );
+
 const LEAGUE_CACHE_TIME = 24 * 60 * 60 * 1000;
 const RECENT_CACHE_TIME = 6 * 60 * 60 * 1000;
 const MATCHDAY_PICKS_CACHE_TIME = 60 * 1000;
@@ -72,6 +78,91 @@ const centralSerieAState = {
 
 async function ensureCacheDirectory() {
   await fs.mkdir(CACHE_DIR, { recursive: true });
+}
+
+async function bootstrapSeedCache() {
+  await ensureCacheDirectory();
+
+  try {
+    const seedFiles =
+      await fs.readdir(
+        SEED_CACHE_DIR,
+      );
+
+    if (
+      seedFiles.length === 0
+    ) {
+      console.log(
+        'PREDICT seed-cache: vuota',
+      );
+
+      return;
+    }
+
+    let copied = 0;
+    let existing = 0;
+
+    for (
+      const fileName
+        of seedFiles
+    ) {
+      if (
+        !fileName.endsWith(
+          '.json',
+        )
+      ) {
+        continue;
+      }
+
+      const source =
+        path.join(
+          SEED_CACHE_DIR,
+          fileName,
+        );
+
+      const target =
+        path.join(
+          CACHE_DIR,
+          fileName,
+        );
+
+      try {
+        await fs.access(
+          target,
+        );
+
+        existing += 1;
+      } catch {
+        await fs.copyFile(
+          source,
+          target,
+        );
+
+        copied += 1;
+      }
+    }
+
+    console.log(
+      `PREDICT seed-cache: ${copied} copiati, ${existing} già presenti`,
+    );
+  } catch (error) {
+    if (
+      error?.code ===
+      'ENOENT'
+    ) {
+      console.log(
+        'PREDICT seed-cache: cartella non presente',
+      );
+
+      return;
+    }
+
+    console.error(
+      'PREDICT seed-cache error:',
+      error?.message ??
+        error,
+    );
+  }
 }
 
 function sanitizeCachePart(value) {
@@ -4828,6 +4919,15 @@ async function precomputeUpcomingPredictData() {
                 CENTRAL_PREDICTION_HORIZON
             );
           },
+        )
+        .sort(
+          (a, b) =>
+            Date.parse(
+              a?.date ?? '',
+            ) -
+            Date.parse(
+              b?.date ?? '',
+            ),
         );
 
     if (
@@ -4837,52 +4937,71 @@ async function precomputeUpcomingPredictData() {
       return;
     }
 
-    console.log(
-      `PREDICT CENTRAL: preparo ${upcoming.length} analisi/pronostici futuri`,
-    );
+    for (
+      const match
+        of upcoming
+    ) {
+      const homeTeamId =
+        teamIdOf(
+          match?.homeTeam,
+        );
 
-    await mapWithConcurrency(
-      upcoming,
-      2,
-      async (match) => {
-        const homeTeamId =
-          teamIdOf(
-            match?.homeTeam,
-          );
+      const awayTeamId =
+        teamIdOf(
+          match?.awayTeam,
+        );
 
-        const awayTeamId =
-          teamIdOf(
-            match?.awayTeam,
-          );
+      if (
+        !homeTeamId ||
+        !awayTeamId
+      ) {
+        continue;
+      }
 
-        if (
-          !homeTeamId ||
-          !awayTeamId
-        ) {
-          return;
-        }
+      const existingSnapshot =
+        await getExistingMatchdayPickSnapshot({
+          matchId:
+            match?.id,
+          historicalSeason:
+            '2025',
+          leagueName:
+            'Serie A',
+          countryName:
+            'Italy',
+        });
 
-        try {
-          await getOrCreateMatchdayPickSnapshot({
-            match,
-            homeTeamId,
-            awayTeamId,
-            historicalSeason:
-              '2025',
-            leagueName:
-              'Serie A',
-            countryName:
-              'Italy',
-          });
-        } catch (error) {
-          console.warn(
-            `Precompute ${homeTeamId}-${awayTeamId} non riuscito:`,
-            error?.message ??
-              error,
-          );
-        }
-      },
-    );
+      if (existingSnapshot) {
+        continue;
+      }
+
+      console.log(
+        `PREDICT CENTRAL: preparo 1 pronostico mancante (${homeTeamId}-${awayTeamId})`,
+      );
+
+      try {
+        await getOrCreateMatchdayPickSnapshot({
+          match,
+          homeTeamId,
+          awayTeamId,
+          historicalSeason:
+            '2025',
+          leagueName:
+            'Serie A',
+          countryName:
+            'Italy',
+        });
+      } catch (error) {
+        console.warn(
+          `Precompute ${homeTeamId}-${awayTeamId} non riuscito:`,
+          error?.message ??
+            error,
+        );
+      }
+
+      // Massimo un nuovo match per ogni ciclo dello scheduler.
+      // Il ciclo successivo arriverà dopo 15 minuti.
+      break;
+    }
   } finally {
     centralSerieAState.precomputeRunning =
       false;
@@ -7468,7 +7587,11 @@ app.listen(
       }`,
     );
 
-    startCentralSerieAScheduler()
+    bootstrapSeedCache()
+      .then(
+        () =>
+          startCentralSerieAScheduler(),
+      )
       .catch(
         (error) => {
           console.error(

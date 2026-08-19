@@ -1,0 +1,345 @@
+{
+  "createdAt": 1787151211817,
+  "data": [
+    {
+      "id": 1172753672,
+      "round": "Regular Season - 23",
+      "date": "2026-01-30T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1172598790,
+      "round": "Regular Season - 5",
+      "date": "2025-09-29T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1041555002,
+      "round": "Regular Season - 33",
+      "date": "2025-04-23T16:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 1041351613,
+      "round": "Regular Season - 9",
+      "date": "2024-10-27T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 895742109,
+      "round": "Regular Season - 33",
+      "date": "2024-04-19T16:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 970933916,
+      "round": "Round of 16",
+      "date": "2023-12-05T20:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2023
+      }
+    },
+    {
+      "id": 895480852,
+      "round": "Regular Season - 2",
+      "date": "2023-08-27T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 785028711,
+      "round": "Club Friendlies 3",
+      "date": "2022-07-27T16:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2022
+      }
+    },
+    {
+      "id": 622845131,
+      "round": "Regular Season - 32",
+      "date": "2022-04-10T10:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 4",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    },
+    {
+      "id": 622726842,
+      "round": "Regular Season - 18",
+      "date": "2021-12-17T17:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 415221,
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "name": "Lazio"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    }
+  ]
+}

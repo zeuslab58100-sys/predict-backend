@@ -1,0 +1,345 @@
+{
+  "createdAt": 1787137913966,
+  "data": [
+    {
+      "id": 1172761331,
+      "round": "Regular Season - 24",
+      "date": "2026-02-07T17:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1172610704,
+      "round": "Regular Season - 6",
+      "date": "2025-10-05T16:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1041583085,
+      "round": "Regular Season - 36",
+      "date": "2025-05-11T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 1041417991,
+      "round": "Regular Season - 17",
+      "date": "2024-12-21T17:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 895678284,
+      "round": "Regular Season - 25",
+      "date": "2024-02-17T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 895496170,
+      "round": "Regular Season - 4",
+      "date": "2023-09-16T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2023
+      }
+    },
+    {
+      "id": 622890234,
+      "round": "Regular Season - 37",
+      "date": "2022-05-15T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    },
+    {
+      "id": 622588980,
+      "round": "Regular Season - 2",
+      "date": "2021-08-29T16:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2021
+      }
+    },
+    {
+      "id": 518037673,
+      "round": "Regular Season - 21",
+      "date": "2021-02-06T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "homeTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2020
+      }
+    },
+    {
+      "id": 517829178,
+      "round": "Regular Season - 2",
+      "date": "2020-09-27T16:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "6 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422029,
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "name": "Genoa"
+      },
+      "homeTeam": {
+        "id": 419476,
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "name": "Napoli"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2020
+      }
+    }
+  ]
+}

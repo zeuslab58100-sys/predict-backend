@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787139048026,
+  "data": [
+    {
+      "id": 1312541485,
+      "round": "Club Friendlies",
+      "date": "2026-08-11T10:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 445006,
+        "logo": "https://highlightly.net/soccer/images/teams/445006.png",
+        "name": "Palermo"
+      },
+      "homeTeam": {
+        "id": 422880,
+        "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+        "name": "Juventus"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1312539783,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T11:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 430539,
+        "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+        "name": "Inter"
+      },
+      "homeTeam": {
+        "id": 422880,
+        "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+        "name": "Juventus"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1312537230,
+      "round": "Club Friendlies",
+      "date": "2026-08-05T11:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422880,
+        "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+        "name": "Juventus"
+      },
+      "homeTeam": {
+        "id": 42483,
+        "logo": "https://highlightly.net/soccer/images/teams/42483.png",
+        "name": "Chelsea"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348839188,
+      "round": "Club Friendlies",
+      "date": "2026-07-31T16:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 72268,
+        "logo": "https://highlightly.net/soccer/images/teams/72268.png",
+        "name": "Nice"
+      },
+      "homeTeam": {
+        "id": 422880,
+        "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+        "name": "Juventus"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1318130853,
+      "round": "Club Friendlies",
+      "date": "2026-07-25T18:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 422880,
+        "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+        "name": "Juventus"
+      },
+      "homeTeam": {
+        "id": 624567,
+        "logo": "https://highlightly.net/soccer/images/teams/624567.png",
+        "name": "Standard Liege"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

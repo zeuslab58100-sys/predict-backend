@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787139102915,
+  "data": [
+    {
+      "id": 1378323785,
+      "round": "Round of 64",
+      "date": "2026-08-14T19:15:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 431390,
+        "logo": "https://highlightly.net/soccer/images/teams/431390.png",
+        "name": "Benevento"
+      },
+      "league": {
+        "id": 117371,
+        "logo": "https://highlightly.net/soccer/images/leagues/117371.png",
+        "name": "Coppa Italia",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347666510,
+      "round": "Club Friendlies",
+      "date": "2026-08-06T18:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 463728,
+        "logo": "https://highlightly.net/soccer/images/teams/463728.png",
+        "name": "Deportivo La Coruña"
+      },
+      "homeTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1352508700,
+      "round": "Club Friendlies",
+      "date": "2026-08-01T16:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 461175,
+        "logo": "https://highlightly.net/soccer/images/teams/461175.png",
+        "name": "Real Madrid"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347552476,
+      "round": "Club Friendlies",
+      "date": "2026-07-29T18:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 33122,
+        "logo": "https://highlightly.net/soccer/images/teams/33122.png",
+        "name": "Watford"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1330144420,
+      "round": "Club Friendlies",
+      "date": "2026-07-25T14:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 427986,
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "name": "Fiorentina"
+      },
+      "homeTeam": {
+        "id": 62056,
+        "logo": "https://highlightly.net/soccer/images/teams/62056.png",
+        "name": "QPR"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

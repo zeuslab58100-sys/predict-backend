@@ -1,0 +1,345 @@
+{
+  "createdAt": 1787137884015,
+  "data": [
+    {
+      "id": 1172786861,
+      "round": "Regular Season - 27",
+      "date": "2026-02-27T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "homeTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1172580919,
+      "round": "Regular Season - 3",
+      "date": "2025-09-13T13:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1041475859,
+      "round": "Regular Season - 24",
+      "date": "2025-02-09T14:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 1041327785,
+      "round": "Regular Season - 6",
+      "date": "2024-09-30T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "homeTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 875598939,
+      "round": "Promotion Play-offs - Semi-finals",
+      "date": "2023-06-03T18:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "homeTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2022
+      }
+    },
+    {
+      "id": 875598088,
+      "round": "Promotion Play-offs - Semi-finals",
+      "date": "2023-05-30T18:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2022
+      }
+    },
+    {
+      "id": 769200111,
+      "round": "Regular Season - 34",
+      "date": "2023-04-22T12:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "homeTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2022
+      }
+    },
+    {
+      "id": 769037570,
+      "round": "Regular Season - 15",
+      "date": "2022-12-03T17:00:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 116520,
+        "logo": "https://highlightly.net/soccer/images/leagues/116520.png",
+        "name": "Serie B",
+        "season": 2022
+      }
+    },
+    {
+      "id": 518123624,
+      "round": "Regular Season - 31",
+      "date": "2021-04-17T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "homeTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2020
+      }
+    },
+    {
+      "id": 517961934,
+      "round": "Regular Season - 12",
+      "date": "2020-12-16T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 417774,
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "name": "Cagliari"
+      },
+      "homeTeam": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2020
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787151211681,
+  "data": {
+    "pick": {
+      "label": "1 · Monza",
+      "probability": 58.24,
+      "market": "1X2",
+      "selection": "home",
+      "line": null
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:53:31.677Z"
+  }
+}

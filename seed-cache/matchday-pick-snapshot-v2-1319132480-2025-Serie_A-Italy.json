@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787150693411,
+  "data": {
+    "pick": {
+      "label": "1 · Venezia",
+      "probability": 77.6,
+      "market": "1X2",
+      "selection": "home",
+      "line": null
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:44:53.411Z"
+  }
+}

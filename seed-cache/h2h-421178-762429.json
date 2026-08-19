@@ -1,0 +1,141 @@
+{
+  "createdAt": 1787136068910,
+  "data": [
+    {
+      "id": 1172825156,
+      "round": "Regular Season - 31",
+      "date": "2026-04-06T10:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1172709420,
+      "round": "Regular Season - 18",
+      "date": "2026-01-03T11:30:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "homeTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2025
+      }
+    },
+    {
+      "id": 1041452882,
+      "round": "Regular Season - 21",
+      "date": "2025-01-20T19:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "homeTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    },
+    {
+      "id": 1041303957,
+      "round": "Regular Season - 3",
+      "date": "2024-09-01T18:45:00.000Z",
+      "country": {
+        "code": "IT",
+        "name": "Italy",
+        "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "homeTeam": {
+        "id": 421178,
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "name": "Udinese"
+      },
+      "league": {
+        "id": 115669,
+        "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+        "name": "Serie A",
+        "season": 2024
+      }
+    }
+  ]
+}

@@ -1,0 +1,5449 @@
+{
+  "createdAt": 1787154290493,
+  "data": {
+    "matches": [
+      {
+        "id": 1319255024,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319254173,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319253322,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319252471,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319260130,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319259279,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319258428,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319257577,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319256726,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319255875,
+        "round": "Regular Season - 16",
+        "date": "2026-12-20T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319245663,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319244812,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319249918,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319251620,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319243961,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319246514,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319247365,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319249067,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319250769,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319248216,
+        "round": "Regular Season - 15",
+        "date": "2026-12-13T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319240557,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319235451,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319238855,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319241408,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319238004,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319237153,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319242259,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319243110,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319239706,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319236302,
+        "round": "Regular Season - 14",
+        "date": "2026-12-06T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319229494,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319228643,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319232898,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319233749,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319230345,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319232047,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319231196,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319234600,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319226941,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319227792,
+        "round": "Regular Season - 13",
+        "date": "2026-11-29T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319219282,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319218431,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319220984,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319221835,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319222686,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319225239,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319220133,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319226090,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319223537,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319224388,
+        "round": "Regular Season - 12",
+        "date": "2026-11-22T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319215027,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319213325,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319214176,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319216729,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319215878,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319209921,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319210772,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319211623,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319212474,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319217580,
+        "round": "Regular Season - 11",
+        "date": "2026-11-08T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319205666,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319203964,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319209070,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319202262,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319203113,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319208219,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319206517,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319201411,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319204815,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319207368,
+        "round": "Regular Season - 10",
+        "date": "2026-11-01T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319199709,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319194603,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319198858,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319200560,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319198007,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319192901,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319196305,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319197156,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319195454,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319193752,
+        "round": "Regular Season - 9",
+        "date": "2026-10-28T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319192050,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319184391,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319185242,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319186093,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319186944,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319189497,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319191199,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319187795,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319188646,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319190348,
+        "round": "Regular Season - 8",
+        "date": "2026-10-25T17:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319180136,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319176732,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319175881,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319177583,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319178434,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319180987,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319179285,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319181838,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319183540,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319182689,
+        "round": "Regular Season - 7",
+        "date": "2026-10-18T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319170775,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319167371,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319175030,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319171626,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319174179,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319169924,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319172477,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319168222,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319169073,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319173328,
+        "round": "Regular Season - 6",
+        "date": "2026-10-11T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319158861,
+        "round": "Regular Season - 5",
+        "date": "2026-09-20T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319163116,
+        "round": "Regular Season - 5",
+        "date": "2026-09-20T16:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319162265,
+        "round": "Regular Season - 5",
+        "date": "2026-09-20T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319164818,
+        "round": "Regular Season - 5",
+        "date": "2026-09-20T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319161414,
+        "round": "Regular Season - 5",
+        "date": "2026-09-20T10:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319166520,
+        "round": "Regular Season - 5",
+        "date": "2026-09-19T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319159712,
+        "round": "Regular Season - 5",
+        "date": "2026-09-19T16:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319160563,
+        "round": "Regular Season - 5",
+        "date": "2026-09-19T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319165669,
+        "round": "Regular Season - 5",
+        "date": "2026-09-19T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319163967,
+        "round": "Regular Season - 5",
+        "date": "2026-09-18T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319152904,
+        "round": "Regular Season - 4",
+        "date": "2026-09-14T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319153755,
+        "round": "Regular Season - 4",
+        "date": "2026-09-13T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319155457,
+        "round": "Regular Season - 4",
+        "date": "2026-09-13T16:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319151202,
+        "round": "Regular Season - 4",
+        "date": "2026-09-13T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319154606,
+        "round": "Regular Season - 4",
+        "date": "2026-09-13T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319157159,
+        "round": "Regular Season - 4",
+        "date": "2026-09-13T10:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319150351,
+        "round": "Regular Season - 4",
+        "date": "2026-09-12T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319156308,
+        "round": "Regular Season - 4",
+        "date": "2026-09-12T16:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319152053,
+        "round": "Regular Season - 4",
+        "date": "2026-09-12T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319158010,
+        "round": "Regular Season - 4",
+        "date": "2026-09-11T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319149500,
+        "round": "Regular Season - 3",
+        "date": "2026-09-07T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319143543,
+        "round": "Regular Season - 3",
+        "date": "2026-09-07T16:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319147798,
+        "round": "Regular Season - 3",
+        "date": "2026-09-06T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319142692,
+        "round": "Regular Season - 3",
+        "date": "2026-09-06T16:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319148649,
+        "round": "Regular Season - 3",
+        "date": "2026-09-06T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319145245,
+        "round": "Regular Season - 3",
+        "date": "2026-09-06T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319141841,
+        "round": "Regular Season - 3",
+        "date": "2026-09-05T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319146947,
+        "round": "Regular Season - 3",
+        "date": "2026-09-05T16:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319144394,
+        "round": "Regular Season - 3",
+        "date": "2026-09-05T13:00:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319146096,
+        "round": "Regular Season - 3",
+        "date": "2026-09-04T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319134182,
+        "round": "Regular Season - 2",
+        "date": "2026-08-31T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319138437,
+        "round": "Regular Season - 2",
+        "date": "2026-08-31T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "homeTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319135033,
+        "round": "Regular Season - 2",
+        "date": "2026-08-30T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "homeTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319137586,
+        "round": "Regular Season - 2",
+        "date": "2026-08-30T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "homeTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319140139,
+        "round": "Regular Season - 2",
+        "date": "2026-08-30T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319136735,
+        "round": "Regular Season - 2",
+        "date": "2026-08-29T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "homeTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319140990,
+        "round": "Regular Season - 2",
+        "date": "2026-08-29T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "homeTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319135884,
+        "round": "Regular Season - 2",
+        "date": "2026-08-29T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "homeTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319139288,
+        "round": "Regular Season - 2",
+        "date": "2026-08-29T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "homeTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319133331,
+        "round": "Regular Season - 2",
+        "date": "2026-08-28T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "homeTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319124821,
+        "round": "Regular Season - 1",
+        "date": "2026-08-24T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 427986,
+          "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+          "name": "Fiorentina"
+        },
+        "homeTeam": {
+          "id": 423731,
+          "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+          "name": "AS Roma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319126523,
+        "round": "Regular Season - 1",
+        "date": "2026-08-24T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 415221,
+          "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+          "name": "Lazio"
+        },
+        "homeTeam": {
+          "id": 426284,
+          "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+          "name": "Bologna"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319125672,
+        "round": "Regular Season - 1",
+        "date": "2026-08-23T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416072,
+          "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+          "name": "Sassuolo"
+        },
+        "homeTeam": {
+          "id": 425433,
+          "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+          "name": "Atalanta"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319130778,
+        "round": "Regular Season - 1",
+        "date": "2026-08-23T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 416923,
+          "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+          "name": "AC Milan"
+        },
+        "homeTeam": {
+          "id": 428837,
+          "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+          "name": "Torino"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319127374,
+        "round": "Regular Season - 1",
+        "date": "2026-08-23T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 422880,
+          "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+          "name": "Juventus"
+        },
+        "homeTeam": {
+          "id": 436496,
+          "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+          "name": "Frosinone"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319132480,
+        "round": "Regular Season - 1",
+        "date": "2026-08-23T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 738601,
+          "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+          "name": "Lecce"
+        },
+        "homeTeam": {
+          "id": 440751,
+          "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+          "name": "Venezia"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319129927,
+        "round": "Regular Season - 1",
+        "date": "2026-08-22T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 417774,
+          "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+          "name": "Cagliari"
+        },
+        "homeTeam": {
+          "id": 445857,
+          "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+          "name": "Parma"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319128225,
+        "round": "Regular Season - 1",
+        "date": "2026-08-22T18:45:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 419476,
+          "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+          "name": "Napoli"
+        },
+        "homeTeam": {
+          "id": 422029,
+          "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+          "name": "Genoa"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319129076,
+        "round": "Regular Season - 1",
+        "date": "2026-08-22T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 1344513,
+          "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+          "name": "Monza"
+        },
+        "homeTeam": {
+          "id": 430539,
+          "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+          "name": "Inter"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      },
+      {
+        "id": 1319131629,
+        "round": "Regular Season - 1",
+        "date": "2026-08-22T16:30:00.000Z",
+        "country": {
+          "code": "IT",
+          "name": "Italy",
+          "logo": "https://highlightly.net/soccer/images/countries/IT.svg"
+        },
+        "state": {
+          "clock": null,
+          "score": {
+            "current": null,
+            "penalties": null
+          },
+          "description": "Not started"
+        },
+        "awayTeam": {
+          "id": 762429,
+          "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+          "name": "Como"
+        },
+        "homeTeam": {
+          "id": 421178,
+          "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+          "name": "Udinese"
+        },
+        "league": {
+          "id": 115669,
+          "logo": "https://highlightly.net/soccer/images/leagues/115669.png",
+          "name": "Serie A",
+          "season": 2026
+        }
+      }
+    ],
+    "lastScheduleSyncAt": "2026-08-19T15:44:50.492Z",
+    "lastLiveSyncAt": null
+  }
+}

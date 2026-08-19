@@ -1,0 +1,335 @@
+{
+  "createdAt": 1787140459129,
+  "data": [
+    {
+      "team": {
+        "id": 445857,
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "name": "Parma"
+      },
+      "statistics": [
+        {
+          "value": 1.66,
+          "displayName": "Expected Goals"
+        },
+        {
+          "value": 4,
+          "displayName": "Big Chances Created"
+        },
+        {
+          "value": 13,
+          "displayName": "Free Kicks"
+        },
+        {
+          "value": 1.5,
+          "displayName": "Expected Assists"
+        },
+        {
+          "value": 7,
+          "displayName": "Successful Crosses"
+        },
+        {
+          "value": 47,
+          "displayName": "Crosses"
+        },
+        {
+          "value": 178,
+          "displayName": "Passes Own Half"
+        },
+        {
+          "value": 468,
+          "displayName": "Passes Opposition Half"
+        },
+        {
+          "value": 24,
+          "displayName": "Successful Long Passes"
+        },
+        {
+          "value": 44,
+          "displayName": "Long Passes"
+        },
+        {
+          "value": 34,
+          "displayName": "Throw-Ins"
+        },
+        {
+          "value": 23,
+          "displayName": "Key Passes"
+        },
+        {
+          "value": 206,
+          "displayName": "Passes Into Final Third"
+        },
+        {
+          "value": 77,
+          "displayName": "Backward Passes"
+        },
+        {
+          "value": 4,
+          "displayName": "Goal Kicks"
+        },
+        {
+          "value": 5,
+          "displayName": "Interceptions"
+        },
+        {
+          "value": 6,
+          "displayName": "Successful Tackles"
+        },
+        {
+          "value": 12,
+          "displayName": "Tackles"
+        },
+        {
+          "value": 7,
+          "displayName": "Clearances"
+        },
+        {
+          "value": 11,
+          "displayName": "Successful Aerial Duels"
+        },
+        {
+          "value": 24,
+          "displayName": "Aerial Duels"
+        },
+        {
+          "value": 2,
+          "displayName": "Successful Dribbles"
+        },
+        {
+          "value": 8,
+          "displayName": "Dribbles"
+        },
+        {
+          "value": 0.3,
+          "displayName": "Shots accuracy"
+        },
+        {
+          "value": 64,
+          "displayName": "Failed passes"
+        },
+        {
+          "value": 0.76,
+          "displayName": "Possession"
+        },
+        {
+          "value": 8,
+          "displayName": "Shots on target"
+        },
+        {
+          "value": 12,
+          "displayName": "Corners"
+        },
+        {
+          "value": 2,
+          "displayName": "Offsides"
+        },
+        {
+          "value": 535,
+          "displayName": "Successful passes"
+        },
+        {
+          "value": 0,
+          "displayName": "Red cards"
+        },
+        {
+          "value": 10,
+          "displayName": "Shots off target"
+        },
+        {
+          "value": 9,
+          "displayName": "Blocked shots"
+        },
+        {
+          "value": 12,
+          "displayName": "Shots within penalty area"
+        },
+        {
+          "value": 599,
+          "displayName": "Total passes"
+        },
+        {
+          "value": 15,
+          "displayName": "Shots outside penalty area"
+        },
+        {
+          "value": 0,
+          "displayName": "Goalkeeper saves"
+        },
+        {
+          "value": 7,
+          "displayName": "Fouls"
+        },
+        {
+          "value": 2,
+          "displayName": "Yellow cards"
+        }
+      ]
+    },
+    {
+      "team": {
+        "id": 429688,
+        "logo": "https://highlightly.net/soccer/images/teams/429688.png",
+        "name": "Verona"
+      },
+      "statistics": [
+        {
+          "value": 0.91,
+          "displayName": "Expected Goals"
+        },
+        {
+          "value": 1,
+          "displayName": "Big Chances Created"
+        },
+        {
+          "value": 6,
+          "displayName": "Free Kicks"
+        },
+        {
+          "value": 0.22,
+          "displayName": "Expected Assists"
+        },
+        {
+          "value": 2,
+          "displayName": "Successful Crosses"
+        },
+        {
+          "value": 4,
+          "displayName": "Crosses"
+        },
+        {
+          "value": 73,
+          "displayName": "Passes Own Half"
+        },
+        {
+          "value": 132,
+          "displayName": "Passes Opposition Half"
+        },
+        {
+          "value": 19,
+          "displayName": "Successful Long Passes"
+        },
+        {
+          "value": 53,
+          "displayName": "Long Passes"
+        },
+        {
+          "value": 12,
+          "displayName": "Throw-Ins"
+        },
+        {
+          "value": 3,
+          "displayName": "Key Passes"
+        },
+        {
+          "value": 22,
+          "displayName": "Passes Into Final Third"
+        },
+        {
+          "value": 23,
+          "displayName": "Backward Passes"
+        },
+        {
+          "value": 13,
+          "displayName": "Goal Kicks"
+        },
+        {
+          "value": 4,
+          "displayName": "Interceptions"
+        },
+        {
+          "value": 13,
+          "displayName": "Successful Tackles"
+        },
+        {
+          "value": 16,
+          "displayName": "Tackles"
+        },
+        {
+          "value": 49,
+          "displayName": "Clearances"
+        },
+        {
+          "value": 13,
+          "displayName": "Successful Aerial Duels"
+        },
+        {
+          "value": 24,
+          "displayName": "Aerial Duels"
+        },
+        {
+          "value": 7,
+          "displayName": "Successful Dribbles"
+        },
+        {
+          "value": 13,
+          "displayName": "Dribbles"
+        },
+        {
+          "value": 0.25,
+          "displayName": "Shots accuracy"
+        },
+        {
+          "value": 70,
+          "displayName": "Failed passes"
+        },
+        {
+          "value": 0.24,
+          "displayName": "Possession"
+        },
+        {
+          "value": 1,
+          "displayName": "Shots on target"
+        },
+        {
+          "value": 1,
+          "displayName": "Corners"
+        },
+        {
+          "value": 0,
+          "displayName": "Offsides"
+        },
+        {
+          "value": 131,
+          "displayName": "Successful passes"
+        },
+        {
+          "value": 1,
+          "displayName": "Red cards"
+        },
+        {
+          "value": 2,
+          "displayName": "Shots off target"
+        },
+        {
+          "value": 1,
+          "displayName": "Blocked shots"
+        },
+        {
+          "value": 2,
+          "displayName": "Shots within penalty area"
+        },
+        {
+          "value": 201,
+          "displayName": "Total passes"
+        },
+        {
+          "value": 2,
+          "displayName": "Shots outside penalty area"
+        },
+        {
+          "value": 5,
+          "displayName": "Goalkeeper saves"
+        },
+        {
+          "value": 14,
+          "displayName": "Fouls"
+        },
+        {
+          "value": 1,
+          "displayName": "Yellow cards"
+        }
+      ]
+    }
+  ]
+}

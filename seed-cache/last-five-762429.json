@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787136069142,
+  "data": [
+    {
+      "id": 1319587765,
+      "round": "Club Friendlies",
+      "date": "2026-08-16T10:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "0 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "homeTeam": {
+        "id": 34824,
+        "logo": "https://highlightly.net/soccer/images/teams/34824.png",
+        "name": "Liverpool"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1354732363,
+      "round": "Club Friendlies",
+      "date": "2026-08-12T18:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 120,
+        "score": {
+          "current": "1 - 1",
+          "penalties": "4 - 3"
+        },
+        "description": "Finished after penalties"
+      },
+      "awayTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "homeTeam": {
+        "id": 36526,
+        "logo": "https://highlightly.net/soccer/images/teams/36526.png",
+        "name": "Arsenal"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1368018175,
+      "round": "3rd place",
+      "date": "2026-07-31T16:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "homeTeam": {
+        "id": 206726,
+        "logo": "https://highlightly.net/soccer/images/teams/206726.png",
+        "name": "Famalicao"
+      },
+      "league": {
+        "id": 1052620,
+        "logo": null,
+        "name": "Como Cup",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1368017324,
+      "round": "Group Stage",
+      "date": "2026-07-29T20:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 120,
+        "score": {
+          "current": "1 - 1",
+          "penalties": "3 - 1"
+        },
+        "description": "Finished after penalties"
+      },
+      "awayTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "homeTeam": {
+        "id": 454367,
+        "logo": "https://highlightly.net/soccer/images/teams/454367.png",
+        "name": "Villarreal"
+      },
+      "league": {
+        "id": 1052620,
+        "logo": null,
+        "name": "Como Cup",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1368016473,
+      "round": "Group Stage",
+      "date": "2026-07-29T18:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 22430591,
+        "logo": null,
+        "name": "Al Ula"
+      },
+      "homeTeam": {
+        "id": 762429,
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "name": "Como"
+      },
+      "league": {
+        "id": 1052620,
+        "logo": null,
+        "name": "Como Cup",
+        "season": 2026
+      }
+    }
+  ]
+}

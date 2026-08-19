@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787139102916,
+  "data": [
+    {
+      "id": 1319586914,
+      "round": "Club Friendlies",
+      "date": "2026-08-15T15:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 2",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 141199,
+        "logo": "https://highlightly.net/soccer/images/teams/141199.png",
+        "name": "Borussia Dortmund"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348885142,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T14:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 44185,
+        "logo": "https://highlightly.net/soccer/images/teams/44185.png",
+        "name": "Brighton"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348864718,
+      "round": "Club Friendlies",
+      "date": "2026-08-04T18:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 4",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 1164101,
+        "logo": "https://highlightly.net/soccer/images/teams/1164101.png",
+        "name": "Newport County AFC"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347605238,
+      "round": "Club Friendlies",
+      "date": "2026-08-01T14:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "4 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "homeTeam": {
+        "id": 37377,
+        "logo": "https://highlightly.net/soccer/images/teams/37377.png",
+        "name": "Cardiff"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1334156034,
+      "round": "Club Friendlies",
+      "date": "2026-07-26T15:30:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 3",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 8452916,
+        "logo": "https://highlightly.net/soccer/images/teams/8452916.png",
+        "name": "Cannes"
+      },
+      "homeTeam": {
+        "id": 423731,
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "name": "AS Roma"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

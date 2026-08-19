@@ -1,0 +1,175 @@
+{
+  "createdAt": 1787138004757,
+  "data": [
+    {
+      "id": 1360423851,
+      "round": "Club Friendlies",
+      "date": "2026-08-15T14:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 426284,
+        "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+        "name": "Bologna"
+      },
+      "homeTeam": {
+        "id": 44185,
+        "logo": "https://highlightly.net/soccer/images/teams/44185.png",
+        "name": "Brighton"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1348888546,
+      "round": "Club Friendlies",
+      "date": "2026-08-08T15:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 4",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 682435,
+        "logo": "https://highlightly.net/soccer/images/teams/682435.png",
+        "name": "Pisa"
+      },
+      "homeTeam": {
+        "id": 426284,
+        "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+        "name": "Bologna"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1347578857,
+      "round": "Club Friendlies",
+      "date": "2026-08-01T09:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "3 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 358204,
+        "logo": "https://highlightly.net/soccer/images/teams/358204.png",
+        "name": "Cambuur"
+      },
+      "homeTeam": {
+        "id": 426284,
+        "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+        "name": "Bologna"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1330152079,
+      "round": "Club Friendlies",
+      "date": "2026-07-25T14:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "2 - 0",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 15311125,
+        "logo": null,
+        "name": "Iraklis 1908"
+      },
+      "homeTeam": {
+        "id": 426284,
+        "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+        "name": "Bologna"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    },
+    {
+      "id": 1328222862,
+      "round": "Club Friendlies",
+      "date": "2026-07-22T14:00:00.000Z",
+      "country": {
+        "code": "World",
+        "name": "World",
+        "logo": "https://highlightly.net/soccer/images/countries/World.png"
+      },
+      "state": {
+        "clock": 90,
+        "score": {
+          "current": "1 - 1",
+          "penalties": null
+        },
+        "description": "Finished"
+      },
+      "awayTeam": {
+        "id": 153964,
+        "logo": "https://highlightly.net/soccer/images/teams/153964.png",
+        "name": "FC Heidenheim"
+      },
+      "homeTeam": {
+        "id": 426284,
+        "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+        "name": "Bologna"
+      },
+      "league": {
+        "id": 568401,
+        "logo": "https://highlightly.net/soccer/images/leagues/568401.png",
+        "name": "Friendlies Clubs",
+        "season": 2026
+      }
+    }
+  ]
+}

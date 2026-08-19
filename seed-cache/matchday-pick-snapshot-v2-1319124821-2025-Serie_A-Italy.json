@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787150693067,
+  "data": {
+    "pick": {
+      "label": "1 · AS Roma",
+      "probability": 66.3,
+      "market": "1X2",
+      "selection": "home",
+      "line": null
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:44:53.067Z"
+  }
+}

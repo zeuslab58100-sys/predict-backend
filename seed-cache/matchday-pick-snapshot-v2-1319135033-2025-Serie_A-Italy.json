@@ -1,0 +1,14 @@
+{
+  "createdAt": 1787151211806,
+  "data": {
+    "pick": {
+      "label": "2 · Inter",
+      "probability": 60.42,
+      "market": "1X2",
+      "selection": "away",
+      "line": null
+    },
+    "modelVersion": "PREDICT v5",
+    "generatedAt": "2026-08-19T14:53:31.806Z"
+  }
+}

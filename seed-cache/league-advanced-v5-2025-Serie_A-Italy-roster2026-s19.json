@@ -1,0 +1,513 @@
+{
+  "createdAt": 1787140650522,
+  "data": {
+    "sampleSizePerVenue": 19,
+    "teamsCount": 20,
+    "uniqueMatchesRequested": 482,
+    "uniqueMatchesWithStatistics": 435,
+    "coveragePercentage": 90.25,
+    "teams": [
+      {
+        "id": "416923",
+        "name": "AC Milan",
+        "logo": "https://highlightly.net/soccer/images/teams/416923.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 4.801532567049808,
+          "cornersAgainst": 3.6245210727969344,
+          "shotsOnTargetFor": 4.8911877394636,
+          "shotsOnTargetAgainst": 4.155555555555555,
+          "cardsFor": 2.0965517241379312,
+          "cardsAgainst": 2.118007662835248
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 18,
+          "cornersFor": 3.4719999999999995,
+          "cornersAgainst": 4.6168,
+          "shotsOnTargetFor": 3.6543999999999994,
+          "shotsOnTargetAgainst": 3.672799999999999,
+          "cardsFor": 1.5248,
+          "cardsAgainst": 1.9888000000000003
+        }
+      },
+      {
+        "id": "423731",
+        "name": "AS Roma",
+        "logo": "https://highlightly.net/soccer/images/teams/423731.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 5.854251012145747,
+          "cornersAgainst": 2.7198380566801617,
+          "shotsOnTargetFor": 5.359514170040485,
+          "shotsOnTargetAgainst": 2.6461538461538456,
+          "cardsFor": 1.5368421052631578,
+          "cardsAgainst": 2.2615384615384606
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 4.441379310344828,
+          "cornersAgainst": 4.393869731800766,
+          "shotsOnTargetFor": 3.9287356321839066,
+          "shotsOnTargetAgainst": 4.6421455938697305,
+          "cardsFor": 1.9885057471264367,
+          "cardsAgainst": 2.0122605363984674
+        }
+      },
+      {
+        "id": "425433",
+        "name": "Atalanta",
+        "logo": "https://highlightly.net/soccer/images/teams/425433.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 6.797701149425286,
+          "cornersAgainst": 3.6344827586206896,
+          "shotsOnTargetFor": 4.862835249042145,
+          "shotsOnTargetAgainst": 2.785440613026819,
+          "cardsFor": 1.2168582375478925,
+          "cardsAgainst": 1.6091954022988502
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 4.221862348178137,
+          "cornersAgainst": 4.421862348178136,
+          "shotsOnTargetFor": 4.334412955465585,
+          "shotsOnTargetAgainst": 5.124696356275302,
+          "cardsFor": 2.1203389830508472,
+          "cardsAgainst": 1.4711864406779653
+        }
+      },
+      {
+        "id": "426284",
+        "name": "Bologna",
+        "logo": "https://highlightly.net/soccer/images/teams/426284.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 5.168582375478925,
+          "cornersAgainst": 3.8375478927203064,
+          "shotsOnTargetFor": 3.6245210727969353,
+          "shotsOnTargetAgainst": 3.3601532567049803,
+          "cardsFor": 1.3679999999999999,
+          "cardsAgainst": 1.8543999999999996
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 3.2304526748971183,
+          "cornersAgainst": 5.038683127572016,
+          "shotsOnTargetFor": 3.5810699588477366,
+          "shotsOnTargetAgainst": 4.16625514403292,
+          "cardsFor": 2.235390946502057,
+          "cardsAgainst": 1.8370370370370368
+        }
+      },
+      {
+        "id": "417774",
+        "name": "Cagliari",
+        "logo": "https://highlightly.net/soccer/images/teams/417774.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 4.337448559670781,
+          "cornersAgainst": 4.988477366255143,
+          "shotsOnTargetFor": 3.4930041152263365,
+          "shotsOnTargetAgainst": 3.9884773662551436,
+          "cardsFor": 1.5868312757201641,
+          "cardsAgainst": 1.393415637860082
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 3.6107279693486594,
+          "cornersAgainst": 4.89655172413793,
+          "shotsOnTargetFor": 3.6819923371647505,
+          "shotsOnTargetAgainst": 4.9210727969348635,
+          "cardsFor": 2.4551724137931035,
+          "cardsAgainst": 1.685823754789272
+        }
+      },
+      {
+        "id": "762429",
+        "name": "Como",
+        "logo": "https://highlightly.net/soccer/images/teams/762429.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 5.38544061302682,
+          "cornersAgainst": 1.8597701149425283,
+          "shotsOnTargetFor": 6.491954022988503,
+          "shotsOnTargetAgainst": 2.48735632183908,
+          "cardsFor": 1.8942528735632183,
+          "cardsAgainst": 2.290421455938697
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 4.025287356321837,
+          "cornersAgainst": 4.249808429118774,
+          "shotsOnTargetFor": 3.914176245210727,
+          "shotsOnTargetAgainst": 3.4360153256704975,
+          "cardsFor": 2.2314176245210726,
+          "cardsAgainst": 2.5302681992337157
+        }
+      },
+      {
+        "id": "427986",
+        "name": "Fiorentina",
+        "logo": "https://highlightly.net/soccer/images/teams/427986.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 5.270292887029289,
+          "cornersAgainst": 3.923012552301256,
+          "shotsOnTargetFor": 4.161506276150627,
+          "shotsOnTargetAgainst": 3.692050209205021,
+          "cardsFor": 2.0192468619246857,
+          "cardsAgainst": 2.106276150627615
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 3.2704980842911873,
+          "cornersAgainst": 5.359386973180076,
+          "shotsOnTargetFor": 2.927969348659004,
+          "shotsOnTargetAgainst": 5.7157088122605355,
+          "cardsFor": 2.280459770114942,
+          "cardsAgainst": 2.062068965517241
+        }
+      },
+      {
+        "id": "436496",
+        "name": "Frosinone",
+        "logo": "https://highlightly.net/soccer/images/teams/436496.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 7.352263374485594,
+          "cornersAgainst": 3.905349794238682,
+          "shotsOnTargetFor": 6.813991769547326,
+          "shotsOnTargetAgainst": 4.189300411522631,
+          "cardsFor": 2.200823045267489,
+          "cardsAgainst": 2.5967078189300405
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 15,
+          "cornersFor": 5.613100436681222,
+          "cornersAgainst": 4.184279475982532,
+          "shotsOnTargetFor": 5.413100436681221,
+          "shotsOnTargetAgainst": 5.463755458515283,
+          "cardsFor": 2.6489082969432305,
+          "cardsAgainst": 2.2497816593886464
+        }
+      },
+      {
+        "id": "422029",
+        "name": "Genoa",
+        "logo": "https://highlightly.net/soccer/images/teams/422029.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 3.616736401673639,
+          "cornersAgainst": 3.840167364016736,
+          "shotsOnTargetFor": 4.092050209205021,
+          "shotsOnTargetAgainst": 3.45020920502092,
+          "cardsFor": 1.6493723849372384,
+          "cardsAgainst": 3.2117154811715483
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 3.8413793103448266,
+          "cornersAgainst": 5.556321839080459,
+          "shotsOnTargetFor": 3.493486590038313,
+          "shotsOnTargetAgainst": 4.734099616858237,
+          "cardsFor": 1.265134099616858,
+          "cardsAgainst": 2.1095785440613026
+        }
+      },
+      {
+        "id": "430539",
+        "name": "Inter",
+        "logo": "https://highlightly.net/soccer/images/teams/430539.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 7.0061302681992315,
+          "cornersAgainst": 3.127203065134099,
+          "shotsOnTargetFor": 6.7203065134099615,
+          "shotsOnTargetAgainst": 2.9969348659003825,
+          "cardsFor": 1.3908045977011496,
+          "cardsAgainst": 1.5279693486590038
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 5.011522633744854,
+          "cornersAgainst": 2.8172839506172838,
+          "shotsOnTargetFor": 5.261728395061726,
+          "shotsOnTargetAgainst": 2.871604938271604,
+          "cardsFor": 2.0065843621399178,
+          "cardsAgainst": 1.723456790123457
+        }
+      },
+      {
+        "id": "422880",
+        "name": "Juventus",
+        "logo": "https://highlightly.net/soccer/images/teams/422880.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 18,
+          "cornersFor": 6.322834645669289,
+          "cornersAgainst": 3.033070866141732,
+          "shotsOnTargetFor": 6.763779527559053,
+          "shotsOnTargetAgainst": 2.3007874015748024,
+          "cardsFor": 1.1527559055118106,
+          "cardsAgainst": 2.188188976377952
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 18,
+          "cornersFor": 4.611199999999999,
+          "cornersAgainst": 4.1655999999999995,
+          "shotsOnTargetFor": 5.3344,
+          "shotsOnTargetAgainst": 3.2623999999999995,
+          "cardsFor": 1.6919795221843001,
+          "cardsAgainst": 1.8668941979522182
+        }
+      },
+      {
+        "id": "415221",
+        "name": "Lazio",
+        "logo": "https://highlightly.net/soccer/images/teams/415221.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 4.567816091954022,
+          "cornersAgainst": 3.5256704980842906,
+          "shotsOnTargetFor": 4.824521072796934,
+          "shotsOnTargetAgainst": 4.377011494252873,
+          "cardsFor": 2.4582375478927196,
+          "cardsAgainst": 2.315708812260536
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 2.960919540229885,
+          "cornersAgainst": 4.937931034482758,
+          "shotsOnTargetFor": 3.6421455938697314,
+          "shotsOnTargetAgainst": 3.809961685823754,
+          "cardsFor": 2.0735632183908046,
+          "cardsAgainst": 2.3931034482758613
+        }
+      },
+      {
+        "id": "738601",
+        "name": "Lecce",
+        "logo": "https://highlightly.net/soccer/images/teams/738601.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 3.8766283524904197,
+          "cornersAgainst": 4.308812260536397,
+          "shotsOnTargetFor": 2.718007662835249,
+          "shotsOnTargetAgainst": 3.791570881226053,
+          "cardsFor": 1.7977011494252872,
+          "cardsAgainst": 1.9969348659003827
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 4.160919540229885,
+          "cornersAgainst": 6.229118773946359,
+          "shotsOnTargetFor": 2.4022988505747125,
+          "shotsOnTargetAgainst": 4.652107279693487,
+          "cardsFor": 1.973180076628352,
+          "cardsAgainst": 1.3402298850574712
+        }
+      },
+      {
+        "id": "1344513",
+        "name": "Monza",
+        "logo": "https://highlightly.net/soccer/images/teams/1344513.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 6.166283524904213,
+          "cornersAgainst": 3.8091954022988492,
+          "shotsOnTargetFor": 5.604597701149426,
+          "shotsOnTargetAgainst": 3.523371647509579,
+          "cardsFor": 1.7509578544061297,
+          "cardsAgainst": 2.0927203065134097
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 18,
+          "cornersFor": 5.026771653543307,
+          "cornersAgainst": 3.49763779527559,
+          "shotsOnTargetFor": 4.607874015748029,
+          "shotsOnTargetAgainst": 3.9511811023622045,
+          "cardsFor": 2.499212598425196,
+          "cardsAgainst": 2.2417322834645663
+        }
+      },
+      {
+        "id": "419476",
+        "name": "Napoli",
+        "logo": "https://highlightly.net/soccer/images/teams/419476.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 6.265900383141761,
+          "cornersAgainst": 2.612260536398467,
+          "shotsOnTargetFor": 5.187739463601531,
+          "shotsOnTargetAgainst": 3.2727969348659,
+          "cardsFor": 0.8819923371647507,
+          "cardsAgainst": 1.972413793103448
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 19,
+          "cornersFor": 4.527969348659004,
+          "cornersAgainst": 2.8574712643678155,
+          "shotsOnTargetFor": 4.029118773946359,
+          "shotsOnTargetAgainst": 2.9386973180076628,
+          "cardsFor": 1.6873563218390801,
+          "cardsAgainst": 1.783141762452107
+        }
+      },
+      {
+        "id": "445857",
+        "name": "Parma",
+        "logo": "https://highlightly.net/soccer/images/teams/445857.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 18,
+          "cornersFor": 4.4224,
+          "cornersAgainst": 3.7751999999999994,
+          "shotsOnTargetFor": 3.0951999999999997,
+          "shotsOnTargetAgainst": 4.412,
+          "cardsFor": 1.8552000000000004,
+          "cardsAgainst": 2.0096000000000003
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 3.760493827160494,
+          "cornersAgainst": 6.598353909465019,
+          "shotsOnTargetFor": 2.3341563786008224,
+          "shotsOnTargetAgainst": 4.506995884773661,
+          "cardsFor": 1.4699588477366254,
+          "cardsAgainst": 1.7893004115226332
+        }
+      },
+      {
+        "id": "416072",
+        "name": "Sassuolo",
+        "logo": "https://highlightly.net/soccer/images/teams/416072.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 16,
+          "cornersFor": 3.996551724137931,
+          "cornersAgainst": 5.336206896551724,
+          "shotsOnTargetFor": 3.7327586206896552,
+          "shotsOnTargetAgainst": 4.572413793103446,
+          "cardsFor": 2.11090573012939,
+          "cardsAgainst": 2.328096118299445
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 3.8291497975708486,
+          "cornersAgainst": 4.870445344129554,
+          "shotsOnTargetFor": 3.6291497975708498,
+          "shotsOnTargetAgainst": 5.068016194331983,
+          "cardsFor": 2.438866396761133,
+          "cardsAgainst": 1.9910931174089064
+        }
+      },
+      {
+        "id": "428837",
+        "name": "Torino",
+        "logo": "https://highlightly.net/soccer/images/teams/428837.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 17,
+          "cornersFor": 4.19163179916318,
+          "cornersAgainst": 4.939748953974896,
+          "shotsOnTargetFor": 4.129707112970712,
+          "shotsOnTargetAgainst": 4.426778242677823,
+          "cardsFor": 1.8945606694560668,
+          "cardsAgainst": 1.7472803347280332
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 16,
+          "cornersFor": 2.889655172413793,
+          "cornersAgainst": 4.79655172413793,
+          "shotsOnTargetFor": 3.2198275862068964,
+          "shotsOnTargetAgainst": 4.993965517241379,
+          "cardsFor": 1.904310344827586,
+          "cardsAgainst": 1.089655172413793
+        }
+      },
+      {
+        "id": "421178",
+        "name": "Udinese",
+        "logo": "https://highlightly.net/soccer/images/teams/421178.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 18,
+          "cornersFor": 4.864566929133857,
+          "cornersAgainst": 4.444094488188976,
+          "shotsOnTargetFor": 3.8055118110236203,
+          "shotsOnTargetAgainst": 3.388976377952755,
+          "cardsFor": 1.7204724409448817,
+          "cardsAgainst": 2.0692913385826768
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 16,
+          "cornersFor": 4.005833333333333,
+          "cornersAgainst": 5.282499999999998,
+          "shotsOnTargetFor": 4.1049999999999995,
+          "shotsOnTargetAgainst": 4.599166666666665,
+          "cardsFor": 2.0274999999999994,
+          "cardsAgainst": 1.3966666666666663
+        }
+      },
+      {
+        "id": "440751",
+        "name": "Venezia",
+        "logo": "https://highlightly.net/soccer/images/teams/440751.png",
+        "home": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 11,
+          "cornersFor": 5.034920634920635,
+          "cornersAgainst": 3.61058201058201,
+          "shotsOnTargetFor": 7.5058201058201055,
+          "shotsOnTargetAgainst": 3.0486772486772487,
+          "cardsFor": 1.3767195767195768,
+          "cardsAgainst": 2.6126984126984127
+        },
+        "away": {
+          "requestedMatches": 19,
+          "matchesWithAnyData": 10,
+          "cornersFor": 4.301123595505617,
+          "cornersAgainst": 5.6741573033707855,
+          "shotsOnTargetFor": 5.051685393258427,
+          "shotsOnTargetAgainst": 3.714606741573034,
+          "cardsFor": 1.5752808988764047,
+          "cardsAgainst": 1.937078651685393
+        }
+      }
+    ],
+    "note": "PREDICT v5: stagione avanzata completa, match deduplicati, finestre 5/10/15/19 ponderate, preferenza casa/trasferta e cache persistente."
+  }
+}
