@@ -4958,6 +4958,51 @@ async function precomputeUpcomingPredictData() {
         continue;
       }
 
+      // PRIMA assicuriamo la pagina "Analisi partita".
+      // I vecchi seed avevano già i pronostici, ma non necessariamente
+      // lo snapshot completo usato dalla pagina di analisi.
+      const existingAnalysis =
+        await getExistingMatchAnalysisSnapshot({
+          homeTeamId,
+          awayTeamId,
+          historicalSeason:
+            '2025',
+          leagueName:
+            'Serie A',
+          countryName:
+            'Italy',
+        });
+
+      if (!existingAnalysis) {
+        console.log(
+          `PREDICT CENTRAL: preparo 1 analisi completa (${homeTeamId}-${awayTeamId})`,
+        );
+
+        try {
+          await internalMatchAnalysis({
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              '2025',
+            leagueName:
+              'Serie A',
+            countryName:
+              'Italy',
+          });
+        } catch (error) {
+          console.warn(
+            `Precompute analisi ${homeTeamId}-${awayTeamId} non riuscito:`,
+            error?.message ??
+              error,
+          );
+        }
+
+        // Massimo UNA nuova analisi completa per ciclo da 15 minuti.
+        // Così evitiamo picchi verso Highlightly.
+        break;
+      }
+
+      // Solo dopo verifichiamo il pronostico principale.
       const existingSnapshot =
         await getExistingMatchdayPickSnapshot({
           matchId:
@@ -4992,14 +5037,12 @@ async function precomputeUpcomingPredictData() {
         });
       } catch (error) {
         console.warn(
-          `Precompute ${homeTeamId}-${awayTeamId} non riuscito:`,
+          `Precompute pronostico ${homeTeamId}-${awayTeamId} non riuscito:`,
           error?.message ??
             error,
         );
       }
 
-      // Massimo un nuovo match per ogni ciclo dello scheduler.
-      // Il ciclo successivo arriverà dopo 15 minuti.
       break;
     }
   } finally {
@@ -6611,6 +6654,50 @@ async function evaluateMatchdayPick(
     won,
     `${pick.market}: ${round2(total)}`,
   );
+}
+
+async function getExistingMatchAnalysisSnapshot({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  const key = [
+    'match-analysis-snapshot-v1',
+    homeTeamId,
+    awayTeamId,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ].join('-');
+
+  const memory =
+    getMemoryCache(
+      key,
+      14 * 24 * 60 * 60 * 1000,
+    );
+
+  if (memory) {
+    return memory;
+  }
+
+  const disk =
+    await getDiskCache(
+      key,
+      14 * 24 * 60 * 60 * 1000,
+    );
+
+  if (disk) {
+    setMemoryCache(
+      key,
+      disk,
+    );
+
+    return disk;
+  }
+
+  return null;
 }
 
 async function getOrCreateMatchdayPickSnapshot({
