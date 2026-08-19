@@ -1,0 +1,24 @@
+# Segreti locali
+.env
+.env.*
+!.env.example
+
+# Dipendenze
+node_modules/
+
+# Cache locale PREDICT
+cache/
+
+# Config locale Railway CLI
+.railway/
+
+# Log
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
