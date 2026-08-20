@@ -48,6 +48,18 @@ const ADVANCED_SAMPLE_PER_VENUE = 19;
 const ADVANCED_FETCH_CONCURRENCY = 4;
 const ADVANCED_RECENCY_DECAY = 0.92;
 const ADVANCED_OPPOSITE_VENUE_WEIGHT = 0.70;
+
+// Progressione stagione corrente:
+// con poche partite il 2025/26 resta il "prior" principale;
+// giornata dopo giornata il 2026/27 pesa sempre di più.
+const CURRENT_SEASON_PRIOR_MATCHES = 5;
+const CURRENT_SEASON_MAX_WEIGHT = 0.90;
+
+// Un 404 sulle statistiche appena concluse può essere temporaneo.
+// I payload validi restano in cache 30 giorni, i "non disponibili"
+// vengono invece riprovati dopo un'ora.
+const UNAVAILABLE_STATS_CACHE_TIME = 60 * 60 * 1000;
+
 const CENTRAL_SERIE_A_SCHEDULE_INTERVAL = 6 * 60 * 60 * 1000;
 const CENTRAL_SERIE_A_LIVE_INTERVAL = 15 * 60 * 1000;
 const CENTRAL_SERIE_A_PRESTART_WINDOW = 15 * 60 * 1000;
@@ -61,7 +73,8 @@ const INTERNAL_SYNC_TOKEN =
 
 
 // Stagione corrente mostrata nell'app.
-// Lo storico usato dal modello resta 2025, ma il roster corrente è 2026.
+// Il 2025/26 resta il prior storico iniziale; i risultati 2026/27
+// entrano progressivamente nel modello dopo ogni partita conclusa.
 const CURRENT_SERIE_A_SEASON = '2026';
 
 const centralSerieAState = {
@@ -77,6 +90,10 @@ const centralSerieAState = {
   // Evita di elaborare più volte lo stesso risultato dopo i successivi
   // cicli dello scheduler o dopo un riavvio del backend.
   processedFinishedMatchIds: new Set(),
+
+  // Se il risultato è già noto ma Highlightly non ha ancora pubblicato
+  // corner/tiri/cartellini finali, il match resta qui fino al recupero.
+  pendingStatisticsMatchIds: new Set(),
 
   lastScheduleSyncAt: null,
   lastLiveSyncAt: null,
@@ -1087,6 +1104,375 @@ function buildTeamHistory(
       completedMatches,
   };
 }
+
+
+function progressiveCurrentSeasonWeight(
+  effectiveMatches,
+) {
+  const matches =
+    Math.max(
+      0,
+      Number(
+        effectiveMatches,
+      ) || 0,
+    );
+
+  if (matches <= 0) {
+    return 0;
+  }
+
+  return clamp(
+    matches /
+      (
+        matches +
+        CURRENT_SEASON_PRIOR_MATCHES
+      ),
+    0,
+    CURRENT_SEASON_MAX_WEIGHT,
+  );
+}
+
+function currentVenueProjection(
+  currentHistory,
+  targetVenue,
+) {
+  const target =
+    currentHistory?.[targetVenue];
+
+  const oppositeVenue =
+    targetVenue === 'home'
+      ? 'away'
+      : 'home';
+
+  const opposite =
+    currentHistory?.[oppositeVenue];
+
+  const targetPlayed =
+    Number(
+      target?.played || 0,
+    );
+
+  const oppositePlayed =
+    Number(
+      opposite?.played || 0,
+    );
+
+  const targetWeight =
+    targetPlayed;
+
+  const oppositeWeight =
+    oppositePlayed *
+    ADVANCED_OPPOSITE_VENUE_WEIGHT;
+
+  const totalWeight =
+    targetWeight +
+    oppositeWeight;
+
+  if (totalWeight <= 0) {
+    return null;
+  }
+
+  const fields = [
+    'pointsPerGame',
+    'averageGoalsFor',
+    'averageGoalsAgainst',
+    'averageTotalGoals',
+    'winPercentage',
+    'drawPercentage',
+    'lossPercentage',
+    'cleanSheetPercentage',
+    'failedToScorePercentage',
+    'over15Percentage',
+    'over25Percentage',
+    'over35Percentage',
+    'bothTeamsScorePercentage',
+  ];
+
+  const projection = {
+    played:
+      totalWeight,
+
+    actualTargetVenueMatches:
+      targetPlayed,
+
+    oppositeVenueMatches:
+      oppositePlayed,
+  };
+
+  for (const field of fields) {
+    const targetValue =
+      Number(
+        target?.[field],
+      );
+
+    const oppositeValue =
+      Number(
+        opposite?.[field],
+      );
+
+    let weightedTotal = 0;
+    let availableWeight = 0;
+
+    if (
+      targetPlayed > 0 &&
+      Number.isFinite(
+        targetValue,
+      )
+    ) {
+      weightedTotal +=
+        targetValue *
+        targetWeight;
+
+      availableWeight +=
+        targetWeight;
+    }
+
+    if (
+      oppositePlayed > 0 &&
+      Number.isFinite(
+        oppositeValue,
+      )
+    ) {
+      weightedTotal +=
+        oppositeValue *
+        oppositeWeight;
+
+      availableWeight +=
+        oppositeWeight;
+    }
+
+    projection[field] =
+      availableWeight > 0
+        ? weightedTotal /
+          availableWeight
+        : null;
+  }
+
+  return projection;
+}
+
+function overallCurrentProjection(
+  currentHistory,
+) {
+  const overall =
+    currentHistory?.overall;
+
+  const played =
+    Number(
+      overall?.played || 0,
+    );
+
+  if (played <= 0) {
+    return null;
+  }
+
+  return {
+    ...overall,
+    played,
+  };
+}
+
+function blendHistoricalWithCurrentStats({
+  historical,
+  current,
+}) {
+  if (!current) {
+    return {
+      ...historical,
+
+      predictCurrentSeasonWeight:
+        0,
+
+      predictCurrentSeasonMatches:
+        0,
+    };
+  }
+
+  const weight =
+    progressiveCurrentSeasonWeight(
+      current.played,
+    );
+
+  const fields = [
+    'pointsPerGame',
+    'averageGoalsFor',
+    'averageGoalsAgainst',
+    'averageTotalGoals',
+    'winPercentage',
+    'drawPercentage',
+    'lossPercentage',
+    'cleanSheetPercentage',
+    'failedToScorePercentage',
+    'over15Percentage',
+    'over25Percentage',
+    'over35Percentage',
+    'bothTeamsScorePercentage',
+  ];
+
+  const blended = {
+    ...historical,
+
+    predictCurrentSeasonWeight:
+      round2(
+        weight * 100,
+      ),
+
+    predictCurrentSeasonMatches:
+      round2(
+        current.played,
+      ),
+  };
+
+  for (const field of fields) {
+    const historicalValue =
+      Number(
+        historical?.[field],
+      );
+
+    const currentValue =
+      Number(
+        current?.[field],
+      );
+
+    if (
+      Number.isFinite(
+        historicalValue,
+      ) &&
+      Number.isFinite(
+        currentValue,
+      )
+    ) {
+      blended[field] =
+        historicalValue *
+          (1 - weight) +
+        currentValue *
+          weight;
+    } else if (
+      Number.isFinite(
+        currentValue,
+      )
+    ) {
+      blended[field] =
+        currentValue;
+    }
+  }
+
+  return blended;
+}
+
+function buildProgressiveCurrentSeasonModelTeam({
+  historicalTeam,
+  currentHistory,
+}) {
+  if (!historicalTeam) {
+    return historicalTeam;
+  }
+
+  const currentOverall =
+    overallCurrentProjection(
+      currentHistory,
+    );
+
+  const currentHome =
+    currentVenueProjection(
+      currentHistory,
+      'home',
+    );
+
+  const currentAway =
+    currentVenueProjection(
+      currentHistory,
+      'away',
+    );
+
+  const blendedOverall =
+    blendHistoricalWithCurrentStats({
+      historical:
+        historicalTeam
+          ?.summary
+          ?.overall ??
+        {},
+
+      current:
+        currentOverall,
+    });
+
+  const blendedHome =
+    blendHistoricalWithCurrentStats({
+      historical:
+        historicalTeam
+          ?.summary
+          ?.home ??
+        historicalTeam
+          ?.summary
+          ?.overall ??
+        {},
+
+      current:
+        currentHome,
+    });
+
+  const blendedAway =
+    blendHistoricalWithCurrentStats({
+      historical:
+        historicalTeam
+          ?.summary
+          ?.away ??
+        historicalTeam
+          ?.summary
+          ?.overall ??
+        {},
+
+      current:
+        currentAway,
+    });
+
+  return {
+    ...historicalTeam,
+
+    summary: {
+      ...historicalTeam.summary,
+
+      overall:
+        blendedOverall,
+
+      home:
+        blendedHome,
+
+      away:
+        blendedAway,
+    },
+
+    currentSeasonAdjustment: {
+      season:
+        CURRENT_SERIE_A_SEASON,
+
+      completedMatches:
+        Number(
+          currentHistory
+            ?.overall
+            ?.played ||
+            0,
+        ),
+
+      overallWeight:
+        blendedOverall
+          .predictCurrentSeasonWeight ??
+        0,
+
+      homeWeight:
+        blendedHome
+          .predictCurrentSeasonWeight ??
+        0,
+
+      awayWeight:
+        blendedAway
+          .predictCurrentSeasonWeight ??
+        0,
+    },
+  };
+}
+
 
 function buildLeagueHistory(
   matches,
@@ -2801,7 +3187,7 @@ function calculatePrediction({
       'PREDICT v5',
 
     modelDescription:
-      'Poisson + casa/trasferta + forma recente + statistiche avanzate ponderate su campione esteso',
+      'Poisson + casa/trasferta + forma recente + storico 2025/26 con peso progressivo Serie A 2026/27 + statistiche avanzate ponderate',
 
     dataCoverage,
 
@@ -3008,51 +3394,137 @@ function extractTeamAdvancedStats(
   };
 }
 
+function statisticsCacheTtlForData(
+  data,
+) {
+  return data?.__unavailable === true
+    ? UNAVAILABLE_STATS_CACHE_TIME
+    : HISTORICAL_STATS_CACHE_TIME;
+}
+
+function getStatisticsMemoryCache(
+  key,
+) {
+  const item =
+    memoryCache.get(key);
+
+  if (!item) {
+    return null;
+  }
+
+  const ttl =
+    statisticsCacheTtlForData(
+      item.data,
+    );
+
+  if (
+    Date.now() -
+      item.createdAt >
+    ttl
+  ) {
+    memoryCache.delete(key);
+    return null;
+  }
+
+  return item.data;
+}
+
+async function getStatisticsDiskCache(
+  key,
+) {
+  try {
+    const raw =
+      await fs.readFile(
+        cacheFilePath(key),
+        'utf8',
+      );
+
+    const parsed =
+      JSON.parse(raw);
+
+    if (
+      !parsed ||
+      !parsed.createdAt ||
+      parsed.data === undefined
+    ) {
+      return null;
+    }
+
+    const ttl =
+      statisticsCacheTtlForData(
+        parsed.data,
+      );
+
+    if (
+      Date.now() -
+        parsed.createdAt >
+      ttl
+    ) {
+      return null;
+    }
+
+    return parsed.data;
+  } catch {
+    return null;
+  }
+}
+
 async function getHistoricalMatchStatistics(
   matchId,
 ) {
-  const key = `statistics-${matchId}`;
+  const key =
+    `statistics-${matchId}`;
 
-  const memory = getMemoryCache(
-    key,
-    HISTORICAL_STATS_CACHE_TIME,
-  );
+  const memory =
+    getStatisticsMemoryCache(
+      key,
+    );
 
   if (memory) {
-    if (memory.__unavailable === true) {
-      return null;
-    }
-
-    return memory;
+    return memory.__unavailable === true
+      ? null
+      : memory;
   }
 
-  const disk = await getDiskCache(
-    key,
-    HISTORICAL_STATS_CACHE_TIME,
-  );
+  const disk =
+    await getStatisticsDiskCache(
+      key,
+    );
 
   if (disk) {
-    setMemoryCache(key, disk);
+    setMemoryCache(
+      key,
+      disk,
+    );
 
-    if (disk.__unavailable === true) {
-      return null;
-    }
-
-    return disk;
+    return disk.__unavailable === true
+      ? null
+      : disk;
   }
 
   try {
-    const data = await highlightlyGet(
-      `/statistics/${matchId}`,
-      {},
+    const data =
+      await highlightlyGet(
+        `/statistics/${matchId}`,
+        {},
+      );
+
+    setMemoryCache(
+      key,
+      data,
     );
 
-    setMemoryCache(key, data);
-    await setDiskCache(key, data);
+    await setDiskCache(
+      key,
+      data,
+    );
 
     return data;
   } catch (error) {
-    if (error.statusCode === 404) {
+    if (
+      error.statusCode ===
+      404
+    ) {
       const unavailable = {
         __unavailable: true,
       };
@@ -3068,7 +3540,7 @@ async function getHistoricalMatchStatistics(
       );
 
       console.log(
-        `Statistiche non disponibili per match ${matchId}`,
+        `Statistiche non disponibili per match ${matchId}; nuovo tentativo dopo ${Math.round(UNAVAILABLE_STATS_CACHE_TIME / 60000)} minuti`,
       );
 
       return null;
@@ -3098,12 +3570,12 @@ async function getHistoricalMatchStatistics(
 async function getCachedHistoricalMatchStatistics(
   matchId,
 ) {
-  const key = `statistics-${matchId}`;
+  const key =
+    `statistics-${matchId}`;
 
   const memory =
-    getMemoryCache(
+    getStatisticsMemoryCache(
       key,
-      HISTORICAL_STATS_CACHE_TIME,
     );
 
   if (memory) {
@@ -3113,9 +3585,8 @@ async function getCachedHistoricalMatchStatistics(
   }
 
   const disk =
-    await getDiskCache(
+    await getStatisticsDiskCache(
       key,
-      HISTORICAL_STATS_CACHE_TIME,
     );
 
   if (disk) {
@@ -3131,6 +3602,7 @@ async function getCachedHistoricalMatchStatistics(
 
   return null;
 }
+
 
 function createAdvancedAccumulator() {
   return {
@@ -3687,6 +4159,9 @@ function buildAdvancedSampleFromPayloads({
   const accumulator =
     createAdvancedAccumulator();
 
+  let targetVenueMatchesWithAnyData = 0;
+  let oppositeVenueMatchesWithAnyData = 0;
+
   for (
     let index = 0;
     index < selectedMatches.length;
@@ -3734,6 +4209,25 @@ function buildAdvancedSampleFromPayloads({
 
     accumulator.matchesWithAnyData +=
       1;
+
+    const actualVenue =
+      String(
+        match
+          ?.predictAnalysis
+          ?.venue ??
+          '',
+      );
+
+    if (
+      actualVenue ===
+      targetVenue
+    ) {
+      targetVenueMatchesWithAnyData +=
+        1;
+    } else {
+      oppositeVenueMatchesWithAnyData +=
+        1;
+    }
 
     const weight =
       advancedMatchWeight({
@@ -3793,6 +4287,15 @@ function buildAdvancedSampleFromPayloads({
 
     matchesWithAnyData:
       accumulator.matchesWithAnyData,
+
+    targetVenueMatchesWithAnyData,
+
+    oppositeVenueMatchesWithAnyData,
+
+    effectiveVenueMatches:
+      targetVenueMatchesWithAnyData +
+      oppositeVenueMatchesWithAnyData *
+        ADVANCED_OPPOSITE_VENUE_WEIGHT,
 
     cornersFor:
       averageAccumulatorValue(
@@ -4050,6 +4553,388 @@ async function getLeagueAdvancedProfiles({
   };
 }
 
+
+function buildCurrentSeasonTeamProfile(
+  historicalIdentity,
+) {
+  const history =
+    buildTeamHistory(
+      centralSerieAState.matches,
+      historicalIdentity.id,
+    );
+
+  if (
+    Number(
+      history
+        ?.overall
+        ?.played ||
+        0,
+    ) <= 0
+  ) {
+    return null;
+  }
+
+  return {
+    ...historicalIdentity,
+
+    completedMatches:
+      history.matches.length,
+
+    summary: {
+      overall:
+        history.overall,
+
+      home:
+        history.home,
+
+      away:
+        history.away,
+    },
+
+    matches:
+      history.matches,
+
+    historicalSource:
+      'current-serie-a',
+
+    sourceLeagueName:
+      'Serie A',
+
+    sourceSeason:
+      CURRENT_SERIE_A_SEASON,
+  };
+}
+
+async function buildCurrentSeasonAdvancedProfilesForMatch({
+  homeTeam,
+  awayTeam,
+}) {
+  const currentTeams =
+    [
+      homeTeam,
+      awayTeam,
+    ]
+      .map(
+        buildCurrentSeasonTeamProfile,
+      )
+      .filter(Boolean);
+
+  if (
+    currentTeams.length ===
+    0
+  ) {
+    return {
+      sampleSizePerVenue:
+        ADVANCED_SAMPLE_PER_VENUE,
+
+      teamsCount: 0,
+      teams: [],
+
+      season:
+        CURRENT_SERIE_A_SEASON,
+
+      note:
+        'Nessuna statistica avanzata della stagione corrente ancora disponibile.',
+    };
+  }
+
+  const result =
+    await buildLeagueAdvancedProfiles({
+      leagueHistory: {
+        season:
+          CURRENT_SERIE_A_SEASON,
+
+        rosterSeason:
+          CURRENT_SERIE_A_SEASON,
+
+        leagueName:
+          'Serie A',
+
+        countryName:
+          'Italy',
+
+        teamsCount:
+          currentTeams.length,
+
+        teams:
+          currentTeams,
+      },
+
+      sampleSize:
+        ADVANCED_SAMPLE_PER_VENUE,
+    });
+
+  return {
+    ...result,
+
+    season:
+      CURRENT_SERIE_A_SEASON,
+
+    note:
+      'Statistiche avanzate Serie A 2026/27 usate con peso progressivo.',
+  };
+}
+
+function advancedCurrentEffectiveMatches(
+  sample,
+) {
+  const explicit =
+    Number(
+      sample
+        ?.effectiveVenueMatches,
+    );
+
+  if (
+    Number.isFinite(
+      explicit,
+    )
+  ) {
+    return Math.max(
+      0,
+      explicit,
+    );
+  }
+
+  return Math.max(
+    0,
+    Number(
+      sample
+        ?.matchesWithAnyData ||
+        0,
+    ),
+  );
+}
+
+function blendAdvancedSampleWithCurrent({
+  historicalSample,
+  currentSample,
+}) {
+  if (!historicalSample) {
+    if (!currentSample) {
+      return null;
+    }
+
+    return {
+      ...currentSample,
+
+      predictHistoricalMatches:
+        0,
+
+      predictCurrentSeasonMatches:
+        currentSample
+          .matchesWithAnyData ??
+        0,
+
+      predictCurrentSeasonWeight:
+        100,
+    };
+  }
+
+  if (
+    !currentSample ||
+    Number(
+      currentSample
+        .matchesWithAnyData ||
+        0,
+    ) <= 0
+  ) {
+    return {
+      ...historicalSample,
+
+      predictHistoricalMatches:
+        historicalSample
+          .matchesWithAnyData ??
+        0,
+
+      predictCurrentSeasonMatches:
+        0,
+
+      predictCurrentSeasonWeight:
+        0,
+    };
+  }
+
+  const effectiveCurrentMatches =
+    advancedCurrentEffectiveMatches(
+      currentSample,
+    );
+
+  const currentWeight =
+    progressiveCurrentSeasonWeight(
+      effectiveCurrentMatches,
+    );
+
+  const fields = [
+    'cornersFor',
+    'cornersAgainst',
+    'shotsOnTargetFor',
+    'shotsOnTargetAgainst',
+    'cardsFor',
+    'cardsAgainst',
+  ];
+
+  const blended = {
+    ...historicalSample,
+
+    predictHistoricalMatches:
+      historicalSample
+        .matchesWithAnyData ??
+      0,
+
+    predictCurrentSeasonMatches:
+      currentSample
+        .matchesWithAnyData ??
+      0,
+
+    predictCurrentSeasonEffectiveMatches:
+      round2(
+        effectiveCurrentMatches,
+      ),
+
+    predictCurrentSeasonWeight:
+      round2(
+        currentWeight *
+        100,
+      ),
+  };
+
+  for (const field of fields) {
+    const historicalValue =
+      Number(
+        historicalSample?.[field],
+      );
+
+    const currentValue =
+      Number(
+        currentSample?.[field],
+      );
+
+    if (
+      Number.isFinite(
+        historicalValue,
+      ) &&
+      Number.isFinite(
+        currentValue,
+      )
+    ) {
+      blended[field] =
+        historicalValue *
+          (1 - currentWeight) +
+        currentValue *
+          currentWeight;
+    } else if (
+      Number.isFinite(
+        currentValue,
+      )
+    ) {
+      blended[field] =
+        currentValue;
+    }
+  }
+
+  return blended;
+}
+
+function blendAdvancedLeagueWithCurrentSeason({
+  historicalAdvanced,
+  currentAdvanced,
+}) {
+  const historicalTeams =
+    historicalAdvanced
+      ?.teams ??
+    [];
+
+  const currentTeams =
+    currentAdvanced
+      ?.teams ??
+    [];
+
+  const teamIds =
+    new Set([
+      ...historicalTeams.map(
+        (team) =>
+          String(team.id),
+      ),
+
+      ...currentTeams.map(
+        (team) =>
+          String(team.id),
+      ),
+    ]);
+
+  const teams = [];
+
+  for (const teamId of teamIds) {
+    const historicalTeam =
+      historicalTeams.find(
+        (team) =>
+          String(team.id) ===
+          teamId,
+      );
+
+    const currentTeam =
+      currentTeams.find(
+        (team) =>
+          String(team.id) ===
+          teamId,
+      );
+
+    const identity =
+      historicalTeam ??
+      currentTeam;
+
+    if (!identity) {
+      continue;
+    }
+
+    teams.push({
+      ...identity,
+
+      home:
+        blendAdvancedSampleWithCurrent({
+          historicalSample:
+            historicalTeam
+              ?.home ??
+            null,
+
+          currentSample:
+            currentTeam
+              ?.home ??
+            null,
+        }),
+
+      away:
+        blendAdvancedSampleWithCurrent({
+          historicalSample:
+            historicalTeam
+              ?.away ??
+            null,
+
+          currentSample:
+            currentTeam
+              ?.away ??
+            null,
+        }),
+    });
+  }
+
+  return {
+    ...historicalAdvanced,
+
+    teams,
+
+    currentSeason:
+      CURRENT_SERIE_A_SEASON,
+
+    currentSeasonTeamsWithData:
+      currentTeams.length,
+
+    note:
+      'PREDICT v5: profilo avanzato storico 2025/26 + Serie A 2026/27 con peso progressivo dopo ogni risultato.',
+  };
+}
+
+
 function findAdvancedTeamProfile(
   leagueAdvanced,
   teamId,
@@ -4196,7 +5081,7 @@ function calculateAdvancedPrediction({
       }),
 
     note:
-      `PREDICT v5: statistiche avanzate condivise per tutte le ${leagueAdvanced?.teamsCount ?? 0} squadre, fino a ${leagueAdvanced?.sampleSizePerVenue ?? ADVANCED_SAMPLE_PER_VENUE} gare casa + ${leagueAdvanced?.sampleSizePerVenue ?? ADVANCED_SAMPLE_PER_VENUE} trasferte, con finestre ponderate 5/10/15/stagione completa.`,
+      `PREDICT v5: storico avanzato fino a ${leagueAdvanced?.sampleSizePerVenue ?? ADVANCED_SAMPLE_PER_VENUE} gare casa + ${leagueAdvanced?.sampleSizePerVenue ?? ADVANCED_SAMPLE_PER_VENUE} trasferte, con progressivo ingresso delle statistiche Serie A ${CURRENT_SERIE_A_SEASON}.`,
   };
 }
 
@@ -4645,6 +5530,16 @@ app.get(
           process.env
             .PREDICT_DATA_DIR,
         ),
+      modelVersion:
+        'PREDICT v5',
+      currentSeason:
+        CURRENT_SERIE_A_SEASON,
+      progressiveCurrentSeason:
+        true,
+      pendingCurrentStatistics:
+        centralSerieAState
+          .pendingStatisticsMatchIds
+          .size,
     });
   },
 );
@@ -4811,6 +5706,12 @@ async function persistCentralSerieAState() {
             .processedFinishedMatchIds,
         ),
 
+      pendingStatisticsMatchIds:
+        Array.from(
+          centralSerieAState
+            .pendingStatisticsMatchIds,
+        ),
+
       lastScheduleSyncAt:
         centralSerieAState
           .lastScheduleSyncAt,
@@ -4870,6 +5771,17 @@ async function restoreCentralSerieAState() {
       )
         ? disk
             .processedFinishedMatchIds
+            .map(String)
+        : [],
+    );
+
+  centralSerieAState.pendingStatisticsMatchIds =
+    new Set(
+      Array.isArray(
+        disk.pendingStatisticsMatchIds,
+      )
+        ? disk
+            .pendingStatisticsMatchIds
             .map(String)
         : [],
     );
@@ -5254,17 +6166,31 @@ async function refreshDynamicDataAfterFinishedMatch(
 
   // Proviamo prima a salvare anche le statistiche finali.
   // Se Highlightly non le espone ancora, il risultato viene comunque
-  // registrato: il modello base potrà già aggiornare forma e gol.
+  // registrato: il modello base aggiorna subito forma e gol, mentre
+  // corner/tiri/cartellini verranno recuperati dallo scheduler.
+  let finalStatistics = null;
+
   try {
-    await getHistoricalMatchStatistics(
-      matchId,
-    );
+    finalStatistics =
+      await getHistoricalMatchStatistics(
+        matchId,
+      );
   } catch (error) {
     console.warn(
       `Statistiche finali non ancora disponibili per match ${matchKey}:`,
       error?.message ??
         error,
     );
+  }
+
+  if (finalStatistics) {
+    centralSerieAState
+      .pendingStatisticsMatchIds
+      .delete(matchKey);
+  } else {
+    centralSerieAState
+      .pendingStatisticsMatchIds
+      .add(matchKey);
   }
 
   const affectedTeamIds =
@@ -5389,6 +6315,115 @@ async function settleCentralFinishedMatches() {
   return changed;
 }
 
+
+async function retryPendingCurrentStatistics() {
+  const pendingIds =
+    Array.from(
+      centralSerieAState
+        .pendingStatisticsMatchIds,
+    )
+      .slice(0, 2);
+
+  if (
+    pendingIds.length ===
+    0
+  ) {
+    return false;
+  }
+
+  let changed = false;
+
+  for (const matchId of pendingIds) {
+    const match =
+      centralSerieAState.matches
+        .find(
+          (item) =>
+            String(
+              item?.id,
+            ) ===
+            String(matchId),
+        );
+
+    if (!match) {
+      centralSerieAState
+        .pendingStatisticsMatchIds
+        .delete(
+          String(matchId),
+        );
+
+      changed = true;
+      continue;
+    }
+
+    let statistics = null;
+
+    try {
+      statistics =
+        await getHistoricalMatchStatistics(
+          matchId,
+        );
+    } catch (error) {
+      console.warn(
+        `Retry statistiche ${matchId} non riuscito:`,
+        error?.message ??
+          error,
+      );
+
+      continue;
+    }
+
+    if (!statistics) {
+      continue;
+    }
+
+    centralSerieAState
+      .pendingStatisticsMatchIds
+      .delete(
+        String(matchId),
+      );
+
+    const affectedTeamIds =
+      [
+        teamIdOf(
+          match?.homeTeam,
+        ),
+        teamIdOf(
+          match?.awayTeam,
+        ),
+      ]
+        .filter(
+          (value) =>
+            value !== null &&
+            value !== undefined,
+        )
+        .map(String);
+
+    for (
+      const teamId
+        of new Set(
+          affectedTeamIds,
+        )
+    ) {
+      incrementTeamDataRevision(
+        teamId,
+      );
+    }
+
+    console.log(
+      `PREDICT ADVANCED REFRESH: statistiche finali ${matchId} disponibili; rigenero analisi future`,
+    );
+
+    changed = true;
+  }
+
+  if (changed) {
+    await persistCentralSerieAState();
+  }
+
+  return changed;
+}
+
+
 async function centralSerieATick() {
   if (
     centralSerieAState.syncRunning
@@ -5412,10 +6447,14 @@ async function centralSerieATick() {
     const finishedDataChanged =
       await settleCentralFinishedMatches();
 
+    const advancedStatisticsChanged =
+      await retryPendingCurrentStatistics();
+
     if (
       scheduleChanged ||
       liveUpdated ||
       finishedDataChanged ||
+      advancedStatisticsChanged ||
       centralSerieAState.matches.length >
         0
     ) {
@@ -6241,19 +7280,75 @@ app.get(
           headToHeadData,
         );
 
+      const currentHomeHistory =
+        buildTeamHistory(
+          centralSerieAState.matches,
+          homeTeam.id,
+        );
+
+      const currentAwayHistory =
+        buildTeamHistory(
+          centralSerieAState.matches,
+          awayTeam.id,
+        );
+
+      const modelHomeTeam =
+        buildProgressiveCurrentSeasonModelTeam({
+          historicalTeam:
+            homeTeam,
+
+          currentHistory:
+            currentHomeHistory,
+        });
+
+      const modelAwayTeam =
+        buildProgressiveCurrentSeasonModelTeam({
+          historicalTeam:
+            awayTeam,
+
+          currentHistory:
+            currentAwayHistory,
+        });
+
       const prediction =
         calculatePrediction({
-          homeTeam,
-          awayTeam,
+          homeTeam:
+            modelHomeTeam,
+
+          awayTeam:
+            modelAwayTeam,
 
           homeRecentMatches,
           awayRecentMatches,
           headToHeadMatches,
 
-          // Le medie di riferimento restano quelle della Serie A 2025.
+          // Le medie lega restano ancorate al 2025/26; i profili squadra
+          // incorporano progressivamente i risultati 2026/27.
           leagueHistory:
             leagueResult.data,
         });
+
+      prediction.inputs = {
+        ...prediction.inputs,
+
+        currentSeasonBlend: {
+          season:
+            CURRENT_SERIE_A_SEASON,
+
+          home:
+            modelHomeTeam
+              ?.currentSeasonAdjustment ??
+            null,
+
+          away:
+            modelAwayTeam
+              ?.currentSeasonAdjustment ??
+            null,
+
+          rule:
+            'peso = partite_effettive / (partite_effettive + 5), massimo 90%',
+        },
+      };
 
       // Prima proviamo l'archivio avanzato storico già presente.
       const historicalAdvancedResult =
@@ -6344,14 +7439,55 @@ app.get(
         };
       }
 
+      const currentSeasonAdvanced =
+        await buildCurrentSeasonAdvancedProfilesForMatch({
+          homeTeam,
+          awayTeam,
+        });
+
+      const progressiveAdvancedData =
+        blendAdvancedLeagueWithCurrentSeason({
+          historicalAdvanced:
+            advancedData,
+
+          currentAdvanced:
+            currentSeasonAdvanced,
+        });
+
       const advanced =
         calculateAdvancedPrediction({
           homeTeam,
           awayTeam,
 
           leagueAdvanced:
-            advancedData,
+            progressiveAdvancedData,
         });
+
+      advanced.currentSeasonBlend = {
+        season:
+          CURRENT_SERIE_A_SEASON,
+
+        home:
+          findAdvancedTeamProfile(
+            progressiveAdvancedData,
+            homeTeam.id,
+          )
+            ?.home
+            ?.predictCurrentSeasonWeight ??
+          0,
+
+        away:
+          findAdvancedTeamProfile(
+            progressiveAdvancedData,
+            awayTeam.id,
+          )
+            ?.away
+            ?.predictCurrentSeasonWeight ??
+          0,
+
+        rule:
+          'peso progressivo con prior storico di 5 partite, massimo 90%',
+      };
 
       appendAdvancedSignals(
         prediction,
