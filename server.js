@@ -67,6 +67,17 @@ const CURRENT_SERIE_A_SEASON = '2026';
 const centralSerieAState = {
   matches: [],
   byDate: new Map(),
+
+  // Revisione dinamica per squadra.
+  // Parte da 0 così gli snapshot storici/seed già creati restano validi.
+  // Quando termina una nuova partita, la revisione delle due squadre
+  // aumenta e le future analisi usano automaticamente una nuova chiave.
+  teamDataRevision: new Map(),
+
+  // Evita di elaborare più volte lo stesso risultato dopo i successivi
+  // cicli dello scheduler o dopo un riavvio del backend.
+  processedFinishedMatchIds: new Set(),
+
   lastScheduleSyncAt: null,
   lastLiveSyncAt: null,
   schedulerStartedAt: null,
@@ -244,6 +255,118 @@ async function setDiskCache(key, data) {
       error,
     );
   }
+}
+
+
+async function deleteCacheKey(key) {
+  memoryCache.delete(key);
+
+  try {
+    await fs.unlink(
+      cacheFilePath(key),
+    );
+  } catch (error) {
+    if (
+      error?.code !==
+      'ENOENT'
+    ) {
+      console.warn(
+        `Impossibile eliminare cache ${key}:`,
+        error?.message ??
+          error,
+      );
+    }
+  }
+}
+
+function teamDataRevisionOf(
+  teamId,
+) {
+  if (
+    teamId === undefined ||
+    teamId === null
+  ) {
+    return 0;
+  }
+
+  return (
+    centralSerieAState
+      .teamDataRevision
+      .get(
+        String(teamId),
+      ) ??
+    0
+  );
+}
+
+function incrementTeamDataRevision(
+  teamId,
+) {
+  if (
+    teamId === undefined ||
+    teamId === null
+  ) {
+    return 0;
+  }
+
+  const key =
+    String(teamId);
+
+  const next =
+    teamDataRevisionOf(key) +
+    1;
+
+  centralSerieAState
+    .teamDataRevision
+    .set(
+      key,
+      next,
+    );
+
+  return next;
+}
+
+function buildMatchAnalysisCacheKey({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  const homeRevision =
+    teamDataRevisionOf(
+      homeTeamId,
+    );
+
+  const awayRevision =
+    teamDataRevisionOf(
+      awayTeamId,
+    );
+
+  const parts = [
+    'match-analysis-snapshot-v1',
+    homeTeamId,
+    awayTeamId,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ];
+
+  // Revisione 0/0 = stessa chiave usata finora.
+  // In questo modo tutti gli snapshot seed già pronti continuano a funzionare.
+  if (
+    homeRevision === 0 &&
+    awayRevision === 0
+  ) {
+    return parts.join('-');
+  }
+
+  return [
+    ...parts,
+    'rev',
+    homeRevision,
+    awayRevision,
+  ].join('-');
 }
 
 // ====================================================
@@ -4676,6 +4799,18 @@ async function persistCentralSerieAState() {
       matches:
         centralSerieAState.matches,
 
+      teamDataRevision:
+        Object.fromEntries(
+          centralSerieAState
+            .teamDataRevision,
+        ),
+
+      processedFinishedMatchIds:
+        Array.from(
+          centralSerieAState
+            .processedFinishedMatchIds,
+        ),
+
       lastScheduleSyncAt:
         centralSerieAState
           .lastScheduleSyncAt,
@@ -4713,6 +4848,31 @@ async function restoreCentralSerieAState() {
   centralSerieAState.lastLiveSyncAt =
     disk.lastLiveSyncAt ??
     null;
+
+  centralSerieAState.teamDataRevision =
+    new Map(
+      Object.entries(
+        disk.teamDataRevision ??
+          {},
+      ).map(
+        ([teamId, revision]) => [
+          String(teamId),
+          Number(revision) ||
+            0,
+        ],
+      ),
+    );
+
+  centralSerieAState.processedFinishedMatchIds =
+    new Set(
+      Array.isArray(
+        disk.processedFinishedMatchIds,
+      )
+        ? disk
+            .processedFinishedMatchIds
+            .map(String)
+        : [],
+    );
 
   rebuildCentralSerieAIndex();
 
@@ -5051,46 +5211,182 @@ async function precomputeUpcomingPredictData() {
   }
 }
 
-async function settleCentralFinishedMatches() {
-  const now =
-    Date.now();
+async function refreshDynamicDataAfterFinishedMatch(
+  match,
+) {
+  const matchId =
+    match?.id;
 
-  const recentlyFinished =
+  if (
+    matchId === undefined ||
+    matchId === null
+  ) {
+    return false;
+  }
+
+  const matchKey =
+    String(matchId);
+
+  if (
+    centralSerieAState
+      .processedFinishedMatchIds
+      .has(matchKey)
+  ) {
+    return false;
+  }
+
+  if (
+    !isFinishedMatch(match) ||
+    !parseScore(match)
+  ) {
+    return false;
+  }
+
+  const homeTeamId =
+    teamIdOf(
+      match?.homeTeam,
+    );
+
+  const awayTeamId =
+    teamIdOf(
+      match?.awayTeam,
+    );
+
+  // Proviamo prima a salvare anche le statistiche finali.
+  // Se Highlightly non le espone ancora, il risultato viene comunque
+  // registrato: il modello base potrà già aggiornare forma e gol.
+  try {
+    await getHistoricalMatchStatistics(
+      matchId,
+    );
+  } catch (error) {
+    console.warn(
+      `Statistiche finali non ancora disponibili per match ${matchKey}:`,
+      error?.message ??
+        error,
+    );
+  }
+
+  const affectedTeamIds =
+    [
+      homeTeamId,
+      awayTeamId,
+    ]
+      .filter(
+        (value) =>
+          value !== null &&
+          value !== undefined,
+      )
+      .map(String);
+
+  for (
+    const teamId
+      of new Set(
+        affectedTeamIds,
+      )
+  ) {
+    incrementTeamDataRevision(
+      teamId,
+    );
+
+    // La forma recente deve essere richiesta di nuovo subito,
+    // senza aspettare le normali 6 ore di cache.
+    await deleteCacheKey(
+      `last-five-${teamId}`,
+    );
+  }
+
+  // Se le stesse squadre si riaffronteranno, anche l'H2H deve
+  // includere il risultato appena concluso.
+  if (
+    homeTeamId &&
+    awayTeamId
+  ) {
+    const orderedH2H =
+      [
+        String(homeTeamId),
+        String(awayTeamId),
+      ].sort();
+
+    await deleteCacheKey(
+      `h2h-${orderedH2H[0]}-${orderedH2H[1]}`,
+    );
+  }
+
+  centralSerieAState
+    .processedFinishedMatchIds
+    .add(matchKey);
+
+  console.log(
+    `PREDICT DYNAMIC REFRESH: risultato ${matchKey} acquisito; revisioni ${homeTeamId ?? '-'}=${teamDataRevisionOf(homeTeamId)}, ${awayTeamId ?? '-'}=${teamDataRevisionOf(awayTeamId)}`,
+  );
+
+  return true;
+}
+
+async function settleCentralFinishedMatches() {
+  const pendingFinished =
     centralSerieAState.matches
       .filter(
         (match) => {
-          const startMs =
-            Date.parse(
-              match?.date ?? '',
-            );
+          const matchId =
+            match?.id;
 
           return (
-            Number.isFinite(
-              startMs,
-            ) &&
+            matchId !== undefined &&
+            matchId !== null &&
             isFinishedMatch(
               match,
             ) &&
-            now - startMs <=
-              4 *
-                60 *
-                60 *
-                1000
+            Boolean(
+              parseScore(match),
+            ) &&
+            !centralSerieAState
+              .processedFinishedMatchIds
+              .has(
+                String(matchId),
+              )
           );
         },
-      );
+      )
+      .sort(
+        (a, b) =>
+          Date.parse(
+            a?.date ?? '',
+          ) -
+          Date.parse(
+            b?.date ?? '',
+          ),
+      )
+      // Protezione in caso di riavvio dopo una lunga assenza:
+      // massimo 10 nuovi risultati per ciclo.
+      .slice(0, 10);
 
-  await mapWithConcurrency(
-    recentlyFinished,
-    2,
-    async (match) => {
-      // Solo il server centrale può andare al provider
-      // per le statistiche finali.
-      await getHistoricalMatchStatistics(
-        match?.id,
-      );
-    },
-  );
+  if (
+    pendingFinished.length ===
+    0
+  ) {
+    return false;
+  }
+
+  const refreshed =
+    await mapWithConcurrency(
+      pendingFinished,
+      2,
+      async (match) =>
+        refreshDynamicDataAfterFinishedMatch(
+          match,
+        ),
+    );
+
+  const changed =
+    refreshed.some(Boolean);
+
+  if (changed) {
+    await persistCentralSerieAState();
+  }
+
+  return changed;
 }
 
 async function centralSerieATick() {
@@ -5107,19 +5403,23 @@ async function centralSerieATick() {
     const scheduleChanged =
       await syncCentralSerieASchedule();
 
+    const liveUpdated =
+      await syncCentralSerieALive();
+
+    // Prima registriamo i risultati appena conclusi e aumentiamo
+    // la revisione delle squadre. Solo DOPO prepariamo le analisi future,
+    // così le percentuali vengono calcolate con i dati più recenti.
+    const finishedDataChanged =
+      await settleCentralFinishedMatches();
+
     if (
       scheduleChanged ||
+      liveUpdated ||
+      finishedDataChanged ||
       centralSerieAState.matches.length >
         0
     ) {
       await precomputeUpcomingPredictData();
-    }
-
-    const liveUpdated =
-      await syncCentralSerieALive();
-
-    if (liveUpdated) {
-      await settleCentralFinishedMatches();
     }
 
     centralSerieAState.lastError =
@@ -5180,6 +5480,17 @@ app.get(
       matchesCached:
         centralSerieAState
           .matches.length,
+
+      processedFinishedMatches:
+        centralSerieAState
+          .processedFinishedMatchIds
+          .size,
+
+      dynamicTeamRevisions:
+        Object.fromEntries(
+          centralSerieAState
+            .teamDataRevision,
+        ),
 
       liveWindowActive:
         centralLiveWindowActive(),
@@ -5750,14 +6061,15 @@ app.get(
       }
 
 
-      const analysisCacheKey = [
-        'match-analysis-snapshot-v1',
-        homeTeamId,
-        awayTeamId,
-        season,
-        leagueName,
-        countryName,
-      ].join('-');
+      const analysisCacheKey =
+        buildMatchAnalysisCacheKey({
+          homeTeamId,
+          awayTeamId,
+          historicalSeason:
+            season,
+          leagueName,
+          countryName,
+        });
 
       const cachedAnalysisMemory =
         getMemoryCache(
@@ -6663,14 +6975,14 @@ async function getExistingMatchAnalysisSnapshot({
   leagueName,
   countryName,
 }) {
-  const key = [
-    'match-analysis-snapshot-v1',
-    homeTeamId,
-    awayTeamId,
-    historicalSeason,
-    leagueName,
-    countryName,
-  ].join('-');
+  const key =
+    buildMatchAnalysisCacheKey({
+      homeTeamId,
+      awayTeamId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
 
   const memory =
     getMemoryCache(
