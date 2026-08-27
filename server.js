@@ -66,6 +66,8 @@ const CENTRAL_SERIE_A_PRESTART_WINDOW = 15 * 60 * 1000;
 const CENTRAL_SERIE_A_POSTSTART_WINDOW = 3 * 60 * 60 * 1000;
 const CENTRAL_PREDICTION_HORIZON = 7 * 24 * 60 * 60 * 1000;
 const PREMATCH_PREDICTION_FREEZE_WINDOW = 60 * 60 * 1000;
+const MATCHDAY_MULTIPLE_FREEZE_WINDOW = 4 * 60 * 60 * 1000;
+const MATCHDAY_MULTIPLE_SNAPSHOT_CACHE_TIME = 400 * 24 * 60 * 60 * 1000;
 const INTERNAL_SYNC_TOKEN =
   process.env.PREDICT_INTERNAL_TOKEN ||
   crypto
@@ -6914,7 +6916,7 @@ async function precomputeUpcomingPredictData() {
     ) {
       await deleteCacheKey(
         [
-          'matchday-picks-v1',
+          'matchday-picks-v2',
           CURRENT_SERIE_A_SEASON,
           '2025',
           roundNumber,
@@ -7265,6 +7267,7 @@ async function centralSerieATick() {
         0
     ) {
       await precomputeUpcomingPredictData();
+      await precomputeUpcomingMatchdayMultiples();
     }
 
     centralSerieAState.lastError =
@@ -9243,6 +9246,492 @@ async function internalMatchAnalysis({
   return response.json();
 }
 
+// ====================================================
+// MULTIPLE PREDICT DI GIORNATA
+// ====================================================
+
+function buildMatchdayMultipleCacheKey({
+  season,
+  historicalSeason,
+  round,
+  leagueName,
+  countryName,
+}) {
+  return [
+    'matchday-multiples-snapshot-v1',
+    season,
+    historicalSeason,
+    round,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+async function getExistingMatchdayMultipleSnapshot({
+  season,
+  historicalSeason,
+  round,
+  leagueName,
+  countryName,
+}) {
+  const key =
+    buildMatchdayMultipleCacheKey({
+      season,
+      historicalSeason,
+      round,
+      leagueName,
+      countryName,
+    });
+
+  const memory =
+    getMemoryCache(
+      key,
+      MATCHDAY_MULTIPLE_SNAPSHOT_CACHE_TIME,
+    );
+
+  if (memory) {
+    return memory;
+  }
+
+  const disk =
+    await getDiskCache(
+      key,
+      MATCHDAY_MULTIPLE_SNAPSHOT_CACHE_TIME,
+    );
+
+  if (disk) {
+    setMemoryCache(
+      key,
+      disk,
+    );
+
+    return disk;
+  }
+
+  return null;
+}
+
+function buildMultipleFromRankedPicks(
+  rankedPicks,
+  requestedEvents,
+) {
+  const selections =
+    rankedPicks
+      .slice(
+        0,
+        requestedEvents,
+      )
+      .map(
+        (item) => ({
+          matchId:
+            item?.matchId ?? null,
+
+          date:
+            item?.date ?? null,
+
+          homeTeam:
+            item?.homeTeam ?? null,
+
+          awayTeam:
+            item?.awayTeam ?? null,
+
+          pick:
+            item?.pick ?? null,
+
+          pickGeneratedAt:
+            item?.pickGeneratedAt ?? null,
+
+          modelVersion:
+            item?.modelVersion ??
+            'PREDICT v5',
+        }),
+      );
+
+  return {
+    requestedEvents,
+
+    eventsCount:
+      selections.length,
+
+    ready:
+      selections.length ===
+      requestedEvents,
+
+    selections,
+  };
+}
+
+function buildRankedMultipleCandidates(
+  picks,
+) {
+  return (picks ?? [])
+    .filter(
+      (item) =>
+        item?.pick &&
+        Number.isFinite(
+          Number(
+            item?.pick?.probability,
+          ),
+        ),
+    )
+    .sort(
+      (a, b) =>
+        Number(
+          b?.pick?.probability ?? 0,
+        ) -
+        Number(
+          a?.pick?.probability ?? 0,
+        ),
+    );
+}
+
+async function getOrUpdateMatchdayMultiplesSnapshot({
+  season,
+  historicalSeason,
+  round,
+  leagueName,
+  countryName,
+  roundMatches,
+  picks,
+}) {
+  const validStarts =
+    (roundMatches ?? [])
+      .map(
+        (match) =>
+          Date.parse(
+            match?.date ?? '',
+          ),
+      )
+      .filter(
+        (value) =>
+          Number.isFinite(value),
+      )
+      .sort(
+        (a, b) =>
+          a - b,
+      );
+
+  if (validStarts.length === 0) {
+    return {
+      available: false,
+      frozen: false,
+      status: 'unavailable',
+      reason:
+        'Orario della prima partita non disponibile',
+      multipla3:
+        buildMultipleFromRankedPicks(
+          [],
+          3,
+        ),
+      multipla5:
+        buildMultipleFromRankedPicks(
+          [],
+          5,
+        ),
+    };
+  }
+
+  const firstMatchStartMs =
+    validStarts[0];
+
+  const freezeAtMs =
+    firstMatchStartMs -
+    MATCHDAY_MULTIPLE_FREEZE_WINDOW;
+
+  const now =
+    Date.now();
+
+  const key =
+    buildMatchdayMultipleCacheKey({
+      season,
+      historicalSeason,
+      round,
+      leagueName,
+      countryName,
+    });
+
+  const existing =
+    await getExistingMatchdayMultipleSnapshot({
+      season,
+      historicalSeason,
+      round,
+      leagueName,
+      countryName,
+    });
+
+  // Uno snapshot già congelato non viene mai più modificato.
+  if (existing?.frozen) {
+    return existing;
+  }
+
+  // Se siamo arrivati al cutoff, congeliamo l'ULTIMO snapshot provvisorio.
+  // In questo modo tutte le selezioni della multipla provengono dallo
+  // stesso momento, anche se alcune partite si giocano nei giorni seguenti.
+  if (
+    now >= freezeAtMs &&
+    existing
+  ) {
+    const frozenSnapshot = {
+      ...existing,
+      frozen: true,
+      status: 'frozen',
+      frozenAt:
+        new Date(now)
+          .toISOString(),
+      freezeAt:
+        new Date(freezeAtMs)
+          .toISOString(),
+      firstMatchAt:
+        new Date(firstMatchStartMs)
+          .toISOString(),
+    };
+
+    setMemoryCache(
+      key,
+      frozenSnapshot,
+    );
+
+    await setDiskCache(
+      key,
+      frozenSnapshot,
+    );
+
+    return frozenSnapshot;
+  }
+
+  const rankedPicks =
+    buildRankedMultipleCandidates(
+      picks,
+    );
+
+  const generatedAt =
+    new Date()
+      .toISOString();
+
+  const snapshot = {
+    available:
+      rankedPicks.length >= 3,
+
+    season:
+      String(season),
+
+    historicalSeason:
+      String(historicalSeason),
+
+    leagueName,
+    countryName,
+
+    round:
+      Number(round),
+
+    generatedAt,
+
+    firstMatchAt:
+      new Date(firstMatchStartMs)
+        .toISOString(),
+
+    freezeAt:
+      new Date(freezeAtMs)
+        .toISOString(),
+
+    freezeHoursBeforeFirstMatch:
+      MATCHDAY_MULTIPLE_FREEZE_WINDOW /
+      (60 * 60 * 1000),
+
+    frozen:
+      now >= freezeAtMs,
+
+    status:
+      now >= freezeAtMs
+        ? 'frozen'
+        : 'provisional',
+
+    frozenAt:
+      now >= freezeAtMs
+        ? generatedAt
+        : null,
+
+    candidateCount:
+      rankedPicks.length,
+
+    description:
+      'Multipla PREDICT costruita con una sola selezione per partita e con le pick a probabilità più alta della giornata. Multipla 3 e Multipla 5 vengono congelate insieme 4 ore prima della prima partita della giornata.',
+
+    multipla3:
+      buildMultipleFromRankedPicks(
+        rankedPicks,
+        3,
+      ),
+
+    multipla5:
+      buildMultipleFromRankedPicks(
+        rankedPicks,
+        5,
+      ),
+  };
+
+  setMemoryCache(
+    key,
+    snapshot,
+  );
+
+  await setDiskCache(
+    key,
+    snapshot,
+  );
+
+  return snapshot;
+}
+
+async function precomputeUpcomingMatchdayMultiples() {
+  const now =
+    Date.now();
+
+  const rounds =
+    new Map();
+
+  for (
+    const match
+      of centralSerieAState.matches
+  ) {
+    const round =
+      roundNumberOf(match);
+
+    const startMs =
+      Date.parse(
+        match?.date ?? '',
+      );
+
+    if (
+      !Number.isFinite(
+        Number(round),
+      ) ||
+      !Number.isFinite(startMs)
+    ) {
+      continue;
+    }
+
+    if (
+      startMs <= now ||
+      startMs - now >
+        CENTRAL_PREDICTION_HORIZON
+    ) {
+      continue;
+    }
+
+    const numericRound =
+      Number(round);
+
+    if (!rounds.has(numericRound)) {
+      rounds.set(
+        numericRound,
+        [],
+      );
+    }
+  }
+
+  for (
+    const round
+      of rounds.keys()
+  ) {
+    const roundMatches =
+      centralSerieAState.matches
+        .filter(
+          (match) =>
+            roundNumberOf(match) ===
+            round,
+        )
+        .sort(
+          (a, b) =>
+            Date.parse(
+              a?.date ?? '',
+            ) -
+            Date.parse(
+              b?.date ?? '',
+            ),
+        );
+
+    if (
+      roundMatches.length === 0
+    ) {
+      continue;
+    }
+
+    const picks = [];
+
+    for (
+      const match
+        of roundMatches
+    ) {
+      const snapshot =
+        await getExistingMatchdayPickSnapshot({
+          matchId:
+            match?.id,
+          historicalSeason:
+            '2025',
+          leagueName:
+            'Serie A',
+          countryName:
+            'Italy',
+        });
+
+      if (!snapshot?.pick) {
+        continue;
+      }
+
+      picks.push({
+        matchId:
+          match?.id ?? null,
+
+        date:
+          match?.date ?? null,
+
+        homeTeam:
+          match?.homeTeam ?? null,
+
+        awayTeam:
+          match?.awayTeam ?? null,
+
+        pick:
+          snapshot.pick,
+
+        pickGeneratedAt:
+          snapshot.generatedAt ?? null,
+
+        modelVersion:
+          snapshot.modelVersion ??
+          'PREDICT v5',
+      });
+    }
+
+    await getOrUpdateMatchdayMultiplesSnapshot({
+      season:
+        CURRENT_SERIE_A_SEASON,
+      historicalSeason:
+        '2025',
+      round,
+      leagueName:
+        'Serie A',
+      countryName:
+        'Italy',
+      roundMatches,
+      picks,
+    });
+
+    // La pagina Pronostici Serie A deve leggere subito l'ultimo snapshot.
+    await deleteCacheKey(
+      [
+        'matchday-picks-v2',
+        CURRENT_SERIE_A_SEASON,
+        '2025',
+        round,
+        'Serie A',
+        'Italy',
+      ].join('-'),
+    );
+  }
+}
+
 app.get(
   '/api/football/matchday-picks',
   async (req, res) => {
@@ -9276,7 +9765,7 @@ app.get(
         );
 
       const cacheKey = [
-        'matchday-picks-v1',
+        'matchday-picks-v2',
         season,
         historicalSeason,
         parsedRound,
@@ -9540,6 +10029,18 @@ app.get(
           },
         );
 
+      const multiples =
+        await getOrUpdateMatchdayMultiplesSnapshot({
+          season,
+          historicalSeason,
+          round:
+            parsedRound,
+          leagueName,
+          countryName,
+          roundMatches,
+          picks,
+        });
+
       const payload = {
         season:
           String(season),
@@ -9564,6 +10065,8 @@ app.get(
 
         description:
           'Per ogni partita viene mostrato un solo pronostico principale tra 1X2, GG/NG, Under/Over 2.5, Corner, Tiri in porta e Cartellini. A partita conclusa il pronostico viene marcato come preso o sbagliato.',
+
+        multiples,
 
         picks,
       };
