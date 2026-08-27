@@ -6738,6 +6738,10 @@ async function precomputeUpcomingPredictData() {
       return;
     }
 
+    // Prepariamo fino a 3 partite mancanti per ciclo.
+    // La concorrenza resta limitata a 2 per evitare picchi verso Highlightly.
+    const pendingMatches = [];
+
     for (
       const match
         of upcoming
@@ -6759,9 +6763,6 @@ async function precomputeUpcomingPredictData() {
         continue;
       }
 
-      // PRIMA assicuriamo la pagina "Analisi partita".
-      // I vecchi seed avevano già i pronostici, ma non necessariamente
-      // lo snapshot completo usato dalla pagina di analisi.
       const existingAnalysis =
         await getExistingMatchAnalysisSnapshot({
           homeTeamId,
@@ -6774,36 +6775,6 @@ async function precomputeUpcomingPredictData() {
             'Italy',
         });
 
-      if (!existingAnalysis) {
-        console.log(
-          `PREDICT CENTRAL: preparo 1 analisi completa (${homeTeamId}-${awayTeamId})`,
-        );
-
-        try {
-          await internalMatchAnalysis({
-            homeTeamId,
-            awayTeamId,
-            historicalSeason:
-              '2025',
-            leagueName:
-              'Serie A',
-            countryName:
-              'Italy',
-          });
-        } catch (error) {
-          console.warn(
-            `Precompute analisi ${homeTeamId}-${awayTeamId} non riuscito:`,
-            error?.message ??
-              error,
-          );
-        }
-
-        // Massimo UNA nuova analisi completa per ciclo da 15 minuti.
-        // Così evitiamo picchi verso Highlightly.
-        break;
-      }
-
-      // Solo dopo verifichiamo il pronostico principale.
       const existingSnapshot =
         await getExistingMatchdayPickSnapshot({
           matchId:
@@ -6816,35 +6787,141 @@ async function precomputeUpcomingPredictData() {
             'Italy',
         });
 
-      if (existingSnapshot) {
+      if (
+        existingAnalysis &&
+        existingSnapshot
+      ) {
         continue;
       }
 
-      console.log(
-        `PREDICT CENTRAL: preparo 1 pronostico mancante (${homeTeamId}-${awayTeamId})`,
-      );
+      pendingMatches.push({
+        match,
+        homeTeamId,
+        awayTeamId,
+        needsAnalysis:
+          !existingAnalysis,
+        needsSnapshot:
+          !existingSnapshot,
+      });
 
-      try {
-        await getOrCreateMatchdayPickSnapshot({
+      if (
+        pendingMatches.length >= 3
+      ) {
+        break;
+      }
+    }
+
+    if (
+      pendingMatches.length === 0
+    ) {
+      return;
+    }
+
+    const affectedRounds =
+      new Set();
+
+    await mapWithConcurrency(
+      pendingMatches,
+      2,
+      async (item) => {
+        const {
           match,
           homeTeamId,
           awayTeamId,
-          historicalSeason:
-            '2025',
-          leagueName:
-            'Serie A',
-          countryName:
-            'Italy',
-        });
-      } catch (error) {
-        console.warn(
-          `Precompute pronostico ${homeTeamId}-${awayTeamId} non riuscito:`,
-          error?.message ??
-            error,
-        );
-      }
+          needsAnalysis,
+          needsSnapshot,
+        } = item;
 
-      break;
+        if (needsAnalysis) {
+          console.log(
+            `PREDICT CENTRAL: preparo analisi completa (${homeTeamId}-${awayTeamId})`,
+          );
+
+          try {
+            await internalMatchAnalysis({
+              homeTeamId,
+              awayTeamId,
+              matchId:
+                match?.id,
+              historicalSeason:
+                '2025',
+              leagueName:
+                'Serie A',
+              countryName:
+                'Italy',
+            });
+          } catch (error) {
+            console.warn(
+              `Precompute analisi ${homeTeamId}-${awayTeamId} non riuscito:`,
+              error?.message ??
+                error,
+            );
+
+            return false;
+          }
+        }
+
+        if (needsSnapshot) {
+          console.log(
+            `PREDICT CENTRAL: preparo pronostico mancante (${homeTeamId}-${awayTeamId})`,
+          );
+
+          try {
+            await getOrCreateMatchdayPickSnapshot({
+              match,
+              homeTeamId,
+              awayTeamId,
+              historicalSeason:
+                '2025',
+              leagueName:
+                'Serie A',
+              countryName:
+                'Italy',
+            });
+          } catch (error) {
+            console.warn(
+              `Precompute pronostico ${homeTeamId}-${awayTeamId} non riuscito:`,
+              error?.message ??
+                error,
+            );
+
+            return false;
+          }
+        }
+
+        const roundNumber =
+          roundNumberOf(match);
+
+        if (
+          Number.isFinite(
+            Number(roundNumber),
+          )
+        ) {
+          affectedRounds.add(
+            Number(roundNumber),
+          );
+        }
+
+        return true;
+      },
+    );
+
+    // Evita che la schermata giornata continui a mostrare pick:null
+    // fino alla scadenza della cache aggregata di 60 secondi.
+    for (
+      const roundNumber
+        of affectedRounds
+    ) {
+      await deleteCacheKey(
+        [
+          'matchday-picks-v1',
+          CURRENT_SERIE_A_SEASON,
+          '2025',
+          roundNumber,
+          'Serie A',
+          'Italy',
+        ].join('-'),
+      );
     }
   } finally {
     centralSerieAState.precomputeRunning =
