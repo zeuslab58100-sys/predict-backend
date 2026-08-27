@@ -65,6 +65,7 @@ const CENTRAL_SERIE_A_LIVE_INTERVAL = 15 * 60 * 1000;
 const CENTRAL_SERIE_A_PRESTART_WINDOW = 15 * 60 * 1000;
 const CENTRAL_SERIE_A_POSTSTART_WINDOW = 3 * 60 * 60 * 1000;
 const CENTRAL_PREDICTION_HORIZON = 7 * 24 * 60 * 60 * 1000;
+const PREMATCH_PREDICTION_FREEZE_WINDOW = 60 * 60 * 1000;
 const INTERNAL_SYNC_TOKEN =
   process.env.PREDICT_INTERNAL_TOKEN ||
   crypto
@@ -361,7 +362,7 @@ function buildMatchAnalysisCacheKey({
     );
 
   const parts = [
-    'match-analysis-snapshot-v1',
+    'match-analysis-snapshot-v2',
     homeTeamId,
     awayTeamId,
     historicalSeason,
@@ -509,6 +510,666 @@ async function cachedHighlightlyGet({
   );
 
   return data;
+}
+
+async function getMatchOdds(matchId) {
+  if (!matchId) {
+    return null;
+  }
+
+  return await cachedHighlightlyGet({
+    key: `odds-prematch-${matchId}`,
+    apiPath: '/odds',
+    query: {
+      matchId,
+      oddsType: 'prematch',
+      limit: '5',
+      offset: '0',
+    },
+    ttl: 30 * 60 * 1000,
+  });
+}
+
+
+function oddsToNormalizedProbabilities(homeOdd, drawOdd, awayOdd) {
+  const home = Number(homeOdd);
+  const draw = Number(drawOdd);
+  const away = Number(awayOdd);
+
+  if (
+    !Number.isFinite(home) ||
+    !Number.isFinite(draw) ||
+    !Number.isFinite(away) ||
+    home <= 1 ||
+    draw <= 1 ||
+    away <= 1
+  ) {
+    return null;
+  }
+
+  const homeRaw = 1 / home;
+  const drawRaw = 1 / draw;
+  const awayRaw = 1 / away;
+
+  const total = homeRaw + drawRaw + awayRaw;
+
+  if (total <= 0) {
+    return null;
+  }
+
+  return {
+    home: homeRaw / total,
+    draw: drawRaw / total,
+    away: awayRaw / total,
+  };
+}
+
+function extractOddsMarketItems(oddsPayload) {
+  const marketItems = [];
+
+  if (Array.isArray(oddsPayload?.odds)) {
+    marketItems.push(...oddsPayload.odds);
+  }
+
+  if (Array.isArray(oddsPayload?.data)) {
+    for (const matchOdds of oddsPayload.data) {
+      if (Array.isArray(matchOdds?.odds)) {
+        marketItems.push(...matchOdds.odds);
+      } else if (matchOdds?.market) {
+        marketItems.push(matchOdds);
+      }
+    }
+  }
+
+  return marketItems;
+}
+
+function normalizeProbabilityObject(values) {
+  const entries =
+    Object.entries(values)
+      .filter(
+        ([, value]) =>
+          Number.isFinite(value) &&
+          value > 0,
+      );
+
+  const total =
+    entries.reduce(
+      (sum, [, value]) =>
+        sum + value,
+      0,
+    );
+
+  if (total <= 0) {
+    return null;
+  }
+
+  return Object.fromEntries(
+    entries.map(
+      ([key, value]) => [
+        key,
+        value / total,
+      ],
+    ),
+  );
+}
+
+function normalizedMarketValues(item) {
+  const values =
+    Array.isArray(item?.values)
+      ? item.values
+      : [];
+
+  const raw = {};
+
+  for (const entry of values) {
+    const label =
+      String(
+        entry?.value ??
+        entry?.name ??
+        entry?.label ??
+        '',
+      )
+        .trim()
+        .toLowerCase();
+
+    const odd =
+      Number(entry?.odd);
+
+    if (
+      !label ||
+      !Number.isFinite(odd) ||
+      odd <= 1
+    ) {
+      continue;
+    }
+
+    raw[label] =
+      1 / odd;
+  }
+
+  return normalizeProbabilityObject(
+    raw,
+  );
+}
+
+function averageProbabilityObjects(items, keys) {
+  const valid =
+    items.filter(
+      (item) =>
+        item &&
+        keys.every(
+          (key) =>
+            Number.isFinite(
+              item[key],
+            ),
+        ),
+    );
+
+  if (valid.length === 0) {
+    return null;
+  }
+
+  const average = {};
+
+  for (const key of keys) {
+    average[key] =
+      valid.reduce(
+        (sum, item) =>
+          sum + item[key],
+        0,
+      ) /
+      valid.length;
+  }
+
+  return normalizeProbabilityObject(
+    average,
+  );
+}
+
+function oddsMarketLine(marketName) {
+  const match =
+    String(marketName ?? '')
+      .match(
+        /(-?\d+(?:\.\d+)?)\s*$/,
+      );
+
+  if (!match) {
+    return null;
+  }
+
+  const line =
+    Number(match[1]);
+
+  return Number.isFinite(line)
+    ? line
+    : null;
+}
+
+function buildBookmakerMarketProbabilities(oddsPayload) {
+  const marketItems =
+    extractOddsMarketItems(
+      oddsPayload,
+    );
+
+  const oneXTwoSamples = [];
+  const bttsSamples = [];
+  const totalGoalsSamples = new Map();
+  const totalCardsSamples = new Map();
+  const totalCornersSamples = new Map();
+
+  function addLineSample(
+    target,
+    line,
+    probabilities,
+  ) {
+    if (
+      line === null ||
+      !probabilities ||
+      !Number.isFinite(probabilities.over) ||
+      !Number.isFinite(probabilities.under)
+    ) {
+      return;
+    }
+
+    const key =
+      String(line);
+
+    if (!target.has(key)) {
+      target.set(
+        key,
+        [],
+      );
+    }
+
+    target
+      .get(key)
+      .push({
+        over:
+          probabilities.over,
+        under:
+          probabilities.under,
+      });
+  }
+
+  for (const item of marketItems) {
+    const marketName =
+      String(
+        item?.market ?? '',
+      ).trim();
+
+    const market =
+      marketName.toLowerCase();
+
+    const values =
+      normalizedMarketValues(
+        item,
+      );
+
+    if (!values) {
+      continue;
+    }
+
+    if (
+      market === 'full time result' ||
+      market === 'match result' ||
+      market === '1x2'
+    ) {
+      const home =
+        values.home ??
+        values['1'];
+
+      const draw =
+        values.draw ??
+        values.x;
+
+      const away =
+        values.away ??
+        values['2'];
+
+      if (
+        Number.isFinite(home) &&
+        Number.isFinite(draw) &&
+        Number.isFinite(away)
+      ) {
+        oneXTwoSamples.push({
+          home,
+          draw,
+          away,
+        });
+      }
+
+      continue;
+    }
+
+    if (
+      market === 'both teams to score'
+    ) {
+      const yes =
+        values.yes ??
+        values.gg;
+
+      const no =
+        values.no ??
+        values.ng;
+
+      if (
+        Number.isFinite(yes) &&
+        Number.isFinite(no)
+      ) {
+        bttsSamples.push({
+          yes,
+          no,
+        });
+      }
+
+      continue;
+    }
+
+    const line =
+      oddsMarketLine(
+        marketName,
+      );
+
+    const overUnder = {
+      over:
+        values.over,
+      under:
+        values.under,
+    };
+
+    if (
+      market.startsWith('total goals')
+    ) {
+      addLineSample(
+        totalGoalsSamples,
+        line,
+        overUnder,
+      );
+    } else if (
+      market.startsWith('total cards')
+    ) {
+      addLineSample(
+        totalCardsSamples,
+        line,
+        overUnder,
+      );
+    } else if (
+      market.startsWith('total corners')
+    ) {
+      addLineSample(
+        totalCornersSamples,
+        line,
+        overUnder,
+      );
+    }
+  }
+
+  function averageLineMap(source) {
+    const result = {};
+
+    for (
+      const [line, samples]
+        of source.entries()
+    ) {
+      const average =
+        averageProbabilityObjects(
+          samples,
+          ['over', 'under'],
+        );
+
+      if (average) {
+        result[line] =
+          average;
+      }
+    }
+
+    return result;
+  }
+
+  return {
+    oneXTwo:
+      averageProbabilityObjects(
+        oneXTwoSamples,
+        ['home', 'draw', 'away'],
+      ),
+
+    bothTeamsToScore:
+      averageProbabilityObjects(
+        bttsSamples,
+        ['yes', 'no'],
+      ),
+
+    totalGoals:
+      averageLineMap(
+        totalGoalsSamples,
+      ),
+
+    totalCards:
+      averageLineMap(
+        totalCardsSamples,
+      ),
+
+    totalCorners:
+      averageLineMap(
+        totalCornersSamples,
+      ),
+  };
+}
+
+async function getBookmakerProbabilitiesForMatch(matchId) {
+  if (!matchId) {
+    return null;
+  }
+
+  try {
+    const oddsPayload =
+      await getMatchOdds(matchId);
+
+    return buildBookmakerMarketProbabilities(
+      oddsPayload,
+    );
+  } catch (error) {
+    console.warn(
+      `Odds prematch non disponibili per match ${matchId}:`,
+      error?.message ?? error,
+    );
+
+    return null;
+  }
+}
+
+function blendPredictWithBookmaker(
+  predictProbabilities,
+  bookmakerProbabilities,
+  predictWeight = 0.20,
+  bookmakerWeight = 0.80,
+) {
+  if (
+    !predictProbabilities ||
+    !bookmakerProbabilities
+  ) {
+    return predictProbabilities ?? bookmakerProbabilities ?? null;
+  }
+
+  const home =
+    Number(predictProbabilities.home) * predictWeight +
+    Number(bookmakerProbabilities.home) * bookmakerWeight;
+
+  const draw =
+    Number(predictProbabilities.draw) * predictWeight +
+    Number(bookmakerProbabilities.draw) * bookmakerWeight;
+
+  const away =
+    Number(predictProbabilities.away) * predictWeight +
+    Number(bookmakerProbabilities.away) * bookmakerWeight;
+
+  const total = home + draw + away;
+
+  if (
+    !Number.isFinite(total) ||
+    total <= 0
+  ) {
+    return predictProbabilities;
+  }
+
+  return {
+    home: home / total,
+    draw: draw / total,
+    away: away / total,
+  };
+}
+function blendBinaryPredictWithBookmaker(
+  predictProbabilities,
+  bookmakerProbabilities,
+  firstKey,
+  secondKey,
+  predictWeight = 0.20,
+  bookmakerWeight = 0.80,
+) {
+  if (
+    !predictProbabilities ||
+    !bookmakerProbabilities
+  ) {
+    return predictProbabilities ?? bookmakerProbabilities ?? null;
+  }
+
+  const first =
+    Number(
+      predictProbabilities[firstKey],
+    ) * predictWeight +
+    Number(
+      bookmakerProbabilities[firstKey],
+    ) * bookmakerWeight;
+
+  const second =
+    Number(
+      predictProbabilities[secondKey],
+    ) * predictWeight +
+    Number(
+      bookmakerProbabilities[secondKey],
+    ) * bookmakerWeight;
+
+  const normalized =
+    normalizeProbabilityObject({
+      [firstKey]:
+        first,
+      [secondKey]:
+        second,
+    });
+
+  return normalized ??
+    predictProbabilities;
+}
+
+function bookmakerLineProbability(
+  lineMap,
+  wantedLine,
+) {
+  if (
+    !lineMap ||
+    typeof lineMap !== 'object'
+  ) {
+    return null;
+  }
+
+  const exact =
+    lineMap[
+      String(wantedLine)
+    ];
+
+  if (exact) {
+    return {
+      line:
+        Number(wantedLine),
+      probabilities:
+        exact,
+    };
+  }
+
+  const candidates =
+    Object.entries(lineMap)
+      .map(
+        ([line, probabilities]) => ({
+          line:
+            Number(line),
+          probabilities,
+        }),
+      )
+      .filter(
+        (item) =>
+          Number.isFinite(item.line) &&
+          item.probabilities,
+      )
+      .sort(
+        (a, b) =>
+          Math.abs(
+            a.line - wantedLine,
+          ) -
+          Math.abs(
+            b.line - wantedLine,
+          ),
+      );
+
+  if (candidates.length === 0) {
+    return null;
+  }
+
+  return candidates[0];
+}
+
+function applyBookmakerAdvancedBlend(
+  advanced,
+  bookmakerProbabilities,
+) {
+  if (
+    !advanced ||
+    !bookmakerProbabilities
+  ) {
+    return advanced;
+  }
+
+  const entries = [
+    [
+      'corners',
+      bookmakerProbabilities.totalCorners,
+    ],
+    [
+      'cards',
+      bookmakerProbabilities.totalCards,
+    ],
+  ];
+
+  for (
+    const [metricKey, lineMap]
+      of entries
+  ) {
+    const metric =
+      advanced?.[metricKey];
+
+    if (
+      !metric?.available ||
+      !Number.isFinite(
+        Number(metric.totalExpected),
+      ) ||
+      !Number.isFinite(
+        Number(metric.line),
+      )
+    ) {
+      continue;
+    }
+
+    const bookmakerLine =
+      bookmakerLineProbability(
+        lineMap,
+        Number(metric.line),
+      );
+
+    if (!bookmakerLine) {
+      continue;
+    }
+
+    const line =
+      bookmakerLine.line;
+
+    const predictOver =
+      totalGoalsOverProbability(
+        Number(metric.totalExpected),
+        line,
+      );
+
+    const blended =
+      blendBinaryPredictWithBookmaker(
+        {
+          over:
+            predictOver,
+          under:
+            1 - predictOver,
+        },
+        bookmakerLine.probabilities,
+        'over',
+        'under',
+      );
+
+    if (!blended) {
+      continue;
+    }
+
+    metric.line =
+      round2(line);
+
+    metric.overProbability =
+      round2(
+        blended.over * 100,
+      );
+
+    metric.underProbability =
+      round2(
+        blended.under * 100,
+      );
+  }
+
+  return advanced;
 }
 
 function sendApiError(
@@ -2750,6 +3411,7 @@ function calculatePrediction({
   awayRecentMatches,
   headToHeadMatches,
   leagueHistory,
+  bookmakerProbabilities = null,
 }) {
   const homeVenue =
     homeTeam.summary.home;
@@ -2925,6 +3587,12 @@ function calculatePrediction({
           0.18,
     );
 
+  const final1x2 =
+    blendPredictWithBookmaker(
+      blended1x2,
+      bookmakerProbabilities?.oneXTwo,
+    );
+
   const totalLambda =
     homeLambda +
     awayLambda;
@@ -3026,65 +3694,126 @@ function calculatePrediction({
       empiricalOver35,
     );
 
+  const finalGG =
+    blendBinaryPredictWithBookmaker(
+      {
+        yes:
+          gg,
+        no:
+          1 - gg,
+      },
+      bookmakerProbabilities
+        ?.bothTeamsToScore,
+      'yes',
+      'no',
+    );
+
+  const finalOver15 =
+    blendBinaryPredictWithBookmaker(
+      {
+        over:
+          over15,
+        under:
+          1 - over15,
+      },
+      bookmakerProbabilities
+        ?.totalGoals
+        ?.['1.5'],
+      'over',
+      'under',
+    );
+
+  const finalOver25 =
+    blendBinaryPredictWithBookmaker(
+      {
+        over:
+          over25,
+        under:
+          1 - over25,
+      },
+      bookmakerProbabilities
+        ?.totalGoals
+        ?.['2.5'],
+      'over',
+      'under',
+    );
+
+  const finalOver35 =
+    blendBinaryPredictWithBookmaker(
+      {
+        over:
+          over35,
+        under:
+          1 - over35,
+      },
+      bookmakerProbabilities
+        ?.totalGoals
+        ?.['3.5'],
+      'over',
+      'under',
+    );
+
   const oneXTwoPercent = {
     home:
       round2(
-        blended1x2.home *
+        final1x2.home *
         100,
       ),
 
     draw:
       round2(
-        blended1x2.draw *
+        final1x2.draw *
         100,
       ),
 
     away:
       round2(
-        blended1x2.away *
+        final1x2.away *
         100,
       ),
   };
 
   const goalPercent = {
     gg:
-      round2(gg * 100),
+      round2(
+        finalGG.yes * 100,
+      ),
 
     noGoal:
       round2(
-        (1 - gg) * 100,
+        finalGG.no * 100,
       ),
 
     over15:
       round2(
-        over15 * 100,
+        finalOver15.over * 100,
       ),
 
     under15:
       round2(
-        (1 - over15) *
+        finalOver15.under *
         100,
       ),
 
     over25:
       round2(
-        over25 * 100,
+        finalOver25.over * 100,
       ),
 
     under25:
       round2(
-        (1 - over25) *
+        finalOver25.under *
         100,
       ),
 
     over35:
       round2(
-        over35 * 100,
+        finalOver35.over * 100,
       ),
 
     under35:
       round2(
-        (1 - over35) *
+        finalOver35.under *
         100,
       ),
   };
@@ -7077,6 +7806,7 @@ app.get(
       const {
         homeTeamId,
         awayTeamId,
+        matchId,
 
         season = '2025',
 
@@ -7100,6 +7830,45 @@ app.get(
       }
 
 
+      const centralMatch =
+        centralSerieAState.matches.find(
+          (match) =>
+            String(
+              teamIdOf(match?.homeTeam),
+            ) === String(homeTeamId) &&
+            String(
+              teamIdOf(match?.awayTeam),
+            ) === String(awayTeamId),
+        );
+
+      const effectiveMatchId =
+        matchId ??
+        centralMatch?.id ??
+        null;
+
+      const matchStartMs =
+        Date.parse(
+          centralMatch?.date ?? '',
+        );
+
+      const matchIsUpcoming =
+        Number.isFinite(matchStartMs) &&
+        Date.now() < matchStartMs;
+
+      const predictionFreezeActive =
+        Number.isFinite(matchStartMs) &&
+        Date.now() >=
+          matchStartMs -
+            PREMATCH_PREDICTION_FREEZE_WINDOW;
+
+      const analysisCacheTtl =
+        predictionFreezeActive
+          ? 14 * 24 * 60 * 60 * 1000
+          : matchIsUpcoming ||
+              (!centralMatch && effectiveMatchId)
+            ? 30 * 60 * 1000
+            : 14 * 24 * 60 * 60 * 1000;
+
       const analysisCacheKey =
         buildMatchAnalysisCacheKey({
           homeTeamId,
@@ -7113,7 +7882,7 @@ app.get(
       const cachedAnalysisMemory =
         getMemoryCache(
           analysisCacheKey,
-          14 * 24 * 60 * 60 * 1000,
+          analysisCacheTtl,
         );
 
       if (cachedAnalysisMemory) {
@@ -7127,7 +7896,7 @@ app.get(
       const cachedAnalysisDisk =
         await getDiskCache(
           analysisCacheKey,
-          14 * 24 * 60 * 60 * 1000,
+          analysisCacheTtl,
         );
 
       if (cachedAnalysisDisk) {
@@ -7310,6 +8079,11 @@ app.get(
             currentAwayHistory,
         });
 
+      const bookmakerProbabilities =
+        await getBookmakerProbabilitiesForMatch(
+          effectiveMatchId,
+        );
+
       const prediction =
         calculatePrediction({
           homeTeam:
@@ -7326,6 +8100,8 @@ app.get(
           // incorporano progressivamente i risultati 2026/27.
           leagueHistory:
             leagueResult.data,
+
+          bookmakerProbabilities,
         });
 
       prediction.inputs = {
@@ -7462,6 +8238,11 @@ app.get(
           leagueAdvanced:
             progressiveAdvancedData,
         });
+
+      applyBookmakerAdvancedBlend(
+        advanced,
+        bookmakerProbabilities,
+      );
 
       advanced.currentSeasonBlend = {
         season:
@@ -8157,12 +8938,50 @@ async function getOrCreateMatchdayPickSnapshot({
   countryName,
 }) {
   const key = [
-    'matchday-pick-snapshot-v2',
+    'matchday-pick-snapshot-v3',
     match?.id,
     historicalSeason,
     leagueName,
     countryName,
   ].join('-');
+
+  const matchStartMs =
+    Date.parse(
+      match?.date ?? '',
+    );
+
+  const beforeKickoff =
+    Number.isFinite(matchStartMs) &&
+    Date.now() < matchStartMs;
+
+  const predictionFreezeActive =
+    Number.isFinite(matchStartMs) &&
+    Date.now() >=
+      matchStartMs -
+        PREMATCH_PREDICTION_FREEZE_WINDOW;
+
+  function snapshotIsFresh(snapshot) {
+    if (!snapshot) {
+      return false;
+    }
+
+    // Da 60 minuti prima del calcio d'inizio il pronostico prematch
+    // resta congelato, e rimane invariato anche dopo il fischio iniziale.
+    if (predictionFreezeActive || !beforeKickoff) {
+      return true;
+    }
+
+    const generatedAtMs =
+      Date.parse(
+        snapshot?.generatedAt ?? '',
+      );
+
+    return (
+      Number.isFinite(generatedAtMs) &&
+      Date.now() - generatedAtMs <
+        30 * 60 * 1000
+    );
+  }
 
   const memory =
     getMemoryCache(
@@ -8170,7 +8989,10 @@ async function getOrCreateMatchdayPickSnapshot({
       MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
     );
 
-  if (memory) {
+  if (
+    memory &&
+    snapshotIsFresh(memory)
+  ) {
     return memory;
   }
 
@@ -8180,7 +9002,10 @@ async function getOrCreateMatchdayPickSnapshot({
       MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
     );
 
-  if (disk) {
+  if (
+    disk &&
+    snapshotIsFresh(disk)
+  ) {
     setMemoryCache(
       key,
       disk,
@@ -8193,6 +9018,8 @@ async function getOrCreateMatchdayPickSnapshot({
     await internalMatchAnalysis({
       homeTeamId,
       awayTeamId,
+      matchId:
+        match?.id,
       historicalSeason,
       leagueName,
       countryName,
@@ -8284,6 +9111,7 @@ async function mapWithConcurrency(
 async function internalMatchAnalysis({
   homeTeamId,
   awayTeamId,
+  matchId = null,
   historicalSeason,
   leagueName,
   countryName,
@@ -8307,6 +9135,13 @@ async function internalMatchAnalysis({
       countryName:
         String(countryName),
     });
+
+  if (matchId !== null && matchId !== undefined) {
+    params.set(
+      'matchId',
+      String(matchId),
+    );
+  }
 
   const response =
     await fetch(
@@ -8695,7 +9530,7 @@ async function getExistingMatchdayPickSnapshot({
   countryName,
 }) {
   const key = [
-    'matchday-pick-snapshot-v2',
+    'matchday-pick-snapshot-v3',
     matchId,
     historicalSeason,
     leagueName,
