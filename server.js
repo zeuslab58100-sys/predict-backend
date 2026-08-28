@@ -477,6 +477,21 @@ function buildMatchAnalysisArchiveKey({
   leagueName,
   countryName,
 }) {
+  const teamIds =
+    new Set([
+      String(homeTeamId),
+      String(awayTeamId),
+    ]);
+
+  // Data-fix 1: Fiorentina-Frosinone deve usare un nuovo archivio
+  // permanente, senza cancellare quello precedente creato con il
+  // dato provider casa/trasferta errato di Fiorentina-Benevento.
+  const archiveDataFixRevision =
+    teamIds.has('427986') &&
+    teamIds.has('436496')
+      ? 1
+      : 0;
+
   return [
     'match-analysis-history-v1',
     homeTeamId,
@@ -484,6 +499,13 @@ function buildMatchAnalysisArchiveKey({
     historicalSeason,
     leagueName,
     countryName,
+
+    ...(archiveDataFixRevision > 0
+      ? [
+          'datafix',
+          archiveDataFixRevision,
+        ]
+      : []),
   ].join('-');
 }
 
@@ -8067,17 +8089,21 @@ async function precomputeUpcomingPredictData() {
         continue;
       }
 
-      const analysisPrecomputeTtl =
+      const analysisMatchStartMs =
+        Date.parse(
+          match?.date ?? '',
+        );
+
+      const analysisFreezeActive =
         Number.isFinite(
-          Date.parse(
-            match?.date ?? '',
-          ),
+          analysisMatchStartMs,
         ) &&
         now >=
-          Date.parse(
-            match?.date ?? '',
-          ) -
-            PREMATCH_PREDICTION_FREEZE_WINDOW
+          analysisMatchStartMs -
+            PREMATCH_PREDICTION_FREEZE_WINDOW;
+
+      const analysisPrecomputeTtl =
+        analysisFreezeActive
           ? 14 * 24 * 60 * 60 * 1000
           : 30 * 60 * 1000;
 
@@ -8093,6 +8119,14 @@ async function precomputeUpcomingPredictData() {
             'Italy',
           cacheTtl:
             analysisPrecomputeTtl,
+
+          // Prima del freeze vogliamo una vera analisi aggiornata:
+          // un vecchio archivio permanente o legacy non deve bloccare
+          // la rigenerazione dello snapshot corrente.
+          allowPermanent:
+            analysisFreezeActive,
+          allowLegacy:
+            analysisFreezeActive,
         });
 
       const existingSnapshot =
@@ -9509,32 +9543,39 @@ app.get(
           countryName,
         });
 
-      // Prima di tutto leggiamo l'archivio storico permanente.
-      // Una volta archiviata, l'analisi pre-match originale non viene
-      // più ricalcolata né sostituita da revisioni successive.
-      const permanentAnalysis =
-        await getPermanentMatchAnalysisRecord({
-          homeTeamId,
-          awayTeamId,
-          historicalSeason:
-            season,
-          leagueName,
-          countryName,
-        });
+      // L'archivio permanente ha priorità solo quando il match è ormai
+      // congelato/giocato (o non è una gara futura della schedule corrente).
+      // Prima del freeze una vecchia analisi archiviata non deve impedire
+      // l'aggiornamento con i dati correnti.
+      const canUsePermanentAnalysis =
+        predictionFreezeActive ||
+        !matchIsUpcoming;
 
-      if (
-        permanentAnalysis?.analysis
-      ) {
-        const presentedAnalysis =
-          buildPredictPresentationSignals(
-            permanentAnalysis.analysis,
-          );
+      if (canUsePermanentAnalysis) {
+        const permanentAnalysis =
+          await getPermanentMatchAnalysisRecord({
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              season,
+            leagueName,
+            countryName,
+          });
 
-        return res.json({
-          ...presentedAnalysis,
-          cacheSource:
-            'predict-analysis-history',
-        });
+        if (
+          permanentAnalysis?.analysis
+        ) {
+          const presentedAnalysis =
+            buildPredictPresentationSignals(
+              permanentAnalysis.analysis,
+            );
+
+          return res.json({
+            ...presentedAnalysis,
+            cacheSource:
+              'predict-analysis-history',
+          });
+        }
       }
 
       const cachedAnalysisMemory =
@@ -10755,18 +10796,22 @@ async function getExistingMatchAnalysisSnapshot({
   countryName,
   cacheTtl =
     PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+  allowPermanent = true,
+  allowLegacy = true,
 }) {
-  const permanent =
-    await getPermanentMatchAnalysisRecord({
-      homeTeamId,
-      awayTeamId,
-      historicalSeason,
-      leagueName,
-      countryName,
-    });
+  if (allowPermanent) {
+    const permanent =
+      await getPermanentMatchAnalysisRecord({
+        homeTeamId,
+        awayTeamId,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
 
-  if (permanent?.analysis) {
-    return permanent.analysis;
+    if (permanent?.analysis) {
+      return permanent.analysis;
+    }
   }
 
   const key =
@@ -10803,24 +10848,26 @@ async function getExistingMatchAnalysisSnapshot({
     return disk;
   }
 
-  const legacy =
-    await readLegacyMatchAnalysisSnapshot({
-      homeTeamId,
-      awayTeamId,
-      historicalSeason,
-      leagueName,
-      countryName,
-    });
+  if (allowLegacy) {
+    const legacy =
+      await readLegacyMatchAnalysisSnapshot({
+        homeTeamId,
+        awayTeamId,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
 
-  if (legacy?.snapshot) {
-    return migrateLegacyMatchAnalysisSnapshot({
-      homeTeamId,
-      awayTeamId,
-      historicalSeason,
-      leagueName,
-      countryName,
-      legacy,
-    });
+    if (legacy?.snapshot) {
+      return migrateLegacyMatchAnalysisSnapshot({
+        homeTeamId,
+        awayTeamId,
+        historicalSeason,
+        leagueName,
+        countryName,
+        legacy,
+      });
+    }
   }
 
   return null;
