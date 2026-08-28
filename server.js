@@ -68,6 +68,15 @@ const CENTRAL_PREDICTION_HORIZON = 7 * 24 * 60 * 60 * 1000;
 const PREMATCH_PREDICTION_FREEZE_WINDOW = 60 * 60 * 1000;
 const MATCHDAY_MULTIPLE_FREEZE_WINDOW = 4 * 60 * 60 * 1000;
 const MATCHDAY_MULTIPLE_SNAPSHOT_CACHE_TIME = 400 * 24 * 60 * 60 * 1000;
+
+// Archivio storico PREDICT: durata pratica di 100 anni.
+// Questi record vivono sul disco persistente e non dipendono dalla RAM.
+const PREDICT_HISTORY_ARCHIVE_CACHE_TIME = 100 * 365 * 24 * 60 * 60 * 1000;
+const MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION = 'v3';
+const MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS = ['v2'];
+const MATCH_ANALYSIS_SNAPSHOT_CURRENT_VERSION = 'v2';
+const MATCH_ANALYSIS_SNAPSHOT_LEGACY_VERSIONS = ['v1'];
+
 const INTERNAL_SYNC_TOKEN =
   process.env.PREDICT_INTERNAL_TOKEN ||
   crypto
@@ -299,6 +308,567 @@ async function deleteCacheKey(key) {
   }
 }
 
+// ====================================================
+// ARCHIVIO STORICO PERSISTENTE PREDICT
+// ====================================================
+
+async function getPermanentCache(key) {
+  const memory =
+    getMemoryCache(
+      key,
+      PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+    );
+
+  if (memory) {
+    return memory;
+  }
+
+  const disk =
+    await getDiskCache(
+      key,
+      PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+    );
+
+  if (disk) {
+    setMemoryCache(
+      key,
+      disk,
+    );
+
+    return disk;
+  }
+
+  return null;
+}
+
+async function setPermanentCache(
+  key,
+  data,
+) {
+  setMemoryCache(
+    key,
+    data,
+  );
+
+  await setDiskCache(
+    key,
+    data,
+  );
+}
+
+function buildMatchdayPickSnapshotKey({
+  version =
+    MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+  matchId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  return [
+    `matchday-pick-snapshot-${version}`,
+    matchId,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+function buildMatchdayPickRecordKey({
+  matchId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  return [
+    'matchday-pick-record-v1',
+    matchId,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+function buildMatchdayRoundArchiveKey({
+  season,
+  historicalSeason,
+  round,
+  leagueName,
+  countryName,
+}) {
+  return [
+    'matchday-picks-history-v1',
+    season,
+    historicalSeason,
+    round,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+function buildSeasonSummaryArchiveKey({
+  season,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  return [
+    'season-picks-history-v1',
+    season,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+function buildMatchdayMultipleArchiveKey({
+  season,
+  historicalSeason,
+  round,
+  leagueName,
+  countryName,
+}) {
+  return [
+    'matchday-multiples-history-v1',
+    season,
+    historicalSeason,
+    round,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+function buildSeasonMultiplesSummaryArchiveKey({
+  season,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  return [
+    'season-multiples-history-v1',
+    season,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+function buildMatchAnalysisLegacySnapshotKey({
+  version = 'v1',
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  return [
+    `match-analysis-snapshot-${version}`,
+    homeTeamId,
+    awayTeamId,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+function buildMatchAnalysisArchiveKey({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  return [
+    'match-analysis-history-v1',
+    homeTeamId,
+    awayTeamId,
+    historicalSeason,
+    leagueName,
+    countryName,
+  ].join('-');
+}
+
+async function getPermanentMatchAnalysisRecord({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  return getPermanentCache(
+    buildMatchAnalysisArchiveKey({
+      homeTeamId,
+      awayTeamId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    }),
+  );
+}
+
+async function persistPermanentMatchAnalysis({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+  analysis,
+  sourceKey = null,
+}) {
+  if (
+    !analysis ||
+    typeof analysis !== 'object'
+  ) {
+    return null;
+  }
+
+  const key =
+    buildMatchAnalysisArchiveKey({
+      homeTeamId,
+      awayTeamId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  const existing =
+    await getPermanentCache(
+      key,
+    );
+
+  // La prima analisi pre-match archiviata resta immutabile:
+  // non deve essere riscritta da revisioni future del modello.
+  if (
+    existing?.analysis &&
+    typeof existing.analysis === 'object'
+  ) {
+    return existing;
+  }
+
+  const record = {
+    schemaVersion: 1,
+
+    homeTeamId:
+      String(homeTeamId),
+
+    awayTeamId:
+      String(awayTeamId),
+
+    historicalSeason:
+      String(historicalSeason),
+
+    leagueName,
+    countryName,
+
+    analysis,
+
+    sourceKey,
+
+    createdAt:
+      new Date()
+        .toISOString(),
+  };
+
+  await setPermanentCache(
+    key,
+    record,
+  );
+
+  return record;
+}
+
+async function getPermanentMatchdayPickRecord({
+  matchId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  if (
+    matchId === undefined ||
+    matchId === null
+  ) {
+    return null;
+  }
+
+  return getPermanentCache(
+    buildMatchdayPickRecordKey({
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    }),
+  );
+}
+
+async function persistPermanentMatchdayPickRecord({
+  match = null,
+  matchId = null,
+  snapshot = null,
+  result = null,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  const resolvedMatchId =
+    match?.id ??
+    matchId;
+
+  if (
+    resolvedMatchId === undefined ||
+    resolvedMatchId === null
+  ) {
+    return null;
+  }
+
+  const key =
+    buildMatchdayPickRecordKey({
+      matchId:
+        resolvedMatchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  const existing =
+    await getPermanentCache(
+      key,
+    );
+
+  // Il primo pronostico archiviato diventa definitivo.
+  // Una nuova versione del modello non può riscrivere lo storico.
+  const pick =
+    existing?.pick ??
+    snapshot?.pick ??
+    null;
+
+  const existingResult =
+    existing?.result ??
+    null;
+
+  const finalResult =
+    existingResult?.settled
+      ? existingResult
+      : result ??
+        existingResult ??
+        {
+          status:
+            'pending',
+          settled:
+            false,
+        };
+
+  const nowIso =
+    new Date()
+      .toISOString();
+
+  const record = {
+    schemaVersion: 1,
+
+    matchId:
+      resolvedMatchId,
+
+    historicalSeason:
+      String(
+        historicalSeason,
+      ),
+
+    leagueName,
+    countryName,
+
+    round:
+      match
+        ? roundNumberOf(
+            match,
+          )
+        : existing?.round ??
+          null,
+
+    date:
+      match?.date ??
+      existing?.date ??
+      null,
+
+    homeTeam:
+      match?.homeTeam ??
+      existing?.homeTeam ??
+      null,
+
+    awayTeam:
+      match?.awayTeam ??
+      existing?.awayTeam ??
+      null,
+
+    pick,
+
+    pickGeneratedAt:
+      existing
+        ?.pickGeneratedAt ??
+      snapshot
+        ?.generatedAt ??
+      null,
+
+    modelVersion:
+      existing
+        ?.modelVersion ??
+      snapshot
+        ?.modelVersion ??
+      'PREDICT v5',
+
+    result:
+      finalResult,
+
+    createdAt:
+      existing?.createdAt ??
+      nowIso,
+
+    updatedAt:
+      nowIso,
+  };
+
+  await setPermanentCache(
+    key,
+    record,
+  );
+
+  return record;
+}
+
+function snapshotFromPermanentRecord(
+  record,
+) {
+  if (!record?.pick) {
+    return null;
+  }
+
+  return {
+    pick:
+      record.pick,
+
+    modelVersion:
+      record.modelVersion ??
+      'PREDICT v5',
+
+    generatedAt:
+      record.pickGeneratedAt ??
+      record.createdAt ??
+      null,
+
+    historicalRecord:
+      true,
+  };
+}
+
+async function readMatchdayPickSnapshotVersion({
+  version,
+  matchId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  const key =
+    buildMatchdayPickSnapshotKey({
+      version,
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  const memory =
+    getMemoryCache(
+      key,
+      MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
+    );
+
+  if (memory) {
+    return {
+      key,
+      snapshot:
+        memory,
+      source:
+        'memory',
+    };
+  }
+
+  const disk =
+    await getDiskCache(
+      key,
+      MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
+    );
+
+  if (disk) {
+    setMemoryCache(
+      key,
+      disk,
+    );
+
+    return {
+      key,
+      snapshot:
+        disk,
+      source:
+        'disk',
+    };
+  }
+
+  return {
+    key,
+    snapshot:
+      null,
+    source:
+      null,
+  };
+}
+
+async function migrateLegacyMatchdayPickSnapshot({
+  legacyVersion,
+  matchId,
+  historicalSeason,
+  leagueName,
+  countryName,
+  snapshot,
+}) {
+  if (!snapshot?.pick) {
+    return snapshot;
+  }
+
+  const currentKey =
+    buildMatchdayPickSnapshotKey({
+      version:
+        MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  const migrated = {
+    ...snapshot,
+
+    migratedFrom:
+      legacyVersion,
+
+    migratedAt:
+      new Date()
+        .toISOString(),
+  };
+
+  setMemoryCache(
+    currentKey,
+    migrated,
+  );
+
+  await setDiskCache(
+    currentKey,
+    migrated,
+  );
+
+  console.log(
+    `PREDICT HISTORY: snapshot ${legacyVersion} -> ${MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION} migrato per match ${matchId}`,
+  );
+
+  return migrated;
+}
+
 function teamDataRevisionOf(
   teamId,
 ) {
@@ -363,6 +933,14 @@ function buildMatchAnalysisCacheKey({
       awayTeamId,
     );
 
+  const matchDataFixRevision =
+    String(homeTeamId) ===
+      '427986' ||
+    String(awayTeamId) ===
+      '427986'
+      ? 1
+      : 0;
+
   const parts = [
     'match-analysis-snapshot-v2',
     homeTeamId,
@@ -370,6 +948,13 @@ function buildMatchAnalysisCacheKey({
     historicalSeason,
     leagueName,
     countryName,
+
+    ...(matchDataFixRevision > 0
+      ? [
+          'datafix',
+          matchDataFixRevision,
+        ]
+      : []),
   ];
 
   // Revisione 0/0 = stessa chiave usata finora.
@@ -387,6 +972,139 @@ function buildMatchAnalysisCacheKey({
     homeRevision,
     awayRevision,
   ].join('-');
+}
+
+
+async function readLegacyMatchAnalysisSnapshot({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  for (
+    const version
+      of MATCH_ANALYSIS_SNAPSHOT_LEGACY_VERSIONS
+  ) {
+    const key =
+      buildMatchAnalysisLegacySnapshotKey({
+        version,
+        homeTeamId,
+        awayTeamId,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+
+    const memory =
+      getMemoryCache(
+        key,
+        PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+      );
+
+    if (memory) {
+      return {
+        key,
+        version,
+        snapshot:
+          memory,
+        source:
+          'memory',
+      };
+    }
+
+    const disk =
+      await getDiskCache(
+        key,
+        PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+      );
+
+    if (disk) {
+      setMemoryCache(
+        key,
+        disk,
+      );
+
+      return {
+        key,
+        version,
+        snapshot:
+          disk,
+        source:
+          'disk',
+      };
+    }
+  }
+
+  return null;
+}
+
+async function migrateLegacyMatchAnalysisSnapshot({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+  legacy,
+}) {
+  if (!legacy?.snapshot) {
+    return null;
+  }
+
+  const currentKey =
+    buildMatchAnalysisCacheKey({
+      homeTeamId,
+      awayTeamId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  const existingCurrentMemory =
+    getMemoryCache(
+      currentKey,
+      PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+    );
+
+  const existingCurrentDisk =
+    existingCurrentMemory ??
+    await getDiskCache(
+      currentKey,
+      PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+    );
+
+  if (!existingCurrentDisk) {
+    setMemoryCache(
+      currentKey,
+      legacy.snapshot,
+    );
+
+    await setDiskCache(
+      currentKey,
+      legacy.snapshot,
+    );
+  }
+
+  await persistPermanentMatchAnalysis({
+    homeTeamId,
+    awayTeamId,
+    historicalSeason,
+    leagueName,
+    countryName,
+    analysis:
+      legacy.snapshot,
+    sourceKey:
+      legacy.key,
+  });
+
+  console.log(
+    `PREDICT HISTORY: analisi ${legacy.version} -> ${MATCH_ANALYSIS_SNAPSHOT_CURRENT_VERSION} migrata per ${homeTeamId}-${awayTeamId}`,
+  );
+
+  return (
+    existingCurrentDisk ??
+    legacy.snapshot
+  );
 }
 
 // ====================================================
@@ -1198,9 +1916,86 @@ function sendApiError(
 // UTILITÀ MATCH
 // ====================================================
 
+// Correzioni puntuali di anomalie note del provider.
+// Match 1378323785: il provider restituisce Benevento-Fiorentina 4-1,
+// ma la gara corretta è Fiorentina-Benevento 4-1.
+// Non modifichiamo il punteggio: scambiamo solo casa/trasferta.
+const PREDICT_MATCH_HOME_AWAY_SWAP_IDS =
+  new Set([
+    '1378323785',
+  ]);
+
+function normalizeProviderMatch(match) {
+  if (
+    !match ||
+    typeof match !== 'object'
+  ) {
+    return match;
+  }
+
+  const matchId =
+    match?.id === undefined ||
+    match?.id === null
+      ? null
+      : String(match.id);
+
+  if (
+    !matchId ||
+    !PREDICT_MATCH_HOME_AWAY_SWAP_IDS
+      .has(matchId)
+  ) {
+    return match;
+  }
+
+  return {
+    ...match,
+
+    homeTeam:
+      match?.awayTeam ??
+      null,
+
+    awayTeam:
+      match?.homeTeam ??
+      null,
+
+    predictDataCorrection: {
+      type:
+        'home-away-swap',
+
+      revision:
+        1,
+
+      reason:
+        'Correzione anomalia provider',
+
+      originalHomeTeam:
+        match?.homeTeam ??
+        null,
+
+      originalAwayTeam:
+        match?.awayTeam ??
+        null,
+    },
+  };
+}
+
+function normalizeProviderMatches(
+  matches,
+) {
+  if (!Array.isArray(matches)) {
+    return [];
+  }
+
+  return matches.map(
+    normalizeProviderMatch,
+  );
+}
+
 function extractMatches(data) {
   if (Array.isArray(data)) {
-    return data;
+    return normalizeProviderMatches(
+      data,
+    );
   }
 
   if (
@@ -1211,15 +2006,21 @@ function extractMatches(data) {
   }
 
   if (Array.isArray(data.data)) {
-    return data.data;
+    return normalizeProviderMatches(
+      data.data,
+    );
   }
 
   if (Array.isArray(data.matches)) {
-    return data.matches;
+    return normalizeProviderMatches(
+      data.matches,
+    );
   }
 
   if (Array.isArray(data.results)) {
-    return data.results;
+    return normalizeProviderMatches(
+      data.results,
+    );
   }
 
   return [];
@@ -5878,6 +6679,506 @@ function appendAdvancedSignals(
 }
 
 
+
+function predictSignalReliability(
+  prediction,
+  market,
+) {
+  const reliability =
+    prediction?.reliability ?? {};
+
+  if (market === 'oneXTwo') {
+    return Number(
+      reliability.oneXTwo ?? 0,
+    );
+  }
+
+  if (market === 'corners') {
+    return Number(
+      reliability.corners ?? 0,
+    );
+  }
+
+  if (
+    market ===
+    'shotsOnTarget'
+  ) {
+    return Number(
+      reliability.shotsOnTarget ??
+      0,
+    );
+  }
+
+  if (market === 'cards') {
+    return Number(
+      reliability.cards ?? 0,
+    );
+  }
+
+  return Number(
+    reliability.goals ?? 0,
+  );
+}
+
+function buildPredictPresentationSignals(
+  analysis,
+) {
+  if (
+    !analysis ||
+    !analysis.prediction
+  ) {
+    return analysis;
+  }
+
+  const prediction = {
+    ...analysis.prediction,
+  };
+
+  const advanced =
+    analysis.advanced ?? {};
+
+  const candidates = [];
+
+  function addSignal({
+    label,
+    probability,
+    reason,
+    market,
+    selection = null,
+    line = null,
+  }) {
+    const numeric =
+      Number(probability);
+
+    if (
+      !Number.isFinite(numeric)
+    ) {
+      return;
+    }
+
+    const reliability =
+      predictSignalReliability(
+        prediction,
+        market,
+      );
+
+    candidates.push({
+      label,
+      probability:
+        round2(numeric),
+      reason,
+      market,
+      selection,
+      line,
+      reliability:
+        round2(reliability),
+      reliabilityLabel:
+        reliability > 0
+          ? reliabilityLabel(
+              reliability,
+            )
+          : 'N/D',
+    });
+  }
+
+  const oneXTwo =
+    prediction.oneXTwo ?? {};
+
+  const oneXTwoCandidates = [
+    ['1', oneXTwo.home, 'home'],
+    ['X', oneXTwo.draw, 'draw'],
+    ['2', oneXTwo.away, 'away'],
+  ]
+    .filter(
+      (item) =>
+        Number.isFinite(
+          Number(item[1]),
+        ),
+    )
+    .sort(
+      (a, b) =>
+        Number(b[1]) -
+        Number(a[1]),
+    );
+
+  if (oneXTwoCandidates[0]) {
+    addSignal({
+      label:
+        oneXTwoCandidates[0][0],
+      probability:
+        oneXTwoCandidates[0][1],
+      reason:
+        'Esito più probabile nel modello 1X2',
+      market:
+        'oneXTwo',
+      selection:
+        oneXTwoCandidates[0][2],
+    });
+  }
+
+  const goals =
+    prediction.goals ?? {};
+
+  const ggCandidates = [
+    ['GG', goals.gg, 'gg'],
+    ['NG', goals.noGoal, 'ng'],
+  ]
+    .filter(
+      (item) =>
+        Number.isFinite(
+          Number(item[1]),
+        ),
+    )
+    .sort(
+      (a, b) =>
+        Number(b[1]) -
+        Number(a[1]),
+    );
+
+  if (ggCandidates[0]) {
+    addSignal({
+      label:
+        ggCandidates[0][0],
+      probability:
+        ggCandidates[0][1],
+      reason:
+        'Segnale Goal / No Goal',
+      market:
+        'goals',
+      selection:
+        ggCandidates[0][2],
+    });
+  }
+
+  const goalLineCandidates = [
+    {
+      label:
+        'Over 1.5',
+      probability:
+        goals.over15,
+      selection:
+        'over',
+      line:
+        1.5,
+    },
+    {
+      label:
+        'Under 1.5',
+      probability:
+        goals.under15,
+      selection:
+        'under',
+      line:
+        1.5,
+    },
+    {
+      label:
+        'Over 2.5',
+      probability:
+        goals.over25,
+      selection:
+        'over',
+      line:
+        2.5,
+    },
+    {
+      label:
+        'Under 2.5',
+      probability:
+        goals.under25,
+      selection:
+        'under',
+      line:
+        2.5,
+    },
+    {
+      label:
+        'Over 3.5',
+      probability:
+        goals.over35,
+      selection:
+        'over',
+      line:
+        3.5,
+    },
+    {
+      label:
+        'Under 3.5',
+      probability:
+        goals.under35,
+      selection:
+        'under',
+      line:
+        3.5,
+    },
+  ]
+    .filter(
+      (item) =>
+        Number.isFinite(
+          Number(
+            item.probability,
+          ),
+        ),
+    )
+    .sort(
+      (a, b) =>
+        Number(
+          b.probability,
+        ) -
+        Number(
+          a.probability,
+        ),
+    );
+
+  const strongestGoalLine =
+    goalLineCandidates[0];
+
+  if (strongestGoalLine) {
+    addSignal({
+      ...strongestGoalLine,
+      reason:
+        'Segnale Under / Over più forte tra le linee 1.5, 2.5 e 3.5',
+      market:
+        'goals',
+    });
+  }
+
+  const advancedEntries = [
+    [
+      'Corner',
+      'corners',
+      advanced?.corners,
+    ],
+    [
+      'Tiri in porta',
+      'shotsOnTarget',
+      advanced
+        ?.shotsOnTarget,
+    ],
+    [
+      'Cartellini',
+      'cards',
+      advanced?.cards,
+    ],
+  ];
+
+  for (
+    const [
+      label,
+      market,
+      metric,
+    ] of advancedEntries
+  ) {
+    if (!metric?.available) {
+      continue;
+    }
+
+    const overProbability =
+      Number(
+        metric.overProbability,
+      );
+
+    const underProbability =
+      Number(
+        metric.underProbability,
+      );
+
+    const overIsStronger =
+      overProbability >=
+      underProbability;
+
+    const probability =
+      overIsStronger
+        ? overProbability
+        : underProbability;
+
+    if (
+      !Number.isFinite(
+        probability,
+      ) ||
+      probability < 55
+    ) {
+      continue;
+    }
+
+    addSignal({
+      label:
+        `${label} ${overIsStronger ? 'Over' : 'Under'} ${metric.line}`,
+      probability,
+      reason:
+        `Segnale ${label.toLowerCase()} dal campione casa/trasferta ponderato`,
+      market,
+      selection:
+        overIsStronger
+          ? 'over'
+          : 'under',
+      line:
+        Number(
+          metric.line,
+        ),
+    });
+  }
+
+  candidates.sort(
+    (a, b) =>
+      b.probability -
+      a.probability,
+  );
+
+  const primaryPick =
+    buildMostProbablePick({
+      ...analysis,
+      prediction,
+    });
+
+  let primarySignal =
+    null;
+
+  if (primaryPick) {
+    const primaryMarket =
+      primaryPick.market ===
+      '1X2'
+        ? 'oneXTwo'
+        : primaryPick.market ===
+            'Corner'
+          ? 'corners'
+          : primaryPick.market ===
+              'Tiri in porta'
+            ? 'shotsOnTarget'
+            : primaryPick.market ===
+                'Cartellini'
+              ? 'cards'
+              : 'goals';
+
+    const primaryReliability =
+      predictSignalReliability(
+        prediction,
+        primaryMarket,
+      );
+
+    primarySignal = {
+      ...primaryPick,
+      reason:
+        'Scelta principale PREDICT',
+      signalMarket:
+        primaryMarket,
+      reliability:
+        round2(
+          primaryReliability,
+        ),
+      reliabilityLabel:
+        primaryReliability > 0
+          ? reliabilityLabel(
+              primaryReliability,
+            )
+          : 'N/D',
+    };
+  }
+
+  const alternatives =
+    candidates.filter(
+      (signal) => {
+        if (!primarySignal) {
+          return true;
+        }
+
+        const sameSelection =
+          String(
+            signal.selection ??
+              '',
+          ) ===
+          String(
+            primarySignal
+              .selection ??
+              '',
+          );
+
+        const signalLine =
+          Number(
+            signal.line,
+          );
+
+        const primaryLine =
+          Number(
+            primarySignal.line,
+          );
+
+        const sameLine =
+          Number.isFinite(
+            signalLine,
+          ) &&
+          Number.isFinite(
+            primaryLine,
+          )
+            ? signalLine ===
+              primaryLine
+            : signal.line ==
+              primarySignal.line;
+
+        const sameMarket =
+          signal.market ===
+          primarySignal
+            .signalMarket;
+
+        return !(
+          sameSelection &&
+          sameLine &&
+          sameMarket
+        );
+      },
+    );
+
+  prediction.primarySignal =
+    primarySignal;
+
+  prediction.topSignals = [
+    ...(primarySignal
+      ? [
+          {
+            label:
+              primarySignal.label,
+            probability:
+              primarySignal
+                .probability,
+            reason:
+              primarySignal.reason,
+            market:
+              primarySignal
+                .signalMarket,
+            selection:
+              primarySignal
+                .selection,
+            line:
+              primarySignal.line,
+            reliability:
+              primarySignal
+                .reliability,
+            reliabilityLabel:
+              primarySignal
+                .reliabilityLabel,
+            primary:
+              true,
+          },
+        ]
+      : []),
+    ...alternatives.map(
+      (signal) => ({
+        ...signal,
+        primary:
+          false,
+      }),
+    ),
+  ].slice(
+    0,
+    6,
+  );
+
+  return {
+    ...analysis,
+    prediction,
+  };
+}
+
 // ====================================================
 // AFFIDABILITÀ PREDICT V4
 // ====================================================
@@ -6740,8 +8041,9 @@ async function precomputeUpcomingPredictData() {
       return;
     }
 
-    // Prepariamo fino a 3 partite mancanti per ciclo.
-    // La concorrenza resta limitata a 2 per evitare picchi verso Highlightly.
+    // Prepariamo fino a 10 partite mancanti per ciclo.
+    // La concorrenza resta limitata a 2 per evitare picchi simultanei
+    // verso Highlightly e completare rapidamente il precompute.
     const pendingMatches = [];
 
     for (
@@ -6765,6 +8067,20 @@ async function precomputeUpcomingPredictData() {
         continue;
       }
 
+      const analysisPrecomputeTtl =
+        Number.isFinite(
+          Date.parse(
+            match?.date ?? '',
+          ),
+        ) &&
+        now >=
+          Date.parse(
+            match?.date ?? '',
+          ) -
+            PREMATCH_PREDICTION_FREEZE_WINDOW
+          ? 14 * 24 * 60 * 60 * 1000
+          : 30 * 60 * 1000;
+
       const existingAnalysis =
         await getExistingMatchAnalysisSnapshot({
           homeTeamId,
@@ -6775,6 +8091,8 @@ async function precomputeUpcomingPredictData() {
             'Serie A',
           countryName:
             'Italy',
+          cacheTtl:
+            analysisPrecomputeTtl,
         });
 
       const existingSnapshot =
@@ -6807,7 +8125,7 @@ async function precomputeUpcomingPredictData() {
       });
 
       if (
-        pendingMatches.length >= 3
+        pendingMatches.length >= 10
       ) {
         break;
       }
@@ -7232,6 +8550,223 @@ async function retryPendingCurrentStatistics() {
 }
 
 
+async function archivePermanentAnalysisHistoryForFrozenMatches() {
+  const frozenMatches =
+    centralSerieAState.matches
+      .filter(
+        (match) => {
+          const startMs =
+            Date.parse(
+              match?.date ?? '',
+            );
+
+          return (
+            Number.isFinite(
+              startMs,
+            ) &&
+            Date.now() >=
+              startMs -
+                PREMATCH_PREDICTION_FREEZE_WINDOW
+          );
+        },
+      );
+
+  if (
+    frozenMatches.length ===
+    0
+  ) {
+    return false;
+  }
+
+  const archived =
+    await mapWithConcurrency(
+      frozenMatches,
+      2,
+      async (match) => {
+        try {
+          const homeTeamId =
+            teamIdOf(
+              match?.homeTeam,
+            );
+
+          const awayTeamId =
+            teamIdOf(
+              match?.awayTeam,
+            );
+
+          if (
+            !homeTeamId ||
+            !awayTeamId
+          ) {
+            return false;
+          }
+
+          const existing =
+            await getPermanentMatchAnalysisRecord({
+              homeTeamId,
+              awayTeamId,
+              historicalSeason:
+                '2025',
+              leagueName:
+                'Serie A',
+              countryName:
+                'Italy',
+            });
+
+          if (
+            existing?.analysis
+          ) {
+            return false;
+          }
+
+          const analysis =
+            await getExistingMatchAnalysisSnapshot({
+              homeTeamId,
+              awayTeamId,
+              historicalSeason:
+                '2025',
+              leagueName:
+                'Serie A',
+              countryName:
+                'Italy',
+            });
+
+          if (!analysis) {
+            return false;
+          }
+
+          await persistPermanentMatchAnalysis({
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              '2025',
+            leagueName:
+              'Serie A',
+            countryName:
+              'Italy',
+            analysis,
+            sourceKey:
+              buildMatchAnalysisCacheKey({
+                homeTeamId,
+                awayTeamId,
+                historicalSeason:
+                  '2025',
+                leagueName:
+                  'Serie A',
+                countryName:
+                  'Italy',
+              }),
+          });
+
+          return true;
+        } catch (error) {
+          console.warn(
+            `PREDICT HISTORY: archivio analisi non riuscito per ${match?.id}:`,
+            error?.message ??
+              error,
+          );
+
+          return false;
+        }
+      },
+    );
+
+  return archived.some(Boolean);
+}
+
+async function settlePermanentPickHistoryForFinishedMatches() {
+  const finishedMatches =
+    centralSerieAState.matches
+      .filter(
+        (match) =>
+          isFinishedMatch(
+            match,
+          ) &&
+          Boolean(
+            parseScore(
+              match,
+            ),
+          ),
+      );
+
+  if (finishedMatches.length === 0) {
+    return false;
+  }
+
+  const settled =
+    await mapWithConcurrency(
+      finishedMatches,
+      2,
+      async (match) => {
+        try {
+          const snapshot =
+            await getExistingMatchdayPickSnapshot({
+              matchId:
+                match?.id,
+              historicalSeason:
+                '2025',
+              leagueName:
+                'Serie A',
+              countryName:
+                'Italy',
+            });
+
+          if (!snapshot?.pick) {
+            return false;
+          }
+
+          const before =
+            await getPermanentMatchdayPickRecord({
+              matchId:
+                match?.id,
+              historicalSeason:
+                '2025',
+              leagueName:
+                'Serie A',
+              countryName:
+                'Italy',
+            });
+
+          if (
+            before
+              ?.result
+              ?.settled
+          ) {
+            return false;
+          }
+
+          const result =
+            await getOrPersistMatchdayPickResult({
+              match,
+              snapshot,
+              historicalSeason:
+                '2025',
+              leagueName:
+                'Serie A',
+              countryName:
+                'Italy',
+              allowProvider:
+                false,
+            });
+
+          return Boolean(
+            result?.settled,
+          );
+        } catch (error) {
+          console.warn(
+            `PREDICT HISTORY: settlement non riuscito per ${match?.id}:`,
+            error?.message ??
+              error,
+          );
+
+          return false;
+        }
+      },
+    );
+
+  return settled.some(Boolean);
+}
+
 async function centralSerieATick() {
   if (
     centralSerieAState.syncRunning
@@ -7258,16 +8793,31 @@ async function centralSerieATick() {
     const advancedStatisticsChanged =
       await retryPendingCurrentStatistics();
 
+    // Storico indipendente dagli accessi degli utenti:
+    // ogni risultato concluso viene archiviato dal server stesso.
+    const persistentHistoryChanged =
+      await settlePermanentPickHistoryForFinishedMatches();
+
     if (
       scheduleChanged ||
       liveUpdated ||
       finishedDataChanged ||
       advancedStatisticsChanged ||
+      persistentHistoryChanged ||
       centralSerieAState.matches.length >
         0
     ) {
       await precomputeUpcomingPredictData();
       await precomputeUpcomingMatchdayMultiples();
+
+      // Le multiple ufficialmente congelate vengono valutate dal server
+      // e il loro storico aggregato viene aggiornato senza dipendere dall'app.
+      await settlePermanentMultipleHistory();
+
+      // Dopo il precompute, se una partita è entrata nella finestra
+      // di congelamento, preserviamo definitivamente anche l'analisi
+      // pre-match completa sul disco persistente.
+      await archivePermanentAnalysisHistoryForFrozenMatches();
     }
 
     centralSerieAState.lastError =
@@ -7959,6 +9509,34 @@ app.get(
           countryName,
         });
 
+      // Prima di tutto leggiamo l'archivio storico permanente.
+      // Una volta archiviata, l'analisi pre-match originale non viene
+      // più ricalcolata né sostituita da revisioni successive.
+      const permanentAnalysis =
+        await getPermanentMatchAnalysisRecord({
+          homeTeamId,
+          awayTeamId,
+          historicalSeason:
+            season,
+          leagueName,
+          countryName,
+        });
+
+      if (
+        permanentAnalysis?.analysis
+      ) {
+        const presentedAnalysis =
+          buildPredictPresentationSignals(
+            permanentAnalysis.analysis,
+          );
+
+        return res.json({
+          ...presentedAnalysis,
+          cacheSource:
+            'predict-analysis-history',
+        });
+      }
+
       const cachedAnalysisMemory =
         getMemoryCache(
           analysisCacheKey,
@@ -7966,8 +9544,30 @@ app.get(
         );
 
       if (cachedAnalysisMemory) {
+        if (
+          predictionFreezeActive
+        ) {
+          await persistPermanentMatchAnalysis({
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              season,
+            leagueName,
+            countryName,
+            analysis:
+              cachedAnalysisMemory,
+            sourceKey:
+              analysisCacheKey,
+          });
+        }
+
+        const presentedAnalysis =
+          buildPredictPresentationSignals(
+            cachedAnalysisMemory,
+          );
+
         return res.json({
-          ...cachedAnalysisMemory,
+          ...presentedAnalysis,
           cacheSource:
             'predict-analysis-memory',
         });
@@ -7985,8 +9585,30 @@ app.get(
           cachedAnalysisDisk,
         );
 
+        if (
+          predictionFreezeActive
+        ) {
+          await persistPermanentMatchAnalysis({
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              season,
+            leagueName,
+            countryName,
+            analysis:
+              cachedAnalysisDisk,
+            sourceKey:
+              analysisCacheKey,
+          });
+        }
+
+        const presentedAnalysis =
+          buildPredictPresentationSignals(
+            cachedAnalysisDisk,
+          );
+
         return res.json({
-          ...cachedAnalysisDisk,
+          ...presentedAnalysis,
           cacheSource:
             'predict-analysis-disk',
         });
@@ -7997,6 +9619,76 @@ app.get(
           'x-predict-internal',
         ) ===
         INTERNAL_SYNC_TOKEN;
+
+      // Per una partita futura, se l'analisi esiste sul disco ma ha
+      // superato il TTL operativo di 30 minuti, la mostriamo comunque
+      // all'app come fallback invece di rispondere 503.
+      // Le richieste interne dello scheduler bypassano il fallback:
+      // devono rigenerare davvero lo snapshot.
+      if (
+        matchIsUpcoming &&
+        !predictionFreezeActive &&
+        !internalRequest
+      ) {
+        const staleAnalysisDisk =
+          await getDiskCache(
+            analysisCacheKey,
+            PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+          );
+
+        if (staleAnalysisDisk) {
+          const presentedAnalysis =
+            buildPredictPresentationSignals(
+              staleAnalysisDisk,
+            );
+
+          return res.json({
+            ...presentedAnalysis,
+            cacheSource:
+              'predict-analysis-disk-stale',
+            refreshPending:
+              true,
+          });
+        }
+      }
+
+      // Compatibilità storica: le analisi della prima giornata
+      // erano state salvate come snapshot v1. Se esistono, vengono
+      // recuperate senza rigenerarle, copiate in v2 e archiviate.
+      const legacyAnalysis =
+        await readLegacyMatchAnalysisSnapshot({
+          homeTeamId,
+          awayTeamId,
+          historicalSeason:
+            season,
+          leagueName,
+          countryName,
+        });
+
+      if (legacyAnalysis?.snapshot) {
+        const migratedAnalysis =
+          await migrateLegacyMatchAnalysisSnapshot({
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              season,
+            leagueName,
+            countryName,
+            legacy:
+              legacyAnalysis,
+          });
+
+        const presentedAnalysis =
+          buildPredictPresentationSignals(
+            migratedAnalysis,
+          );
+
+        return res.json({
+          ...presentedAnalysis,
+          cacheSource:
+            `predict-analysis-${legacyAnalysis.version}-history`,
+        });
+      }
 
       if (!internalRequest) {
         return res
@@ -8410,18 +10102,40 @@ app.get(
         advanced,
       };
 
+      const presentedAnalysisPayload =
+        buildPredictPresentationSignals(
+          analysisPayload,
+        );
+
       setMemoryCache(
         analysisCacheKey,
-        analysisPayload,
+        presentedAnalysisPayload,
       );
 
       await setDiskCache(
         analysisCacheKey,
-        analysisPayload,
+        presentedAnalysisPayload,
       );
 
+      if (
+        predictionFreezeActive
+      ) {
+        await persistPermanentMatchAnalysis({
+          homeTeamId,
+          awayTeamId,
+          historicalSeason:
+            season,
+          leagueName,
+          countryName,
+          analysis:
+            presentedAnalysisPayload,
+          sourceKey:
+            analysisCacheKey,
+        });
+      }
+
       res.json({
-        ...analysisPayload,
+        ...presentedAnalysisPayload,
         cacheSource:
           'predict-analysis-generated',
       });
@@ -8965,13 +10679,96 @@ async function evaluateMatchdayPick(
   );
 }
 
+async function getOrPersistMatchdayPickResult({
+  match,
+  snapshot,
+  historicalSeason,
+  leagueName,
+  countryName,
+  allowProvider = false,
+}) {
+  if (!snapshot?.pick) {
+    return evaluateMatchdayPick(
+      match,
+      null,
+      {
+        allowProvider,
+      },
+    );
+  }
+
+  const archived =
+    await getPermanentMatchdayPickRecord({
+      matchId:
+        match?.id,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  if (
+    archived
+      ?.result
+      ?.settled
+  ) {
+    return archived.result;
+  }
+
+  const result =
+    await evaluateMatchdayPick(
+      match,
+      snapshot.pick,
+      {
+        allowProvider,
+      },
+    );
+
+  // Dopo il calcio d'inizio il pick viene comunque archiviato.
+  // Il risultato resta aggiornabile finché non diventa definitivamente settled.
+  const startMs =
+    Date.parse(
+      match?.date ?? '',
+    );
+
+  if (
+    Number.isFinite(startMs) &&
+    Date.now() >= startMs
+  ) {
+    await persistPermanentMatchdayPickRecord({
+      match,
+      snapshot,
+      result,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+  }
+
+  return result;
+}
+
 async function getExistingMatchAnalysisSnapshot({
   homeTeamId,
   awayTeamId,
   historicalSeason,
   leagueName,
   countryName,
+  cacheTtl =
+    PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
 }) {
+  const permanent =
+    await getPermanentMatchAnalysisRecord({
+      homeTeamId,
+      awayTeamId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  if (permanent?.analysis) {
+    return permanent.analysis;
+  }
+
   const key =
     buildMatchAnalysisCacheKey({
       homeTeamId,
@@ -8984,7 +10781,7 @@ async function getExistingMatchAnalysisSnapshot({
   const memory =
     getMemoryCache(
       key,
-      14 * 24 * 60 * 60 * 1000,
+      cacheTtl,
     );
 
   if (memory) {
@@ -8994,7 +10791,7 @@ async function getExistingMatchAnalysisSnapshot({
   const disk =
     await getDiskCache(
       key,
-      14 * 24 * 60 * 60 * 1000,
+      cacheTtl,
     );
 
   if (disk) {
@@ -9004,6 +10801,26 @@ async function getExistingMatchAnalysisSnapshot({
     );
 
     return disk;
+  }
+
+  const legacy =
+    await readLegacyMatchAnalysisSnapshot({
+      homeTeamId,
+      awayTeamId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  if (legacy?.snapshot) {
+    return migrateLegacyMatchAnalysisSnapshot({
+      homeTeamId,
+      awayTeamId,
+      historicalSeason,
+      leagueName,
+      countryName,
+      legacy,
+    });
   }
 
   return null;
@@ -9017,13 +10834,18 @@ async function getOrCreateMatchdayPickSnapshot({
   leagueName,
   countryName,
 }) {
-  const key = [
-    'matchday-pick-snapshot-v3',
-    match?.id,
-    historicalSeason,
-    leagueName,
-    countryName,
-  ].join('-');
+  const matchId =
+    match?.id;
+
+  const key =
+    buildMatchdayPickSnapshotKey({
+      version:
+        MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
 
   const matchStartMs =
     Date.parse(
@@ -9041,7 +10863,7 @@ async function getOrCreateMatchdayPickSnapshot({
         PREMATCH_PREDICTION_FREEZE_WINDOW;
 
   function snapshotIsFresh(snapshot) {
-    if (!snapshot) {
+    if (!snapshot?.pick) {
       return false;
     }
 
@@ -9063,43 +10885,125 @@ async function getOrCreateMatchdayPickSnapshot({
     );
   }
 
-  const memory =
-    getMemoryCache(
-      key,
-      MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
+  // Un record storico già archiviato ha priorità assoluta:
+  // il pronostico pubblicato non può più essere riscritto.
+  const permanentRecord =
+    await getPermanentMatchdayPickRecord({
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  const permanentSnapshot =
+    snapshotFromPermanentRecord(
+      permanentRecord,
     );
 
-  if (
-    memory &&
-    snapshotIsFresh(memory)
-  ) {
-    return memory;
+  if (permanentSnapshot) {
+    return permanentSnapshot;
   }
 
-  const disk =
-    await getDiskCache(
-      key,
-      MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
-    );
+  const current =
+    await readMatchdayPickSnapshotVersion({
+      version:
+        MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
 
   if (
-    disk &&
-    snapshotIsFresh(disk)
+    current.snapshot &&
+    snapshotIsFresh(
+      current.snapshot,
+    )
   ) {
-    setMemoryCache(
-      key,
-      disk,
-    );
+    if (
+      predictionFreezeActive ||
+      !beforeKickoff
+    ) {
+      await persistPermanentMatchdayPickRecord({
+        match,
+        snapshot:
+          current.snapshot,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+    }
 
-    return disk;
+    return current.snapshot;
+  }
+
+  // Compatibilità con gli snapshot storici v2.
+  // Se esistono, vengono copiati in v3 senza cambiare pick o data originale.
+  for (
+    const legacyVersion
+      of MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS
+  ) {
+    const legacy =
+      await readMatchdayPickSnapshotVersion({
+        version:
+          legacyVersion,
+        matchId,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+
+    if (
+      !legacy.snapshot?.pick ||
+      !snapshotIsFresh(
+        legacy.snapshot,
+      )
+    ) {
+      continue;
+    }
+
+    const migrated =
+      await migrateLegacyMatchdayPickSnapshot({
+        legacyVersion,
+        matchId,
+        historicalSeason,
+        leagueName,
+        countryName,
+        snapshot:
+          legacy.snapshot,
+      });
+
+    if (
+      predictionFreezeActive ||
+      !beforeKickoff
+    ) {
+      await persistPermanentMatchdayPickRecord({
+        match,
+        snapshot:
+          migrated,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+    }
+
+    return migrated;
+  }
+
+  // Protezione anti-retroattività: se la partita è già iniziata
+  // e non esiste alcun pronostico prematch storico, NON ne creiamo uno dopo.
+  if (
+    Number.isFinite(matchStartMs) &&
+    !beforeKickoff
+  ) {
+    return null;
   }
 
   const analysis =
     await internalMatchAnalysis({
       homeTeamId,
       awayTeamId,
-      matchId:
-        match?.id,
+      matchId,
       historicalSeason,
       leagueName,
       countryName,
@@ -9131,6 +11035,19 @@ async function getOrCreateMatchdayPickSnapshot({
     key,
     snapshot,
   );
+
+  if (
+    snapshot?.pick &&
+    predictionFreezeActive
+  ) {
+    await persistPermanentMatchdayPickRecord({
+      match,
+      snapshot,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+  }
 
   return snapshot;
 }
@@ -9283,6 +11200,32 @@ async function getExistingMatchdayMultipleSnapshot({
       countryName,
     });
 
+  const archiveKey =
+    buildMatchdayMultipleArchiveKey({
+      season,
+      historicalSeason,
+      round,
+      leagueName,
+      countryName,
+    });
+
+  const archived =
+    await getPermanentCache(
+      archiveKey,
+    );
+
+  if (
+    archived?.frozen &&
+    archived?.available
+  ) {
+    setMemoryCache(
+      key,
+      archived,
+    );
+
+    return archived;
+  }
+
   const memory =
     getMemoryCache(
       key,
@@ -9385,6 +11328,623 @@ function buildRankedMultipleCandidates(
     );
 }
 
+
+function buildMultipleResultSummary(
+  accumulator,
+) {
+  const selections =
+    Array.isArray(
+      accumulator?.selections,
+    )
+      ? accumulator.selections
+      : [];
+
+  const statuses =
+    selections.map(
+      (selection) =>
+        selection?.result
+          ?.status ??
+        'pending',
+    );
+
+  const wonSelections =
+    statuses.filter(
+      (status) =>
+        status === 'won',
+    ).length;
+
+  const lostSelections =
+    statuses.filter(
+      (status) =>
+        status === 'lost',
+    ).length;
+
+  const unavailableSelections =
+    statuses.filter(
+      (status) =>
+        status ===
+        'unavailable',
+    ).length;
+
+  const pendingSelections =
+    Math.max(
+      0,
+      selections.length -
+        wonSelections -
+        lostSelections -
+        unavailableSelections,
+    );
+
+  let status =
+    'pending';
+
+  let settled =
+    false;
+
+  let won =
+    null;
+
+  if (lostSelections > 0) {
+    status =
+      'lost';
+    settled =
+      true;
+    won =
+      false;
+  } else if (
+    selections.length > 0 &&
+    wonSelections ===
+      selections.length
+  ) {
+    status =
+      'won';
+    settled =
+      true;
+    won =
+      true;
+  }
+
+  return {
+    status,
+    settled,
+    won,
+    verifiedSelections:
+      wonSelections +
+      lostSelections,
+    wonSelections,
+    lostSelections,
+    pendingSelections,
+    unavailableSelections,
+  };
+}
+
+async function evaluateFrozenMultipleAccumulator({
+  accumulator,
+  roundMatches,
+  allowProvider = false,
+}) {
+  if (
+    !accumulator?.ready ||
+    !Array.isArray(
+      accumulator.selections,
+    )
+  ) {
+    return accumulator;
+  }
+
+  const matchesById =
+    new Map(
+      (roundMatches ?? [])
+        .map(
+          (match) => [
+            String(
+              match?.id,
+            ),
+            match,
+          ],
+        ),
+    );
+
+  const selections =
+    [];
+
+  for (
+    const selection
+      of accumulator.selections
+  ) {
+    const match =
+      matchesById.get(
+        String(
+          selection?.matchId,
+        ),
+      );
+
+    let result =
+      selection?.result ?? {
+        status:
+          'pending',
+        settled:
+          false,
+      };
+
+    if (match) {
+      try {
+        const evaluated =
+          await evaluateMatchdayPick(
+            match,
+            selection?.pick,
+            {
+              allowProvider,
+            },
+          );
+
+        // Un risultato già definitivo non torna mai indietro.
+        if (
+          result?.settled
+        ) {
+          result = {
+            ...evaluated,
+            ...result,
+          };
+        } else {
+          result =
+            evaluated;
+        }
+      } catch (error) {
+        result = {
+          status:
+            result?.status ??
+            'pending',
+          settled:
+            Boolean(
+              result?.settled,
+            ),
+          error:
+            error?.message ??
+            String(error),
+        };
+      }
+    }
+
+    selections.push({
+      ...selection,
+      result,
+    });
+  }
+
+  const nextAccumulator = {
+    ...accumulator,
+    selections,
+  };
+
+  const summary =
+    buildMultipleResultSummary(
+      nextAccumulator,
+    );
+
+  const oldResult =
+    accumulator?.result;
+
+  return {
+    ...nextAccumulator,
+    result: {
+      ...summary,
+      settledAt:
+        oldResult?.settledAt ??
+        (summary.settled
+          ? new Date()
+              .toISOString()
+          : null),
+      updatedAt:
+        new Date()
+          .toISOString(),
+    },
+  };
+}
+
+async function persistOfficialMultipleSnapshot(
+  snapshot,
+) {
+  if (
+    !snapshot?.frozen ||
+    !snapshot?.available
+  ) {
+    return snapshot;
+  }
+
+  const archiveKey =
+    buildMatchdayMultipleArchiveKey({
+      season:
+        snapshot.season,
+      historicalSeason:
+        snapshot.historicalSeason,
+      round:
+        snapshot.round,
+      leagueName:
+        snapshot.leagueName,
+      countryName:
+        snapshot.countryName,
+    });
+
+  const existing =
+    await getPermanentCache(
+      archiveKey,
+    );
+
+  if (
+    existing?.frozen &&
+    existing?.available
+  ) {
+    return existing;
+  }
+
+  const archived = {
+    ...snapshot,
+    archivedAt:
+      new Date()
+        .toISOString(),
+  };
+
+  await setPermanentCache(
+    archiveKey,
+    archived,
+  );
+
+  return archived;
+}
+
+async function settleAndPersistMatchdayMultipleSnapshot({
+  snapshot,
+  roundMatches,
+  allowProvider = false,
+}) {
+  if (
+    !snapshot?.frozen ||
+    !snapshot?.available
+  ) {
+    return snapshot;
+  }
+
+  const multipla3 =
+    await evaluateFrozenMultipleAccumulator({
+      accumulator:
+        snapshot.multipla3,
+      roundMatches,
+      allowProvider,
+    });
+
+  const multipla5 =
+    await evaluateFrozenMultipleAccumulator({
+      accumulator:
+        snapshot.multipla5,
+      roundMatches,
+      allowProvider,
+    });
+
+  const updated = {
+    ...snapshot,
+    multipla3,
+    multipla5,
+    resultUpdatedAt:
+      new Date()
+        .toISOString(),
+  };
+
+  const archiveKey =
+    buildMatchdayMultipleArchiveKey({
+      season:
+        snapshot.season,
+      historicalSeason:
+        snapshot.historicalSeason,
+      round:
+        snapshot.round,
+      leagueName:
+        snapshot.leagueName,
+      countryName:
+        snapshot.countryName,
+    });
+
+  await setPermanentCache(
+    archiveKey,
+    updated,
+  );
+
+  const cacheKey =
+    buildMatchdayMultipleCacheKey({
+      season:
+        snapshot.season,
+      historicalSeason:
+        snapshot.historicalSeason,
+      round:
+        snapshot.round,
+      leagueName:
+        snapshot.leagueName,
+      countryName:
+        snapshot.countryName,
+    });
+
+  setMemoryCache(
+    cacheKey,
+    updated,
+  );
+
+  await setDiskCache(
+    cacheKey,
+    updated,
+  );
+
+  return updated;
+}
+
+function emptyMultipleSummary() {
+  return {
+    verified: 0,
+    won: 0,
+    lost: 0,
+    pending: 0,
+    successRate: null,
+  };
+}
+
+function addMultipleToSummary(
+  summary,
+  accumulator,
+) {
+  if (
+    !accumulator?.ready
+  ) {
+    return;
+  }
+
+  const status =
+    accumulator?.result
+      ?.status ??
+    'pending';
+
+  if (status === 'won') {
+    summary.won += 1;
+    summary.verified +=
+      1;
+  } else if (
+    status === 'lost'
+  ) {
+    summary.lost += 1;
+    summary.verified +=
+      1;
+  } else {
+    summary.pending +=
+      1;
+  }
+}
+
+async function buildAndPersistMultiplesSummary({
+  season,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  const multipla3 =
+    emptyMultipleSummary();
+
+  const multipla5 =
+    emptyMultipleSummary();
+
+  let officialRounds =
+    0;
+
+  for (
+    let round = 1;
+    round <= 38;
+    round += 1
+  ) {
+    const archiveKey =
+      buildMatchdayMultipleArchiveKey({
+        season,
+        historicalSeason,
+        round,
+        leagueName,
+        countryName,
+      });
+
+    const archived =
+      await getPermanentCache(
+        archiveKey,
+      );
+
+    if (
+      !archived?.frozen ||
+      !archived?.available
+    ) {
+      continue;
+    }
+
+    officialRounds +=
+      1;
+
+    addMultipleToSummary(
+      multipla3,
+      archived.multipla3,
+    );
+
+    addMultipleToSummary(
+      multipla5,
+      archived.multipla5,
+    );
+  }
+
+  for (
+    const summary
+      of [
+        multipla3,
+        multipla5,
+      ]
+  ) {
+    summary.successRate =
+      summary.verified > 0
+        ? round2(
+            (
+              summary.won /
+              summary.verified
+            ) *
+              100,
+          )
+        : null;
+  }
+
+  const payload = {
+    season:
+      String(season),
+    historicalSeason:
+      String(
+        historicalSeason,
+      ),
+    leagueName,
+    countryName,
+    generatedAt:
+      new Date()
+        .toISOString(),
+    officialRounds,
+    multipla3,
+    multipla5,
+  };
+
+  const summaryKey =
+    buildSeasonMultiplesSummaryArchiveKey({
+      season,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
+
+  await setPermanentCache(
+    summaryKey,
+    payload,
+  );
+
+  return payload;
+}
+
+async function settlePermanentMultipleHistory() {
+  const rounds =
+    new Map();
+
+  for (
+    const match
+      of centralSerieAState.matches
+  ) {
+    const round =
+      roundNumberOf(
+        match,
+      );
+
+    if (
+      !round ||
+      round < 1 ||
+      round > 38
+    ) {
+      continue;
+    }
+
+    if (!rounds.has(round)) {
+      rounds.set(
+        round,
+        [],
+      );
+    }
+
+    rounds.get(
+      round,
+    ).push(
+      match,
+    );
+  }
+
+  let changed =
+    false;
+
+  for (
+    const [
+      round,
+      roundMatches,
+    ] of rounds.entries()
+  ) {
+    const archiveKey =
+      buildMatchdayMultipleArchiveKey({
+        season:
+          CURRENT_SERIE_A_SEASON,
+        historicalSeason:
+          '2025',
+        round,
+        leagueName:
+          'Serie A',
+        countryName:
+          'Italy',
+      });
+
+    const archived =
+      await getPermanentCache(
+        archiveKey,
+      );
+
+    if (
+      !archived?.frozen ||
+      !archived?.available
+    ) {
+      continue;
+    }
+
+    const before3 =
+      archived?.multipla3
+        ?.result?.status ??
+      'pending';
+
+    const before5 =
+      archived?.multipla5
+        ?.result?.status ??
+      'pending';
+
+    const updated =
+      await settleAndPersistMatchdayMultipleSnapshot({
+        snapshot:
+          archived,
+        roundMatches,
+        allowProvider:
+          false,
+      });
+
+    const after3 =
+      updated?.multipla3
+        ?.result?.status ??
+      'pending';
+
+    const after5 =
+      updated?.multipla5
+        ?.result?.status ??
+      'pending';
+
+    if (
+      before3 !== after3 ||
+      before5 !== after5
+    ) {
+      changed =
+        true;
+    }
+  }
+
+  await buildAndPersistMultiplesSummary({
+    season:
+      CURRENT_SERIE_A_SEASON,
+    historicalSeason:
+      '2025',
+    leagueName:
+      'Serie A',
+    countryName:
+      'Italy',
+  });
+
+  return changed;
+}
+
 async function getOrUpdateMatchdayMultiplesSnapshot({
   season,
   historicalSeason,
@@ -9459,17 +12019,83 @@ async function getOrUpdateMatchdayMultiplesSnapshot({
       countryName,
     });
 
-  // Uno snapshot già congelato non viene mai più modificato.
-  if (existing?.frozen) {
-    return existing;
+  const existingCandidateCount =
+    Number(
+      existing?.candidateCount ??
+      existing?.multipla5?.eventsCount ??
+      existing?.multipla3?.eventsCount ??
+      0,
+    );
+
+  const existingUsable =
+    existingCandidateCount >= 3 &&
+    Boolean(
+      existing?.multipla3?.ready,
+    );
+
+  // Uno snapshot congelato valido non viene mai più modificato.
+  // I vecchi snapshot vuoti 0/3 - 0/5 non vengono considerati storici validi.
+  if (
+    existing?.frozen &&
+    existingUsable
+  ) {
+    return await persistOfficialMultipleSnapshot(
+      existing,
+    );
   }
 
-  // Se siamo arrivati al cutoff, congeliamo l'ULTIMO snapshot provvisorio.
-  // In questo modo tutte le selezioni della multipla provengono dallo
-  // stesso momento, anche se alcune partite si giocano nei giorni seguenti.
+  if (
+    now >= firstMatchStartMs &&
+    !existingUsable
+  ) {
+    return {
+      available: false,
+      season:
+        String(season),
+      historicalSeason:
+        String(historicalSeason),
+      leagueName,
+      countryName,
+      round:
+        Number(round),
+      firstMatchAt:
+        new Date(
+          firstMatchStartMs,
+        ).toISOString(),
+      freezeAt:
+        new Date(
+          freezeAtMs,
+        ).toISOString(),
+      freezeHoursBeforeFirstMatch:
+        MATCHDAY_MULTIPLE_FREEZE_WINDOW /
+        (60 * 60 * 1000),
+      frozen: false,
+      status: 'closed',
+      reason:
+        'Nessuna multipla PREDICT valida era stata congelata prima dell’inizio della giornata.',
+      candidateCount: 0,
+      multipla3:
+        buildMultipleFromRankedPicks(
+          [],
+          3,
+        ),
+      multipla5:
+        buildMultipleFromRankedPicks(
+          [],
+          5,
+        ),
+    };
+  }
+
+  // Se siamo arrivati al cutoff, congeliamo l'ULTIMO snapshot provvisorio
+  // soltanto se contiene davvero almeno 5 candidati, così 3 e 5 eventi
+  // vengono congelate insieme e non esistono multiple vuote.
   if (
     now >= freezeAtMs &&
-    existing
+    existing &&
+    existingCandidateCount >= 5 &&
+    existing?.multipla3?.ready &&
+    existing?.multipla5?.ready
   ) {
     const frozenSnapshot = {
       ...existing,
@@ -9496,13 +12122,62 @@ async function getOrUpdateMatchdayMultiplesSnapshot({
       frozenSnapshot,
     );
 
-    return frozenSnapshot;
+    return await persistOfficialMultipleSnapshot(
+      frozenSnapshot,
+    );
   }
 
   const rankedPicks =
     buildRankedMultipleCandidates(
       picks,
     );
+
+  if (
+    now >= freezeAtMs &&
+    rankedPicks.length < 5
+  ) {
+    return {
+      available: false,
+      season:
+        String(season),
+      historicalSeason:
+        String(historicalSeason),
+      leagueName,
+      countryName,
+      round:
+        Number(round),
+      generatedAt:
+        new Date()
+          .toISOString(),
+      firstMatchAt:
+        new Date(
+          firstMatchStartMs,
+        ).toISOString(),
+      freezeAt:
+        new Date(
+          freezeAtMs,
+        ).toISOString(),
+      freezeHoursBeforeFirstMatch:
+        MATCHDAY_MULTIPLE_FREEZE_WINDOW /
+        (60 * 60 * 1000),
+      frozen: false,
+      status: 'preparing-freeze',
+      reason:
+        'In attesa di almeno 5 pronostici validi prima del congelamento.',
+      candidateCount:
+        rankedPicks.length,
+      multipla3:
+        buildMultipleFromRankedPicks(
+          rankedPicks,
+          3,
+        ),
+      multipla5:
+        buildMultipleFromRankedPicks(
+          rankedPicks,
+          5,
+        ),
+    };
+  }
 
   const generatedAt =
     new Date()
@@ -9579,6 +12254,12 @@ async function getOrUpdateMatchdayMultiplesSnapshot({
     key,
     snapshot,
   );
+
+  if (snapshot.frozen) {
+    return await persistOfficialMultipleSnapshot(
+      snapshot,
+    );
+  }
 
   return snapshot;
 }
@@ -9876,10 +12557,34 @@ app.get(
             },
           );
 
+      const historyArchiveKey =
+        buildMatchdayRoundArchiveKey({
+          season,
+          historicalSeason,
+          round:
+            parsedRound,
+          leagueName,
+          countryName,
+        });
+
+      const archivedRound =
+        await getPermanentCache(
+          historyArchiveKey,
+        );
+
       if (
         roundMatches.length ===
         0
       ) {
+        if (archivedRound) {
+          return res.json({
+            ...archivedRound,
+            cached: true,
+            cacheSource:
+              'history-archive',
+          });
+        }
+
         return res
           .status(404)
           .json({
@@ -9977,10 +12682,15 @@ app.get(
                 });
 
               const result =
-                await evaluateMatchdayPick(
+                await getOrPersistMatchdayPickResult({
                   match,
-                  snapshot?.pick,
-                );
+                  snapshot,
+                  historicalSeason,
+                  leagueName,
+                  countryName,
+                  allowProvider:
+                    forceRefresh,
+                });
 
               return {
                 ...base,
@@ -10029,7 +12739,7 @@ app.get(
           },
         );
 
-      const multiples =
+      let multiples =
         await getOrUpdateMatchdayMultiplesSnapshot({
           season,
           historicalSeason,
@@ -10040,6 +12750,111 @@ app.get(
           roundMatches,
           picks,
         });
+
+      if (
+        multiples?.frozen &&
+        multiples?.available
+      ) {
+        multiples =
+          await settleAndPersistMatchdayMultipleSnapshot({
+            snapshot:
+              multiples,
+            roundMatches,
+            allowProvider:
+              forceRefresh,
+          });
+      }
+
+      const firstRoundStartMs =
+        Math.min(
+          ...roundMatches
+            .map(
+              (match) =>
+                Date.parse(
+                  match?.date ?? '',
+                ),
+            )
+            .filter(
+              (value) =>
+                Number.isFinite(value),
+            ),
+        );
+
+      const roundHasStarted =
+        Number.isFinite(
+          firstRoundStartMs,
+        ) &&
+        Date.now() >=
+          firstRoundStartMs;
+
+      let finalPicks =
+        picks;
+
+      if (
+        roundHasStarted &&
+        Array.isArray(
+          archivedRound?.picks,
+        )
+      ) {
+        const archivedByMatchId =
+          new Map(
+            archivedRound.picks.map(
+              (item) => [
+                String(
+                  item?.matchId,
+                ),
+                item,
+              ],
+            ),
+          );
+
+        finalPicks =
+          picks.map(
+            (item) => {
+              const oldItem =
+                archivedByMatchId.get(
+                  String(
+                    item?.matchId,
+                  ),
+                );
+
+              if (!oldItem) {
+                return item;
+              }
+
+              return {
+                ...item,
+
+                pick:
+                  item?.pick ??
+                  oldItem?.pick ??
+                  null,
+
+                pickGeneratedAt:
+                  item
+                    ?.pickGeneratedAt ??
+                  oldItem
+                    ?.pickGeneratedAt ??
+                  null,
+
+                modelVersion:
+                  item
+                    ?.pick
+                    ? item?.modelVersion
+                    : oldItem
+                        ?.modelVersion ??
+                      item?.modelVersion,
+
+                result:
+                  oldItem
+                    ?.result
+                    ?.settled
+                    ? oldItem.result
+                    : item?.result,
+              };
+            },
+          );
+      }
 
       const payload = {
         season:
@@ -10057,7 +12872,7 @@ app.get(
           parsedRound,
 
         matchesCount:
-          picks.length,
+          finalPicks.length,
 
         generatedAt:
           new Date()
@@ -10066,9 +12881,17 @@ app.get(
         description:
           'Per ogni partita viene mostrato un solo pronostico principale tra 1X2, GG/NG, Under/Over 2.5, Corner, Tiri in porta e Cartellini. A partita conclusa il pronostico viene marcato come preso o sbagliato.',
 
-        multiples,
+        multiples:
+          roundHasStarted &&
+          !multiples?.available &&
+          archivedRound
+            ?.multiples
+            ?.available
+            ? archivedRound.multiples
+            : multiples,
 
-        picks,
+        picks:
+          finalPicks,
       };
 
       setMemoryCache(
@@ -10078,6 +12901,13 @@ app.get(
 
       await setDiskCache(
         cacheKey,
+        payload,
+      );
+
+      // Copia persistente della giornata: resta disponibile anche dopo
+      // riavvii, deploy e problemi temporanei del provider/calendario.
+      await setPermanentCache(
+        historyArchiveKey,
         payload,
       );
 
@@ -10109,40 +12939,255 @@ async function getExistingMatchdayPickSnapshot({
   leagueName,
   countryName,
 }) {
-  const key = [
-    'matchday-pick-snapshot-v3',
-    matchId,
-    historicalSeason,
-    leagueName,
-    countryName,
-  ].join('-');
+  const permanentRecord =
+    await getPermanentMatchdayPickRecord({
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
 
-  const memory =
-    getMemoryCache(
-      key,
-      MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
+  const permanentSnapshot =
+    snapshotFromPermanentRecord(
+      permanentRecord,
     );
 
-  if (memory) {
-    return memory;
+  if (permanentSnapshot) {
+    return permanentSnapshot;
   }
 
-  const disk =
-    await getDiskCache(
-      key,
-      MATCHDAY_PICK_SNAPSHOT_CACHE_TIME,
-    );
+  const current =
+    await readMatchdayPickSnapshotVersion({
+      version:
+        MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+    });
 
-  if (disk) {
-    setMemoryCache(
-      key,
-      disk,
-    );
-
-    return disk;
+  if (current.snapshot?.pick) {
+    return current.snapshot;
   }
 
-  return null;
+  for (
+    const legacyVersion
+      of MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS
+  ) {
+    const legacy =
+      await readMatchdayPickSnapshotVersion({
+        version:
+          legacyVersion,
+        matchId,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+
+    if (!legacy.snapshot?.pick) {
+      continue;
+    }
+
+    return migrateLegacyMatchdayPickSnapshot({
+      legacyVersion,
+      matchId,
+      historicalSeason,
+      leagueName,
+      countryName,
+      snapshot:
+        legacy.snapshot,
+    });
+  }
+
+  return current.snapshot ??
+    null;
+}
+
+function recomputeSeasonSummaryTotals(
+  rounds,
+) {
+  const totals = {
+    generatedPicks: 0,
+    verified: 0,
+    won: 0,
+    lost: 0,
+    pending: 0,
+    unavailable: 0,
+    successRate: null,
+  };
+
+  for (const round of rounds) {
+    totals.generatedPicks +=
+      Number(
+        round?.generatedPicks ?? 0,
+      );
+
+    totals.verified +=
+      Number(
+        round?.verified ?? 0,
+      );
+
+    totals.won +=
+      Number(
+        round?.won ?? 0,
+      );
+
+    totals.lost +=
+      Number(
+        round?.lost ?? 0,
+      );
+
+    totals.pending +=
+      Number(
+        round?.pending ?? 0,
+      );
+
+    totals.unavailable +=
+      Number(
+        round?.unavailable ?? 0,
+      );
+  }
+
+  totals.successRate =
+    totals.verified > 0
+      ? round2(
+          (
+            totals.won /
+            totals.verified
+          ) * 100,
+        )
+      : null;
+
+  return totals;
+}
+
+function mergeSeasonSummaryWithArchive(
+  current,
+  archived,
+) {
+  if (!archived?.rounds) {
+    return current;
+  }
+
+  const currentRounds =
+    Array.isArray(current?.rounds)
+      ? current.rounds
+      : [];
+
+  const archivedRounds =
+    Array.isArray(archived?.rounds)
+      ? archived.rounds
+      : [];
+
+  const rounds =
+    Array.from(
+      {
+        length: 38,
+      },
+      (_, index) => {
+        const roundNumber =
+          index + 1;
+
+        const nowRound =
+          currentRounds.find(
+            (item) =>
+              Number(item?.round) ===
+              roundNumber,
+          ) ??
+          emptyRoundPredictSummary(
+            roundNumber,
+          );
+
+        const oldRound =
+          archivedRounds.find(
+            (item) =>
+              Number(item?.round) ===
+              roundNumber,
+          ) ??
+          null;
+
+        if (!oldRound) {
+          return nowRound;
+        }
+
+        const nowGenerated =
+          Number(
+            nowRound
+              ?.generatedPicks ?? 0,
+          );
+
+        const oldGenerated =
+          Number(
+            oldRound
+              ?.generatedPicks ?? 0,
+          );
+
+        const nowVerified =
+          Number(
+            nowRound
+              ?.verified ?? 0,
+          );
+
+        const oldVerified =
+          Number(
+            oldRound
+              ?.verified ?? 0,
+          );
+
+        const preserveOld =
+          oldGenerated > nowGenerated ||
+          (
+            oldGenerated === nowGenerated &&
+            oldVerified > nowVerified
+          );
+
+        const selected =
+          preserveOld
+            ? oldRound
+            : nowRound;
+
+        return {
+          ...selected,
+          matches:
+            Math.max(
+              Number(
+                nowRound?.matches ?? 0,
+              ),
+              Number(
+                oldRound?.matches ?? 0,
+              ),
+            ),
+        };
+      },
+    );
+
+  const totals =
+    recomputeSeasonSummaryTotals(
+      rounds,
+    );
+
+  return {
+    ...current,
+
+    roundsWithPredictions:
+      rounds.filter(
+        (round) =>
+          Number(
+            round?.generatedPicks ?? 0,
+          ) > 0,
+      ).length,
+
+    roundsWithVerifiedPicks:
+      rounds.filter(
+        (round) =>
+          Number(
+            round?.verified ?? 0,
+          ) > 0,
+      ).length,
+
+    totals,
+    rounds,
+  };
 }
 
 function emptyRoundPredictSummary(
@@ -10160,6 +13205,93 @@ function emptyRoundPredictSummary(
     successRate: null,
   };
 }
+
+
+app.get(
+  '/api/football/multiples-summary',
+  async (req, res) => {
+    try {
+      const {
+        season =
+          CURRENT_SERIE_A_SEASON,
+        historicalSeason =
+          '2025',
+        leagueName =
+          'Serie A',
+        countryName =
+          'Italy',
+        refresh =
+          '0',
+      } = req.query;
+
+      const summaryKey =
+        buildSeasonMultiplesSummaryArchiveKey({
+          season,
+          historicalSeason,
+          leagueName,
+          countryName,
+        });
+
+      const forceRefresh =
+        String(refresh) === '1';
+
+      const archivedSummary =
+        await getPermanentCache(
+          summaryKey,
+        );
+
+      if (
+        !forceRefresh &&
+        archivedSummary
+      ) {
+        return res.json({
+          ...archivedSummary,
+          cached:
+            true,
+          cacheSource:
+            'history-archive',
+        });
+      }
+
+      if (
+        forceRefresh &&
+        String(season) ===
+          CURRENT_SERIE_A_SEASON &&
+        String(
+          leagueName,
+        ).toLowerCase() ===
+          'serie a' &&
+        String(
+          countryName,
+        ).toLowerCase() ===
+          'italy'
+      ) {
+        await settlePermanentMultipleHistory();
+      }
+
+      const payload =
+        await buildAndPersistMultiplesSummary({
+          season,
+          historicalSeason,
+          leagueName,
+          countryName,
+        });
+
+      res.json({
+        ...payload,
+        cached:
+          false,
+        cacheSource:
+          'multiple-history',
+      });
+    } catch (error) {
+      sendApiError(
+        res,
+        error,
+      );
+    }
+  },
+);
 
 app.get(
   '/api/football/season-picks-summary',
@@ -10192,6 +13324,19 @@ app.get(
 
       const forceRefresh =
         String(refresh) === '1';
+
+      const historyArchiveKey =
+        buildSeasonSummaryArchiveKey({
+          season,
+          historicalSeason,
+          leagueName,
+          countryName,
+        });
+
+      const archivedSummary =
+        await getPermanentCache(
+          historyArchiveKey,
+        );
 
       if (!forceRefresh) {
         const memory =
@@ -10239,6 +13384,18 @@ app.get(
             'italy'
           ? centralSerieAState.matches
           : [];
+
+      if (
+        seasonMatches.length === 0 &&
+        archivedSummary
+      ) {
+        return res.json({
+          ...archivedSummary,
+          cached: true,
+          cacheSource:
+            'history-archive',
+        });
+      }
 
       const rounds =
         Array.from(
@@ -10306,10 +13463,15 @@ app.get(
             }
 
             const result =
-              await evaluateMatchdayPick(
+              await getOrPersistMatchdayPickResult({
                 match,
-                snapshot.pick,
-              );
+                snapshot,
+                historicalSeason,
+                leagueName,
+                countryName,
+                allowProvider:
+                  forceRefresh,
+              });
 
             return {
               round,
@@ -10405,7 +13567,7 @@ app.get(
             )
           : null;
 
-      const payload = {
+      const currentPayload = {
         season:
           String(season),
 
@@ -10440,6 +13602,12 @@ app.get(
         rounds,
       };
 
+      const payload =
+        mergeSeasonSummaryWithArchive(
+          currentPayload,
+          archivedSummary,
+        );
+
       setMemoryCache(
         cacheKey,
         payload,
@@ -10447,6 +13615,11 @@ app.get(
 
       await setDiskCache(
         cacheKey,
+        payload,
+      );
+
+      await setPermanentCache(
+        historyArchiveKey,
         payload,
       );
 
@@ -10594,6 +13767,10 @@ app.listen(
 
     console.log(
       '- /api/football/season-picks-summary?season=2026&historicalSeason=2025',
+    );
+
+    console.log(
+      '- /api/football/multiples-summary?season=2026&historicalSeason=2025',
     );
 
     console.log(
