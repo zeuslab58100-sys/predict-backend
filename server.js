@@ -489,7 +489,7 @@ function buildMatchAnalysisArchiveKey({
   const archiveDataFixRevision =
     teamIds.has('427986') &&
     teamIds.has('436496')
-      ? 2
+      ? 3
       : 0;
 
   return [
@@ -960,7 +960,7 @@ function buildMatchAnalysisCacheKey({
       '427986' ||
     String(awayTeamId) ===
       '427986'
-      ? 2
+      ? 3
       : 0;
 
   const parts = [
@@ -2011,6 +2011,46 @@ function normalizeProviderMatches(
   return matches.map(
     normalizeProviderMatch,
   );
+}
+
+function normalizeAnalysisProviderMatches(
+  analysis,
+) {
+  if (
+    !analysis ||
+    typeof analysis !== 'object'
+  ) {
+    return analysis;
+  }
+
+  const recent =
+    analysis?.recent &&
+    typeof analysis.recent === 'object'
+      ? {
+          ...analysis.recent,
+
+          home:
+            normalizeProviderMatches(
+              analysis.recent.home,
+            ),
+
+          away:
+            normalizeProviderMatches(
+              analysis.recent.away,
+            ),
+        }
+      : analysis?.recent;
+
+  return {
+    ...analysis,
+
+    recent,
+
+    headToHead:
+      normalizeProviderMatches(
+        analysis?.headToHead,
+      ),
+  };
 }
 
 function extractMatches(data) {
@@ -6745,6 +6785,11 @@ function predictSignalReliability(
 function buildPredictPresentationSignals(
   analysis,
 ) {
+  analysis =
+    normalizeAnalysisProviderMatches(
+      analysis,
+    );
+
   if (
     !analysis ||
     !analysis.prediction
@@ -9707,28 +9752,53 @@ app.get(
         });
 
       if (legacyAnalysis?.snapshot) {
-        const migratedAnalysis =
-          await migrateLegacyMatchAnalysisSnapshot({
-            homeTeamId,
-            awayTeamId,
-            historicalSeason:
-              season,
-            leagueName,
-            countryName,
-            legacy:
-              legacyAnalysis,
+        if (
+          matchIsUpcoming &&
+          !predictionFreezeActive
+        ) {
+          // Prima del freeze un vecchio snapshot legacy può essere
+          // mostrato solo come fallback temporaneo. Non viene copiato
+          // nella nuova chiave e non viene archiviato come definitivo.
+          if (!internalRequest) {
+            const presentedAnalysis =
+              buildPredictPresentationSignals(
+                legacyAnalysis.snapshot,
+              );
+
+            return res.json({
+              ...presentedAnalysis,
+
+              cacheSource:
+                `predict-analysis-${legacyAnalysis.version}-stale`,
+
+              refreshPending:
+                true,
+            });
+          }
+        } else {
+          const migratedAnalysis =
+            await migrateLegacyMatchAnalysisSnapshot({
+              homeTeamId,
+              awayTeamId,
+              historicalSeason:
+                season,
+              leagueName,
+              countryName,
+              legacy:
+                legacyAnalysis,
+            });
+
+          const presentedAnalysis =
+            buildPredictPresentationSignals(
+              migratedAnalysis,
+            );
+
+          return res.json({
+            ...presentedAnalysis,
+            cacheSource:
+              `predict-analysis-${legacyAnalysis.version}-history`,
           });
-
-        const presentedAnalysis =
-          buildPredictPresentationSignals(
-            migratedAnalysis,
-          );
-
-        return res.json({
-          ...presentedAnalysis,
-          cacheSource:
-            `predict-analysis-${legacyAnalysis.version}-history`,
-        });
+        }
       }
 
       if (!internalRequest) {
