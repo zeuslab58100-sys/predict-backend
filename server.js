@@ -489,7 +489,7 @@ function buildMatchAnalysisArchiveKey({
   const archiveDataFixRevision =
     teamIds.has('427986') &&
     teamIds.has('436496')
-      ? 1
+      ? 2
       : 0;
 
   return [
@@ -960,7 +960,7 @@ function buildMatchAnalysisCacheKey({
       '427986' ||
     String(awayTeamId) ===
       '427986'
-      ? 1
+      ? 2
       : 0;
 
   const parts = [
