@@ -39,8 +39,10 @@ const SEED_CACHE_DIR =
 
 const LEAGUE_CACHE_TIME = 24 * 60 * 60 * 1000;
 const RECENT_CACHE_TIME = 6 * 60 * 60 * 1000;
+const SUPPORTED_LEAGUE_PUBLIC_MATCHES_CACHE_TIME = 2 * 60 * 1000;
 const MATCHDAY_PICKS_CACHE_TIME = 60 * 1000;
 const SEASON_PICKS_SUMMARY_CACHE_TIME = 60 * 1000;
+const OFFICIAL_STANDINGS_CACHE_TIME = 30 * 60 * 1000;
 const MATCHDAY_PICK_SNAPSHOT_CACHE_TIME = 400 * 24 * 60 * 60 * 1000;
 const HISTORICAL_STATS_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
 const LEAGUE_ADVANCED_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
@@ -64,7 +66,7 @@ const CENTRAL_SERIE_A_SCHEDULE_INTERVAL = 6 * 60 * 60 * 1000;
 const CENTRAL_SERIE_A_LIVE_INTERVAL = 15 * 60 * 1000;
 const CENTRAL_SERIE_A_PRESTART_WINDOW = 15 * 60 * 1000;
 const CENTRAL_SERIE_A_POSTSTART_WINDOW = 3 * 60 * 60 * 1000;
-const CENTRAL_PREDICTION_HORIZON = 7 * 24 * 60 * 60 * 1000;
+const CENTRAL_PREDICTION_HORIZON = 10 * 24 * 60 * 60 * 1000;
 const PREMATCH_PREDICTION_FREEZE_WINDOW = 60 * 60 * 1000;
 const MATCHDAY_MULTIPLE_FREEZE_WINDOW = 4 * 60 * 60 * 1000;
 const MATCHDAY_MULTIPLE_SNAPSHOT_CACHE_TIME = 400 * 24 * 60 * 60 * 1000;
@@ -77,6 +79,40 @@ const MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS = ['v2'];
 const MATCH_ANALYSIS_SNAPSHOT_CURRENT_VERSION = 'v2';
 const MATCH_ANALYSIS_SNAPSHOT_LEGACY_VERSIONS = ['v1'];
 
+const BOOKMAKER_ONLY_FROM_ROUND = 3;
+const BOOKMAKER_ONLY_PREDICT_WEIGHT = 0.00;
+const BOOKMAKER_ONLY_BOOKMAKER_WEIGHT = 1.00;
+const MATCHDAY_PICK_BOOKMAKER_ONLY_VERSION = 'v6-bookmaker100-pure-nullfix';
+
+function bookmakerOnlyModeForRound(round) {
+  const numericRound =
+    Number(round);
+
+  return (
+    Number.isFinite(numericRound) &&
+    numericRound >=
+      BOOKMAKER_ONLY_FROM_ROUND
+  );
+}
+
+function matchdayPickSnapshotVersionForMatch(
+  match,
+) {
+  return bookmakerOnlyModeForRound(
+    roundNumberOf(match),
+  )
+    ? MATCHDAY_PICK_BOOKMAKER_ONLY_VERSION
+    : MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION;
+}
+
+function matchdayPicksAggregatePrefixForRound(
+  round,
+) {
+  return bookmakerOnlyModeForRound(round)
+    ? 'matchday-picks-v5-bookmaker100-pure-nullfix'
+    : 'matchday-picks-v2';
+}
+
 const INTERNAL_SYNC_TOKEN =
   process.env.PREDICT_INTERNAL_TOKEN ||
   crypto
@@ -88,6 +124,141 @@ const INTERNAL_SYNC_TOKEN =
 // Il 2025/26 resta il prior storico iniziale; i risultati 2026/27
 // entrano progressivamente nel modello dopo ogni partita conclusa.
 const CURRENT_SERIE_A_SEASON = '2026';
+
+
+// ====================================================
+// CAMPIONATI SUPPORTATI
+// ====================================================
+// Configurazione unica delle cinque leghe PREDICT.
+// In questo primo passaggio la Serie A continua a usare lo scheduler
+// centrale esistente senza alcun cambiamento di comportamento.
+// Le altre leghe vengono dichiarate qui come base per i passaggi successivi.
+const SUPPORTED_LEAGUES = Object.freeze({
+  serieA: Object.freeze({
+    key: 'serie-a',
+    leagueName: 'Serie A',
+    countryName: 'Italy',
+    currentSeason: '2026',
+    historicalSeason: '2025',
+    regularSeasonRounds: 38,
+    languageCode: 'it',
+  }),
+
+  premierLeague: Object.freeze({
+    key: 'premier-league',
+    leagueName: 'Premier League',
+    countryName: 'England',
+    currentSeason: '2026',
+    historicalSeason: '2025',
+    regularSeasonRounds: 38,
+    languageCode: 'en',
+  }),
+
+  bundesliga: Object.freeze({
+    key: 'bundesliga',
+    leagueName: 'Bundesliga',
+    countryName: 'Germany',
+    currentSeason: '2026',
+    historicalSeason: '2025',
+    regularSeasonRounds: 34,
+    languageCode: 'de',
+  }),
+
+  ligue1: Object.freeze({
+    key: 'ligue-1',
+    leagueName: 'Ligue 1',
+    countryName: 'France',
+    currentSeason: '2026',
+    historicalSeason: '2025',
+    regularSeasonRounds: 34,
+    languageCode: 'fr',
+  }),
+
+  laLiga: Object.freeze({
+    key: 'la-liga',
+    leagueName: 'La Liga',
+    countryName: 'Spain',
+    currentSeason: '2026',
+    historicalSeason: '2025',
+    regularSeasonRounds: 38,
+    languageCode: 'es',
+  }),
+});
+
+const SUPPORTED_LEAGUE_LIST =
+  Object.freeze(
+    Object.values(
+      SUPPORTED_LEAGUES,
+    ),
+  );
+
+function normalizeLeagueText(value) {
+  return String(
+    value ?? '',
+  )
+    .trim()
+    .toLowerCase();
+}
+
+function resolveSupportedLeague({
+  leagueName,
+  countryName,
+}) {
+  const wantedLeague =
+    normalizeLeagueText(
+      leagueName,
+    );
+
+  const wantedCountry =
+    normalizeLeagueText(
+      countryName,
+    );
+
+  return (
+    SUPPORTED_LEAGUE_LIST.find(
+      (league) =>
+        normalizeLeagueText(
+          league.leagueName,
+        ) === wantedLeague &&
+        normalizeLeagueText(
+          league.countryName,
+        ) === wantedCountry,
+    ) ??
+    null
+  );
+}
+
+
+// Endpoint pubblico usato dal frontend per conoscere i campionati
+// supportati da PREDICT. In questo passaggio non cambia ancora lo scheduler:
+// la Serie A continua a essere gestita dal flusso centrale esistente.
+app.get(
+  '/api/football/supported-leagues',
+  (req, res) => {
+    res.json({
+      ok: true,
+      leagues:
+        SUPPORTED_LEAGUE_LIST.map(
+          (league) => ({
+            key:
+              league.key,
+            leagueName:
+              league.leagueName,
+            countryName:
+              league.countryName,
+            currentSeason:
+              league.currentSeason,
+            historicalSeason:
+              league.historicalSeason,
+            regularSeasonRounds:
+              league.regularSeasonRounds,
+            languageCode:
+              league.languageCode,
+          }),
+        ),
+    });
+  },
+);
 
 const centralSerieAState = {
   matches: [],
@@ -944,6 +1115,7 @@ function buildMatchAnalysisCacheKey({
   historicalSeason,
   leagueName,
   countryName,
+  cacheVariant = null,
 }) {
   const homeRevision =
     teamDataRevisionOf(
@@ -970,6 +1142,13 @@ function buildMatchAnalysisCacheKey({
     historicalSeason,
     leagueName,
     countryName,
+
+    ...(cacheVariant
+      ? [
+          'variant',
+          cacheVariant,
+        ]
+      : []),
 
     ...(matchDataFixRevision > 0
       ? [
@@ -1681,12 +1860,311 @@ async function getBookmakerProbabilitiesForMatch(matchId) {
   }
 }
 
+function mostBalancedBookmakerLine(lineMap) {
+  if (
+    !lineMap ||
+    typeof lineMap !== 'object'
+  ) {
+    return null;
+  }
+
+  const candidates =
+    Object.entries(lineMap)
+      .map(
+        ([line, probabilities]) => ({
+          line:
+            Number(line),
+          over:
+            Number(
+              probabilities?.over,
+            ),
+          under:
+            Number(
+              probabilities?.under,
+            ),
+        }),
+      )
+      .filter(
+        (item) =>
+          Number.isFinite(item.line) &&
+          Number.isFinite(item.over) &&
+          Number.isFinite(item.under) &&
+          item.over > 0 &&
+          item.under > 0,
+      )
+      .sort(
+        (a, b) =>
+          Math.abs(a.over - a.under) -
+          Math.abs(b.over - b.under),
+      );
+
+  return (
+    candidates[0] ??
+    null
+  );
+}
+
+async function buildBookmakerOnlyMatchdayPick(
+  match,
+) {
+  const matchId =
+    match?.id ??
+    null;
+
+  if (!matchId) {
+    return null;
+  }
+
+  const bookmaker =
+    await getBookmakerProbabilitiesForMatch(
+      matchId,
+    );
+
+  if (!bookmaker) {
+    return null;
+  }
+
+  const homeName =
+    match?.homeTeam?.name ??
+    'Casa';
+
+  const awayName =
+    match?.awayTeam?.name ??
+    'Ospite';
+
+  const candidates = [];
+
+  function addCandidate({
+    label,
+    probability,
+    market,
+    selection,
+    line = null,
+  }) {
+    if (
+      probability === null ||
+      probability === undefined ||
+      probability === ''
+    ) {
+      return;
+    }
+
+    const numeric =
+      Number(probability);
+
+    if (
+      !Number.isFinite(numeric) ||
+      numeric <= 0
+    ) {
+      return;
+    }
+
+    candidates.push({
+      label,
+      probability:
+        round2(
+          numeric * 100,
+        ),
+      market,
+      selection,
+      line,
+    });
+  }
+
+  addCandidate({
+    label:
+      `1 · ${homeName}`,
+    probability:
+      bookmaker
+        ?.oneXTwo
+        ?.home,
+    market:
+      '1X2',
+    selection:
+      'home',
+  });
+
+  addCandidate({
+    label:
+      'X · Pareggio',
+    probability:
+      bookmaker
+        ?.oneXTwo
+        ?.draw,
+    market:
+      '1X2',
+    selection:
+      'draw',
+  });
+
+  addCandidate({
+    label:
+      `2 · ${awayName}`,
+    probability:
+      bookmaker
+        ?.oneXTwo
+        ?.away,
+    market:
+      '1X2',
+    selection:
+      'away',
+  });
+
+  addCandidate({
+    label:
+      'GG · Entrambe segnano',
+    probability:
+      bookmaker
+        ?.bothTeamsToScore
+        ?.yes,
+    market:
+      'GG/NG',
+    selection:
+      'gg',
+  });
+
+  addCandidate({
+    label:
+      'NG · No Goal',
+    probability:
+      bookmaker
+        ?.bothTeamsToScore
+        ?.no,
+    market:
+      'GG/NG',
+    selection:
+      'ng',
+  });
+
+  const goals25 =
+    bookmaker
+      ?.totalGoals
+      ?.['2.5'] ??
+    null;
+
+  addCandidate({
+    label:
+      'Over 2.5',
+    probability:
+      goals25?.over,
+    market:
+      'Under/Over',
+    selection:
+      'over',
+    line:
+      2.5,
+  });
+
+  addCandidate({
+    label:
+      'Under 2.5',
+    probability:
+      goals25?.under,
+    market:
+      'Under/Over',
+    selection:
+      'under',
+    line:
+      2.5,
+  });
+
+  const cornerLine =
+    mostBalancedBookmakerLine(
+      bookmaker
+        ?.totalCorners,
+    );
+
+  if (cornerLine) {
+    addCandidate({
+      label:
+        `Corner Over ${cornerLine.line}`,
+      probability:
+        cornerLine.over,
+      market:
+        'Corner',
+      selection:
+        'over',
+      line:
+        cornerLine.line,
+    });
+
+    addCandidate({
+      label:
+        `Corner Under ${cornerLine.line}`,
+      probability:
+        cornerLine.under,
+      market:
+        'Corner',
+      selection:
+        'under',
+      line:
+        cornerLine.line,
+    });
+  }
+
+  const cardsLine =
+    mostBalancedBookmakerLine(
+      bookmaker
+        ?.totalCards,
+    );
+
+  if (cardsLine) {
+    addCandidate({
+      label:
+        `Cartellini Over ${cardsLine.line}`,
+      probability:
+        cardsLine.over,
+      market:
+        'Cartellini',
+      selection:
+        'over',
+      line:
+        cardsLine.line,
+    });
+
+    addCandidate({
+      label:
+        `Cartellini Under ${cardsLine.line}`,
+      probability:
+        cardsLine.under,
+      market:
+        'Cartellini',
+      selection:
+        'under',
+      line:
+        cardsLine.line,
+    });
+  }
+
+  candidates.sort(
+    (a, b) =>
+      b.probability -
+      a.probability,
+  );
+
+  return (
+    candidates[0] ??
+    null
+  );
+}
+
 function blendPredictWithBookmaker(
   predictProbabilities,
   bookmakerProbabilities,
   predictWeight = 0.20,
   bookmakerWeight = 0.80,
 ) {
+  const bookmakerOnly =
+    predictWeight === 0 &&
+    bookmakerWeight === 1;
+
+  if (
+    bookmakerOnly &&
+    !bookmakerProbabilities
+  ) {
+    return null;
+  }
+
   if (
     !predictProbabilities ||
     !bookmakerProbabilities
@@ -1712,7 +2190,9 @@ function blendPredictWithBookmaker(
     !Number.isFinite(total) ||
     total <= 0
   ) {
-    return predictProbabilities;
+    return bookmakerOnly
+      ? null
+      : predictProbabilities;
   }
 
   return {
@@ -1729,6 +2209,17 @@ function blendBinaryPredictWithBookmaker(
   predictWeight = 0.20,
   bookmakerWeight = 0.80,
 ) {
+  const bookmakerOnly =
+    predictWeight === 0 &&
+    bookmakerWeight === 1;
+
+  if (
+    bookmakerOnly &&
+    !bookmakerProbabilities
+  ) {
+    return null;
+  }
+
   if (
     !predictProbabilities ||
     !bookmakerProbabilities
@@ -1761,7 +2252,9 @@ function blendBinaryPredictWithBookmaker(
     });
 
   return normalized ??
-    predictProbabilities;
+    (bookmakerOnly
+      ? null
+      : predictProbabilities);
 }
 
 function bookmakerLineProbability(
@@ -1823,22 +2316,47 @@ function bookmakerLineProbability(
 function applyBookmakerAdvancedBlend(
   advanced,
   bookmakerProbabilities,
+  predictWeight = 0.20,
+  bookmakerWeight = 0.80,
 ) {
-  if (
-    !advanced ||
-    !bookmakerProbabilities
-  ) {
+  if (!advanced) {
     return advanced;
+  }
+
+  const bookmakerOnly =
+    predictWeight === 0 &&
+    bookmakerWeight === 1;
+
+  function markTopSignalUnavailable(metric, reason) {
+    if (!metric) {
+      return;
+    }
+
+    // La metrica statistica resta disponibile nella pagina Analisi.
+    // Blocchiamo soltanto il suo utilizzo come Top Signal bookmaker-only.
+    metric.topSignalAvailable = false;
+    metric.bookmakerOnlyUnavailable = true;
+    metric.bookmakerOnlyReason = reason;
+  }
+
+  // Il parser bookmaker attuale non espone un mercato tiri in porta.
+  // La statistica PREDICT resta visibile nell'Analisi, ma in modalità
+  // 100% bookmaker non può competere nei Top Signal.
+  if (bookmakerOnly) {
+    markTopSignalUnavailable(
+      advanced.shotsOnTarget,
+      'Quote bookmaker tiri in porta non disponibili nel feed attuale',
+    );
   }
 
   const entries = [
     [
       'corners',
-      bookmakerProbabilities.totalCorners,
+      bookmakerProbabilities?.totalCorners,
     ],
     [
       'cards',
-      bookmakerProbabilities.totalCards,
+      bookmakerProbabilities?.totalCards,
     ],
   ];
 
@@ -1849,25 +2367,51 @@ function applyBookmakerAdvancedBlend(
     const metric =
       advanced?.[metricKey];
 
+    if (!metric?.available) {
+      continue;
+    }
+
+    if (!lineMap) {
+      if (bookmakerOnly) {
+        markTopSignalUnavailable(
+          metric,
+          'Quote bookmaker non disponibili per questo mercato',
+        );
+      }
+
+      continue;
+    }
+
+    const wantedLine =
+      Number(metric.line);
+
     if (
-      !metric?.available ||
-      !Number.isFinite(
-        Number(metric.totalExpected),
-      ) ||
-      !Number.isFinite(
-        Number(metric.line),
-      )
+      !Number.isFinite(wantedLine)
     ) {
+      if (bookmakerOnly) {
+        markTopSignalUnavailable(
+          metric,
+          'Linea bookmaker non determinabile',
+        );
+      }
+
       continue;
     }
 
     const bookmakerLine =
       bookmakerLineProbability(
         lineMap,
-        Number(metric.line),
+        wantedLine,
       );
 
     if (!bookmakerLine) {
+      if (bookmakerOnly) {
+        markTopSignalUnavailable(
+          metric,
+          'Linea bookmaker non disponibile',
+        );
+      }
+
       continue;
     }
 
@@ -1875,10 +2419,14 @@ function applyBookmakerAdvancedBlend(
       bookmakerLine.line;
 
     const predictOver =
-      totalGoalsOverProbability(
+      Number.isFinite(
         Number(metric.totalExpected),
-        line,
-      );
+      )
+        ? totalGoalsOverProbability(
+            Number(metric.totalExpected),
+            line,
+          )
+        : 0.5;
 
     const blended =
       blendBinaryPredictWithBookmaker(
@@ -1891,24 +2439,54 @@ function applyBookmakerAdvancedBlend(
         bookmakerLine.probabilities,
         'over',
         'under',
+        predictWeight,
+        bookmakerWeight,
       );
 
     if (!blended) {
+      if (bookmakerOnly) {
+        markTopSignalUnavailable(
+          metric,
+          'Probabilità bookmaker non utilizzabile',
+        );
+      }
+
       continue;
     }
 
-    metric.line =
-      round2(line);
+    if (bookmakerOnly) {
+      // Manteniamo linee e probabilità statistiche PREDICT nella pagina Analisi.
+      // Le probabilità bookmaker vengono salvate separatamente e sono le sole
+      // utilizzabili dai Top Signal in regime 0% PREDICT / 100% bookmaker.
+      metric.topSignalAvailable = true;
+      metric.topSignalLine =
+        round2(line);
+      metric.topSignalOverProbability =
+        round2(
+          blended.over * 100,
+        );
+      metric.topSignalUnderProbability =
+        round2(
+          blended.under * 100,
+        );
+      metric.bookmakerOnly = true;
+      metric.bookmakerOnlyUnavailable = false;
+      delete metric.bookmakerOnlyReason;
+    } else {
+      // Comportamento storico invariato fuori dalla modalità bookmaker-only.
+      metric.line =
+        round2(line);
 
-    metric.overProbability =
-      round2(
-        blended.over * 100,
-      );
+      metric.overProbability =
+        round2(
+          blended.over * 100,
+        );
 
-    metric.underProbability =
-      round2(
-        blended.under * 100,
-      );
+      metric.underProbability =
+        round2(
+          blended.under * 100,
+        );
+    }
   }
 
   return advanced;
@@ -4277,6 +4855,8 @@ function calculatePrediction({
   headToHeadMatches,
   leagueHistory,
   bookmakerProbabilities = null,
+  predictWeight = 0.20,
+  bookmakerWeight = 0.80,
 }) {
   const homeVenue =
     homeTeam.summary.home;
@@ -4456,6 +5036,8 @@ function calculatePrediction({
     blendPredictWithBookmaker(
       blended1x2,
       bookmakerProbabilities?.oneXTwo,
+      predictWeight,
+      bookmakerWeight,
     );
 
   const totalLambda =
@@ -4571,6 +5153,8 @@ function calculatePrediction({
         ?.bothTeamsToScore,
       'yes',
       'no',
+      predictWeight,
+      bookmakerWeight,
     );
 
   const finalOver15 =
@@ -4586,6 +5170,8 @@ function calculatePrediction({
         ?.['1.5'],
       'over',
       'under',
+      predictWeight,
+      bookmakerWeight,
     );
 
   const finalOver25 =
@@ -4601,6 +5187,8 @@ function calculatePrediction({
         ?.['2.5'],
       'over',
       'under',
+      predictWeight,
+      bookmakerWeight,
     );
 
   const finalOver35 =
@@ -4616,137 +5204,184 @@ function calculatePrediction({
         ?.['3.5'],
       'over',
       'under',
+      predictWeight,
+      bookmakerWeight,
     );
 
   const oneXTwoPercent = {
     home:
-      round2(
-        final1x2.home *
-        100,
-      ),
+      final1x2
+        ? round2(
+            final1x2.home *
+            100,
+          )
+        : null,
 
     draw:
-      round2(
-        final1x2.draw *
-        100,
-      ),
+      final1x2
+        ? round2(
+            final1x2.draw *
+            100,
+          )
+        : null,
 
     away:
-      round2(
-        final1x2.away *
-        100,
-      ),
+      final1x2
+        ? round2(
+            final1x2.away *
+            100,
+          )
+        : null,
   };
 
   const goalPercent = {
     gg:
-      round2(
-        finalGG.yes * 100,
-      ),
+      finalGG
+        ? round2(
+            finalGG.yes * 100,
+          )
+        : null,
 
     noGoal:
-      round2(
-        finalGG.no * 100,
-      ),
+      finalGG
+        ? round2(
+            finalGG.no * 100,
+          )
+        : null,
 
     over15:
-      round2(
-        finalOver15.over * 100,
-      ),
+      finalOver15
+        ? round2(
+            finalOver15.over * 100,
+          )
+        : null,
 
     under15:
-      round2(
-        finalOver15.under *
-        100,
-      ),
+      finalOver15
+        ? round2(
+            finalOver15.under *
+            100,
+          )
+        : null,
 
     over25:
-      round2(
-        finalOver25.over * 100,
-      ),
+      finalOver25
+        ? round2(
+            finalOver25.over * 100,
+          )
+        : null,
 
     under25:
-      round2(
-        finalOver25.under *
-        100,
-      ),
+      finalOver25
+        ? round2(
+            finalOver25.under *
+            100,
+          )
+        : null,
 
     over35:
-      round2(
-        finalOver35.over * 100,
-      ),
+      finalOver35
+        ? round2(
+            finalOver35.over * 100,
+          )
+        : null,
 
     under35:
-      round2(
-        finalOver35.under *
-        100,
-      ),
+      finalOver35
+        ? round2(
+            finalOver35.under *
+            100,
+          )
+        : null,
   };
 
   const strongest1x2 =
-    strongestOutcome({
-      '1': oneXTwoPercent.home,
-      'X': oneXTwoPercent.draw,
-      '2': oneXTwoPercent.away,
-    });
+    final1x2
+      ? strongestOutcome({
+          '1':
+            oneXTwoPercent.home,
+          'X':
+            oneXTwoPercent.draw,
+          '2':
+            oneXTwoPercent.away,
+        })
+      : null;
 
   const strongestGG =
-    strongestOutcome({
-      'GG': goalPercent.gg,
-      'NG': goalPercent.noGoal,
-    });
+    finalGG
+      ? strongestOutcome({
+          'GG':
+            goalPercent.gg,
+          'NG':
+            goalPercent.noGoal,
+        })
+      : null;
 
   const strongestOU25 =
-    strongestOutcome({
-      'Over 2.5':
-        goalPercent.over25,
+    finalOver25
+      ? strongestOutcome({
+          'Over 2.5':
+            goalPercent.over25,
 
-      'Under 2.5':
-        goalPercent.under25,
-    });
+          'Under 2.5':
+            goalPercent.under25,
+        })
+      : null;
 
   const topSignals = [
-    {
-      label:
-        strongest1x2[0],
+    ...(strongest1x2
+      ? [
+          {
+            label:
+              strongest1x2[0],
 
-      probability:
-        strongest1x2[1],
+            probability:
+              strongest1x2[1],
 
-      reason:
-        'Esito più probabile nel modello 1X2',
+            reason:
+              'Esito più probabile nel modello 1X2',
 
-      market:
-        'oneXTwo',
-    },
+            market:
+              'oneXTwo',
+          },
+        ]
+      : []),
 
-    {
-      label:
-        strongestGG[0],
+    ...(strongestGG
+      ? [
+          {
+            label:
+              strongestGG[0],
 
-      probability:
-        strongestGG[1],
+            probability:
+              strongestGG[1],
 
-      reason:
-        'Segnale Goal / No Goal',
+            reason:
+              'Segnale Goal / No Goal',
 
-      market:
-        'goals',
-    },
+            market:
+              'ggNg',
+          },
+        ]
+      : []),
 
-    {
-      label:
-        strongestOU25[0],
+    ...(strongestOU25
+      ? [
+          {
+            label:
+              strongestOU25[0],
 
-      probability:
-        strongestOU25[1],
+            probability:
+              strongestOU25[1],
 
-      reason:
-        'Segnale principale sulla linea 2.5',
+            reason:
+              'Segnale principale sulla linea 2.5',
 
-      market:
-        'goals',
-    },
+            market:
+              'overUnder',
+          },
+        ]
+      : []),
   ].sort(
     (a, b) =>
       b.probability -
@@ -6150,10 +6785,18 @@ async function getLeagueAdvancedProfiles({
 
 function buildCurrentSeasonTeamProfile(
   historicalIdentity,
+  {
+    seasonMatches =
+      centralSerieAState.matches,
+    currentSeason =
+      CURRENT_SERIE_A_SEASON,
+    leagueName =
+      'Serie A',
+  } = {},
 ) {
   const history =
     buildTeamHistory(
-      centralSerieAState.matches,
+      seasonMatches,
       historicalIdentity.id,
     );
 
@@ -6189,19 +6832,27 @@ function buildCurrentSeasonTeamProfile(
       history.matches,
 
     historicalSource:
-      'current-serie-a',
+      'current-league',
 
     sourceLeagueName:
-      'Serie A',
+      leagueName,
 
     sourceSeason:
-      CURRENT_SERIE_A_SEASON,
+      String(currentSeason),
   };
 }
 
 async function buildCurrentSeasonAdvancedProfilesForMatch({
   homeTeam,
   awayTeam,
+  seasonMatches =
+    centralSerieAState.matches,
+  currentSeason =
+    CURRENT_SERIE_A_SEASON,
+  leagueName =
+    'Serie A',
+  countryName =
+    'Italy',
 }) {
   const currentTeams =
     [
@@ -6209,7 +6860,15 @@ async function buildCurrentSeasonAdvancedProfilesForMatch({
       awayTeam,
     ]
       .map(
-        buildCurrentSeasonTeamProfile,
+        (team) =>
+          buildCurrentSeasonTeamProfile(
+            team,
+            {
+              seasonMatches,
+              currentSeason,
+              leagueName,
+            },
+          ),
       )
       .filter(Boolean);
 
@@ -6225,7 +6884,7 @@ async function buildCurrentSeasonAdvancedProfilesForMatch({
       teams: [],
 
       season:
-        CURRENT_SERIE_A_SEASON,
+        String(currentSeason),
 
       note:
         'Nessuna statistica avanzata della stagione corrente ancora disponibile.',
@@ -6236,16 +6895,13 @@ async function buildCurrentSeasonAdvancedProfilesForMatch({
     await buildLeagueAdvancedProfiles({
       leagueHistory: {
         season:
-          CURRENT_SERIE_A_SEASON,
+          String(currentSeason),
 
         rosterSeason:
-          CURRENT_SERIE_A_SEASON,
+          String(currentSeason),
 
-        leagueName:
-          'Serie A',
-
-        countryName:
-          'Italy',
+        leagueName,
+        countryName,
 
         teamsCount:
           currentTeams.length,
@@ -6262,10 +6918,10 @@ async function buildCurrentSeasonAdvancedProfilesForMatch({
     ...result,
 
     season:
-      CURRENT_SERIE_A_SEASON,
+      String(currentSeason),
 
     note:
-      'Statistiche avanzate Serie A 2026/27 usate con peso progressivo.',
+      `Statistiche avanzate ${leagueName} ${currentSeason} usate con peso progressivo.`,
   };
 }
 
@@ -6692,17 +7348,32 @@ function appendAdvancedSignals(
   ];
 
   for (const [label, metric] of entries) {
-    if (!metric?.available) {
+    if (
+      !metric?.available ||
+      metric.topSignalAvailable === false
+    ) {
       continue;
     }
 
-    const overIsStronger =
-      metric.overProbability >=
+    const signalOverProbability =
+      metric.topSignalOverProbability ??
+      metric.overProbability;
+
+    const signalUnderProbability =
+      metric.topSignalUnderProbability ??
       metric.underProbability;
 
+    const signalLine =
+      metric.topSignalLine ??
+      metric.line;
+
+    const overIsStronger =
+      signalOverProbability >=
+      signalUnderProbability;
+
     const probability = overIsStronger
-      ? metric.overProbability
-      : metric.underProbability;
+      ? signalOverProbability
+      : signalUnderProbability;
 
     if (probability < 55) {
       continue;
@@ -6717,7 +7388,7 @@ function appendAdvancedSignals(
 
     candidates.push({
       label:
-        `${label} ${overIsStronger ? 'Over' : 'Under'} ${metric.line}`,
+        `${label} ${overIsStronger ? 'Over' : 'Under'} ${signalLine}`,
 
       probability,
 
@@ -6777,6 +7448,16 @@ function predictSignalReliability(
     );
   }
 
+  if (
+    market === 'ggNg' ||
+    market === 'overUnder' ||
+    market === 'goals'
+  ) {
+    return Number(
+      reliability.goals ?? 0,
+    );
+  }
+
   return Number(
     reliability.goals ?? 0,
   );
@@ -6814,6 +7495,14 @@ function buildPredictPresentationSignals(
     selection = null,
     line = null,
   }) {
+    if (
+      probability === null ||
+      probability === undefined ||
+      probability === ''
+    ) {
+      return;
+    }
+
     const numeric =
       Number(probability);
 
@@ -6911,7 +7600,7 @@ function buildPredictPresentationSignals(
       reason:
         'Segnale Goal / No Goal',
       market:
-        'goals',
+        'ggNg',
       selection:
         ggCandidates[0][2],
     });
@@ -7006,7 +7695,7 @@ function buildPredictPresentationSignals(
       reason:
         'Segnale Under / Over più forte tra le linee 1.5, 2.5 e 3.5',
       market:
-        'goals',
+        'overUnder',
     });
   }
 
@@ -7036,18 +7725,29 @@ function buildPredictPresentationSignals(
       metric,
     ] of advancedEntries
   ) {
-    if (!metric?.available) {
+    if (
+      !metric?.available ||
+      metric.topSignalAvailable === false
+    ) {
       continue;
     }
 
     const overProbability =
       Number(
+        metric.topSignalOverProbability ??
         metric.overProbability,
       );
 
     const underProbability =
       Number(
+        metric.topSignalUnderProbability ??
         metric.underProbability,
+      );
+
+    const signalLine =
+      Number(
+        metric.topSignalLine ??
+        metric.line,
       );
 
     const overIsStronger =
@@ -7062,15 +7762,14 @@ function buildPredictPresentationSignals(
     if (
       !Number.isFinite(
         probability,
-      ) ||
-      probability < 55
+      )
     ) {
       continue;
     }
 
     addSignal({
       label:
-        `${label} ${overIsStronger ? 'Over' : 'Under'} ${metric.line}`,
+        `${label} ${overIsStronger ? 'Over' : 'Under'} ${signalLine}`,
       probability,
       reason:
         `Segnale ${label.toLowerCase()} dal campione casa/trasferta ponderato`,
@@ -7080,9 +7779,7 @@ function buildPredictPresentationSignals(
           ? 'over'
           : 'under',
       line:
-        Number(
-          metric.line,
-        ),
+        signalLine,
     });
   }
 
@@ -7107,15 +7804,21 @@ function buildPredictPresentationSignals(
       '1X2'
         ? 'oneXTwo'
         : primaryPick.market ===
-            'Corner'
-          ? 'corners'
+            'GG/NG'
+          ? 'ggNg'
           : primaryPick.market ===
-              'Tiri in porta'
-            ? 'shotsOnTarget'
+              'Under/Over'
+            ? 'overUnder'
             : primaryPick.market ===
-                'Cartellini'
-              ? 'cards'
-              : 'goals';
+                'Corner'
+              ? 'corners'
+              : primaryPick.market ===
+                  'Tiri in porta'
+                ? 'shotsOnTarget'
+                : primaryPick.market ===
+                    'Cartellini'
+                  ? 'cards'
+                  : 'goals';
 
     const primaryReliability =
       predictSignalReliability(
@@ -7149,48 +7852,10 @@ function buildPredictPresentationSignals(
           return true;
         }
 
-        const sameSelection =
-          String(
-            signal.selection ??
-              '',
-          ) ===
-          String(
-            primarySignal
-              .selection ??
-              '',
-          );
-
-        const signalLine =
-          Number(
-            signal.line,
-          );
-
-        const primaryLine =
-          Number(
-            primarySignal.line,
-          );
-
-        const sameLine =
-          Number.isFinite(
-            signalLine,
-          ) &&
-          Number.isFinite(
-            primaryLine,
-          )
-            ? signalLine ===
-              primaryLine
-            : signal.line ==
-              primarySignal.line;
-
-        const sameMarket =
-          signal.market ===
+        return (
+          signal.market !==
           primarySignal
-            .signalMarket;
-
-        return !(
-          sameSelection &&
-          sameLine &&
-          sameMarket
+            .signalMarket
         );
       },
     );
@@ -8162,6 +8827,12 @@ async function precomputeUpcomingPredictData() {
             'Serie A',
           countryName:
             'Italy',
+          cacheVariant:
+            bookmakerOnlyModeForRound(
+              roundNumberOf(match),
+            )
+              ? `bookmaker100pure-analysisstats-v2-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+              : null,
           cacheTtl:
             analysisPrecomputeTtl,
 
@@ -8313,7 +8984,9 @@ async function precomputeUpcomingPredictData() {
     ) {
       await deleteCacheKey(
         [
-          'matchday-picks-v2',
+          matchdayPicksAggregatePrefixForRound(
+            roundNumber,
+          ),
           CURRENT_SERIE_A_SEASON,
           '2025',
           roundNumber,
@@ -8708,6 +9381,12 @@ async function archivePermanentAnalysisHistoryForFrozenMatches() {
                 'Serie A',
               countryName:
                 'Italy',
+              cacheVariant:
+                bookmakerOnlyModeForRound(
+                  roundNumberOf(match),
+                )
+                  ? `bookmaker100pure-nullfix-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+                  : null,
             });
 
           if (!analysis) {
@@ -8734,6 +9413,12 @@ async function archivePermanentAnalysisHistoryForFrozenMatches() {
                   'Serie A',
                 countryName:
                   'Italy',
+                  cacheVariant:
+                    bookmakerOnlyModeForRound(
+                      roundNumberOf(match),
+                    )
+                      ? `bookmaker100pure-nullfix-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+                      : null,
               }),
           });
 
@@ -9087,6 +9772,141 @@ app.get(
             lastLiveSyncAt:
               centralSerieAState
                 .lastLiveSyncAt,
+          },
+        });
+      }
+
+      // Accesso pubblico controllato anche per gli altri campionati
+      // supportati da PREDICT. Non esponiamo il proxy Highlightly:
+      // il client puo leggere solo la stagione corrente di una lega
+      // dichiarata in SUPPORTED_LEAGUES e solo per una data specifica.
+      const supportedLeague =
+        resolveSupportedLeague({
+          leagueName:
+            query.leagueName,
+          countryName:
+            query.countryName,
+        });
+
+      const supportedLeaguePublicRequest =
+        Boolean(
+          supportedLeague,
+        ) &&
+        String(
+          query.season ??
+          '',
+        ) ===
+          String(
+            supportedLeague
+              ?.currentSeason ??
+            '',
+          ) &&
+        Boolean(
+          query.date,
+        ) &&
+        !query.homeTeamId &&
+        !query.awayTeamId &&
+        !query.homeTeamName &&
+        !query.awayTeamName;
+
+      if (
+        supportedLeaguePublicRequest
+      ) {
+        const requestedDate =
+          String(
+            query.date,
+          );
+
+        // Per i campionati non gestiti dallo scheduler centrale Serie A
+        // leggiamo la singola data con una cache breve. La cache stagione
+        // (6 ore) e' ottima per calendario/round, ma e' troppo lunga per
+        // punteggi live e risultati appena conclusi.
+        const datePayload =
+          await cachedHighlightlyGet({
+            key: [
+              'supported-public-matches-v2',
+              supportedLeague.key,
+              String(
+                query.season,
+              ),
+              requestedDate,
+            ].join('-'),
+            apiPath:
+              '/matches',
+            query: {
+              date:
+                requestedDate,
+              leagueName:
+                supportedLeague
+                  .leagueName,
+              countryName:
+                supportedLeague
+                  .countryName,
+              season:
+                String(
+                  query.season,
+                ),
+              timezone:
+                'Europe/Rome',
+              limit:
+                String(
+                  limit,
+                ),
+              offset:
+                String(
+                  offset,
+                ),
+            },
+            ttl:
+              SUPPORTED_LEAGUE_PUBLIC_MATCHES_CACHE_TIME,
+          });
+
+        const matchesForDate =
+          extractMatches(
+            datePayload,
+          )
+            .filter(
+              regularSeasonMatch,
+            )
+            .sort(
+              (a, b) =>
+                Date.parse(
+                  a?.date ?? '',
+                ) -
+                Date.parse(
+                  b?.date ?? '',
+                ),
+            );
+
+        return res.json({
+          data:
+            matchesForDate,
+
+          meta: {
+            source:
+              supportedLeague.key ===
+                'serie-a'
+                ? 'predict-central-cache'
+                : 'predict-supported-league-live-cache',
+            leagueKey:
+              supportedLeague.key,
+            leagueName:
+              supportedLeague
+                .leagueName,
+            countryName:
+              supportedLeague
+                .countryName,
+            season:
+              String(
+                query.season,
+              ),
+            date:
+              requestedDate,
+            cacheTtlSeconds:
+              Math.round(
+                SUPPORTED_LEAGUE_PUBLIC_MATCHES_CACHE_TIME /
+                1000,
+              ),
           },
         });
       }
@@ -9539,16 +10359,70 @@ app.get(
       }
 
 
+      const supportedLeague =
+        resolveSupportedLeague({
+          leagueName,
+          countryName,
+        });
+
+      const currentSeason =
+        supportedLeague
+          ?.currentSeason ??
+        CURRENT_SERIE_A_SEASON;
+
+      const currentSeasonMatches =
+        supportedLeague
+          ? await loadSupportedLeagueSeasonMatches({
+              season:
+                currentSeason,
+              leagueName,
+              countryName,
+            })
+          : centralSerieAState.matches;
+
       const centralMatch =
-        centralSerieAState.matches.find(
+        currentSeasonMatches.find(
           (match) =>
-            String(
-              teamIdOf(match?.homeTeam),
-            ) === String(homeTeamId) &&
-            String(
-              teamIdOf(match?.awayTeam),
-            ) === String(awayTeamId),
+            (
+              matchId !== undefined &&
+              matchId !== null &&
+              String(match?.id) ===
+                String(matchId)
+            ) ||
+            (
+              String(
+                teamIdOf(match?.homeTeam),
+              ) === String(homeTeamId) &&
+              String(
+                teamIdOf(match?.awayTeam),
+              ) === String(awayTeamId)
+            ),
         );
+
+      const centralRound =
+        roundNumberOf(
+          centralMatch,
+        );
+
+      const bookmakerOnlyMode =
+        bookmakerOnlyModeForRound(
+          centralRound,
+        );
+
+      const predictBlendWeight =
+        bookmakerOnlyMode
+          ? BOOKMAKER_ONLY_PREDICT_WEIGHT
+          : 0.20;
+
+      const bookmakerBlendWeight =
+        bookmakerOnlyMode
+          ? BOOKMAKER_ONLY_BOOKMAKER_WEIGHT
+          : 0.80;
+
+      const analysisCacheVariant =
+        bookmakerOnlyMode
+          ? `bookmaker100pure-nullfix-analysisstats-v2-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+          : null;
 
       const effectiveMatchId =
         matchId ??
@@ -9586,6 +10460,8 @@ app.get(
             season,
           leagueName,
           countryName,
+          cacheVariant:
+            analysisCacheVariant,
         });
 
       // L'archivio permanente ha priorità solo quando il match è ormai
@@ -9706,6 +10582,15 @@ app.get(
         ) ===
         INTERNAL_SYNC_TOKEN;
 
+      // Le quattro nuove leghe possono generare l'analisi completa
+      // on-demand quando l'utente apre una partita dall'app.
+      // Serie A mantiene il comportamento storico del flusso centrale.
+      const publicOnDemandAnalysisAllowed =
+        supportedLeague !== null &&
+        supportedLeague !== undefined &&
+        supportedLeague.key !==
+          'serie-a';
+
       // Per una partita futura, se l'analisi esiste sul disco ma ha
       // superato il TTL operativo di 30 minuti, la mostriamo comunque
       // all'app come fallback invece di rispondere 503.
@@ -9801,7 +10686,10 @@ app.get(
         }
       }
 
-      if (!internalRequest) {
+      if (
+        !internalRequest &&
+        !publicOnDemandAnalysisAllowed
+      ) {
         return res
           .status(503)
           .json({
@@ -9934,13 +10822,13 @@ app.get(
 
       const currentHomeHistory =
         buildTeamHistory(
-          centralSerieAState.matches,
+          currentSeasonMatches,
           homeTeam.id,
         );
 
       const currentAwayHistory =
         buildTeamHistory(
-          centralSerieAState.matches,
+          currentSeasonMatches,
           awayTeam.id,
         );
 
@@ -9985,6 +10873,10 @@ app.get(
             leagueResult.data,
 
           bookmakerProbabilities,
+          predictWeight:
+            predictBlendWeight,
+          bookmakerWeight:
+            bookmakerBlendWeight,
         });
 
       prediction.inputs = {
@@ -9992,7 +10884,7 @@ app.get(
 
         currentSeasonBlend: {
           season:
-            CURRENT_SERIE_A_SEASON,
+            String(currentSeason),
 
           home:
             modelHomeTeam
@@ -10051,7 +10943,7 @@ app.get(
                 String(season),
 
               rosterSeason:
-                CURRENT_SERIE_A_SEASON,
+                String(currentSeason),
 
               leagueName,
               countryName,
@@ -10102,6 +10994,11 @@ app.get(
         await buildCurrentSeasonAdvancedProfilesForMatch({
           homeTeam,
           awayTeam,
+          seasonMatches:
+            currentSeasonMatches,
+          currentSeason,
+          leagueName,
+          countryName,
         });
 
       const progressiveAdvancedData =
@@ -10125,11 +11022,13 @@ app.get(
       applyBookmakerAdvancedBlend(
         advanced,
         bookmakerProbabilities,
+        predictBlendWeight,
+        bookmakerBlendWeight,
       );
 
       advanced.currentSeasonBlend = {
         season:
-          CURRENT_SERIE_A_SEASON,
+          String(currentSeason),
 
         home:
           findAdvancedTeamProfile(
@@ -10317,6 +11216,211 @@ function roundNumberOf(match) {
   return null;
 }
 
+function regularSeasonMatch(match) {
+  const rawRound =
+    match?.round;
+
+  const candidates = [
+    rawRound,
+    rawRound?.name,
+    rawRound?.round,
+    rawRound?.label,
+  ];
+
+  const text =
+    candidates
+      .filter(
+        (value) =>
+          value !== undefined &&
+          value !== null &&
+          typeof value !== 'number',
+      )
+      .map(
+        (value) =>
+          String(value).trim(),
+      )
+      .find(
+        (value) =>
+          value.length > 0,
+      );
+
+  // Se il provider restituisce solo il numero della giornata,
+  // lo consideriamo una gara di regular season.
+  if (!text) {
+    return true;
+  }
+
+  const normalized =
+    text.toLowerCase();
+
+  return (
+    normalized.includes(
+      'regular season',
+    ) ||
+    /^\d+$/.test(
+      normalized,
+    )
+  );
+}
+
+async function loadSupportedLeagueSeasonMatches({
+  season,
+  leagueName,
+  countryName,
+}) {
+  const league =
+    resolveSupportedLeague({
+      leagueName,
+      countryName,
+    });
+
+  if (!league) {
+    const error = new Error(
+      `Campionato non supportato: ${leagueName} / ${countryName}`,
+    );
+
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const isCentralSerieA =
+    league.key === 'serie-a' &&
+    String(season) ===
+      CURRENT_SERIE_A_SEASON;
+
+  if (isCentralSerieA) {
+    return centralSerieAState.matches;
+  }
+
+  const cacheKey = [
+    'supported-league-season-v1',
+    String(season),
+    league.key,
+  ].join('-');
+
+  const memory =
+    getMemoryCache(
+      cacheKey,
+      RECENT_CACHE_TIME,
+    );
+
+  if (memory) {
+    return memory;
+  }
+
+  const disk =
+    await getDiskCache(
+      cacheKey,
+      RECENT_CACHE_TIME,
+    );
+
+  if (disk) {
+    setMemoryCache(
+      cacheKey,
+      disk,
+    );
+
+    return disk;
+  }
+
+  const allMatches = [];
+  const pageLimit = 100;
+  let offset = 0;
+  let totalCount = null;
+
+  while (offset < 1000) {
+    const payload =
+      await highlightlyGet(
+        '/matches',
+        {
+          leagueName:
+            league.leagueName,
+          countryName:
+            league.countryName,
+          season:
+            String(season),
+          timezone:
+            'Europe/Rome',
+          limit:
+            String(pageLimit),
+          offset:
+            String(offset),
+        },
+      );
+
+    const pageMatches =
+      extractMatches(
+        payload,
+      );
+
+    allMatches.push(
+      ...pageMatches,
+    );
+
+    const declaredTotal =
+      Number(
+        payload?.pagination
+          ?.totalCount,
+      );
+
+    if (
+      Number.isFinite(
+        declaredTotal,
+      )
+    ) {
+      totalCount =
+        declaredTotal;
+    }
+
+    if (
+      pageMatches.length === 0 ||
+      pageMatches.length <
+        pageLimit ||
+      (
+        Number.isFinite(
+          totalCount,
+        ) &&
+        allMatches.length >=
+          totalCount
+      )
+    ) {
+      break;
+    }
+
+    offset +=
+      pageLimit;
+  }
+
+  const regularSeasonMatches =
+    uniqueMatches(
+      allMatches,
+    )
+      .filter(
+        regularSeasonMatch,
+      )
+      .sort(
+        (a, b) =>
+          Date.parse(
+            a?.date ?? '',
+          ) -
+          Date.parse(
+            b?.date ?? '',
+          ),
+      );
+
+  setMemoryCache(
+    cacheKey,
+    regularSeasonMatches,
+  );
+
+  await setDiskCache(
+    cacheKey,
+    regularSeasonMatches,
+  );
+
+  return regularSeasonMatches;
+}
+
 function buildMostProbablePick(
   analysis,
 ) {
@@ -10343,6 +11447,14 @@ function buildMostProbablePick(
     selection,
     line = null,
   }) {
+    if (
+      probability === null ||
+      probability === undefined ||
+      probability === ''
+    ) {
+      return;
+    }
+
     const numeric =
       Number(probability);
 
@@ -10465,13 +11577,17 @@ function buildMostProbablePick(
       of advancedEntries
   ) {
     if (
-      !metric?.available
+      !metric?.available ||
+      metric.topSignalAvailable === false
     ) {
       continue;
     }
 
     const line =
-      Number(metric.line);
+      Number(
+        metric.topSignalLine ??
+        metric.line,
+      );
 
     if (
       !Number.isFinite(line)
@@ -10483,6 +11599,7 @@ function buildMostProbablePick(
       label:
         `${label} Over ${line}`,
       probability:
+        metric.topSignalOverProbability ??
         metric.overProbability,
       market:
         label,
@@ -10495,6 +11612,7 @@ function buildMostProbablePick(
       label:
         `${label} Under ${line}`,
       probability:
+        metric.topSignalUnderProbability ??
         metric.underProbability,
       market:
         label,
@@ -10799,13 +11917,43 @@ async function getOrPersistMatchdayPickResult({
   allowProvider = false,
 }) {
   if (!snapshot?.pick) {
-    return evaluateMatchdayPick(
-      match,
-      null,
-      {
-        allowProvider,
-      },
-    );
+    if (!isFinishedMatch(match)) {
+      return {
+        status:
+          'pending',
+        settled:
+          false,
+      };
+    }
+
+    const score =
+      parseScore(match);
+
+    if (!score) {
+      return {
+        status:
+          'unavailable',
+        settled:
+          false,
+        message:
+          'Risultato finale non disponibile',
+      };
+    }
+
+    return {
+      status:
+        'unavailable',
+      settled:
+        false,
+      actualLabel:
+        `Finale ${score.home}-${score.away}`,
+      homeGoals:
+        score.home,
+      awayGoals:
+        score.away,
+      resultOnly:
+        true,
+    };
   }
 
   const archived =
@@ -10864,6 +12012,7 @@ async function getExistingMatchAnalysisSnapshot({
   historicalSeason,
   leagueName,
   countryName,
+  cacheVariant = null,
   cacheTtl =
     PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
   allowPermanent = true,
@@ -10891,6 +12040,7 @@ async function getExistingMatchAnalysisSnapshot({
       historicalSeason,
       leagueName,
       countryName,
+      cacheVariant,
     });
 
   const memory =
@@ -10918,7 +12068,7 @@ async function getExistingMatchAnalysisSnapshot({
     return disk;
   }
 
-  if (allowLegacy) {
+  if (allowLegacy && !cacheVariant) {
     const legacy =
       await readLegacyMatchAnalysisSnapshot({
         homeTeamId,
@@ -10954,10 +12104,15 @@ async function getOrCreateMatchdayPickSnapshot({
   const matchId =
     match?.id;
 
+  const snapshotVersion =
+    matchdayPickSnapshotVersionForMatch(
+      match,
+    );
+
   const key =
     buildMatchdayPickSnapshotKey({
       version:
-        MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+        snapshotVersion,
       matchId,
       historicalSeason,
       leagueName,
@@ -11024,7 +12179,7 @@ async function getOrCreateMatchdayPickSnapshot({
   const current =
     await readMatchdayPickSnapshotVersion({
       version:
-        MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+        snapshotVersion,
       matchId,
       historicalSeason,
       leagueName,
@@ -11054,57 +12209,62 @@ async function getOrCreateMatchdayPickSnapshot({
     return current.snapshot;
   }
 
-  // Compatibilità con gli snapshot storici v2.
-  // Se esistono, vengono copiati in v3 senza cambiare pick o data originale.
-  for (
-    const legacyVersion
-      of MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS
+  if (
+    snapshotVersion ===
+      MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION
   ) {
-    const legacy =
-      await readMatchdayPickSnapshotVersion({
-        version:
-          legacyVersion,
-        matchId,
-        historicalSeason,
-        leagueName,
-        countryName,
-      });
-
-    if (
-      !legacy.snapshot?.pick ||
-      !snapshotIsFresh(
-        legacy.snapshot,
-      )
+    // Compatibilità con gli snapshot storici v2.
+    // Se esistono, vengono copiati in v3 senza cambiare pick o data originale.
+    for (
+      const legacyVersion
+        of MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS
     ) {
-      continue;
-    }
+      const legacy =
+        await readMatchdayPickSnapshotVersion({
+          version:
+            legacyVersion,
+          matchId,
+          historicalSeason,
+          leagueName,
+          countryName,
+        });
 
-    const migrated =
-      await migrateLegacyMatchdayPickSnapshot({
-        legacyVersion,
-        matchId,
-        historicalSeason,
-        leagueName,
-        countryName,
-        snapshot:
+      if (
+        !legacy.snapshot?.pick ||
+        !snapshotIsFresh(
           legacy.snapshot,
-      });
+        )
+      ) {
+        continue;
+      }
 
-    if (
-      predictionFreezeActive ||
-      !beforeKickoff
-    ) {
-      await persistPermanentMatchdayPickRecord({
-        match,
-        snapshot:
-          migrated,
-        historicalSeason,
-        leagueName,
-        countryName,
-      });
+      const migrated =
+        await migrateLegacyMatchdayPickSnapshot({
+          legacyVersion,
+          matchId,
+          historicalSeason,
+          leagueName,
+          countryName,
+          snapshot:
+            legacy.snapshot,
+        });
+
+      if (
+        predictionFreezeActive ||
+        !beforeKickoff
+      ) {
+        await persistPermanentMatchdayPickRecord({
+          match,
+          snapshot:
+            migrated,
+          historicalSeason,
+          leagueName,
+          countryName,
+        });
+      }
+
+      return migrated;
     }
-
-    return migrated;
   }
 
   // Protezione anti-retroattività: se la partita è già iniziata
@@ -11114,6 +12274,70 @@ async function getOrCreateMatchdayPickSnapshot({
     !beforeKickoff
   ) {
     return null;
+  }
+
+  const requestedLeague =
+    resolveSupportedLeague({
+      leagueName,
+      countryName,
+    });
+
+  const directBookmakerOnly =
+    bookmakerOnlyModeForRound(
+      roundNumberOf(match),
+    ) &&
+    requestedLeague &&
+    requestedLeague.key !==
+      'serie-a';
+
+  // Dalla giornata 3 le nuove leghe lavorano in modalità 100% bookmaker.
+  // Per creare il Top Signal non serve quindi costruire prima tutta
+  // l'analisi PREDICT storica: basta il feed quote della partita.
+  // Questo riduce drasticamente le chiamate Highlightly e permette anche
+  // alle neopromosse di avere una pick quando le quote sono disponibili.
+  if (directBookmakerOnly) {
+    const directPick =
+      await buildBookmakerOnlyMatchdayPick(
+        match,
+      );
+
+    const directSnapshot = {
+      pick:
+        directPick,
+
+      modelVersion:
+        'PREDICT v5',
+
+      generatedAt:
+        new Date()
+          .toISOString(),
+    };
+
+    setMemoryCache(
+      key,
+      directSnapshot,
+    );
+
+    await setDiskCache(
+      key,
+      directSnapshot,
+    );
+
+    if (
+      directSnapshot?.pick &&
+      predictionFreezeActive
+    ) {
+      await persistPermanentMatchdayPickRecord({
+        match,
+        snapshot:
+          directSnapshot,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+    }
+
+    return directSnapshot;
   }
 
   const analysis =
@@ -11840,6 +13064,24 @@ async function buildAndPersistMultiplesSummary({
   leagueName,
   countryName,
 }) {
+  const supportedLeague =
+    resolveSupportedLeague({
+      leagueName,
+      countryName,
+    });
+
+  if (!supportedLeague) {
+    throw new Error(
+      `Campionato non supportato: ${leagueName} / ${countryName}`,
+    );
+  }
+
+  const regularSeasonRounds =
+    Number(
+      supportedLeague
+        .regularSeasonRounds,
+    ) || 38;
+
   const multipla3 =
     emptyMultipleSummary();
 
@@ -11851,7 +13093,8 @@ async function buildAndPersistMultiplesSummary({
 
   for (
     let round = 1;
-    round <= 38;
+    round <=
+      regularSeasonRounds;
     round += 1
   ) {
     const archiveKey =
@@ -11859,8 +13102,12 @@ async function buildAndPersistMultiplesSummary({
         season,
         historicalSeason,
         round,
-        leagueName,
-        countryName,
+        leagueName:
+          supportedLeague
+            .leagueName,
+        countryName:
+          supportedLeague
+            .countryName,
       });
 
     const archived =
@@ -11915,8 +13162,13 @@ async function buildAndPersistMultiplesSummary({
       String(
         historicalSeason,
       ),
-    leagueName,
-    countryName,
+    leagueName:
+      supportedLeague
+        .leagueName,
+    countryName:
+      supportedLeague
+        .countryName,
+    regularSeasonRounds,
     generatedAt:
       new Date()
         .toISOString(),
@@ -11941,13 +13193,51 @@ async function buildAndPersistMultiplesSummary({
   return payload;
 }
 
-async function settlePermanentMultipleHistory() {
+async function settlePermanentMultipleHistory({
+  season =
+    CURRENT_SERIE_A_SEASON,
+  historicalSeason =
+    '2025',
+  leagueName =
+    'Serie A',
+  countryName =
+    'Italy',
+  allowProvider =
+    false,
+} = {}) {
+  const supportedLeague =
+    resolveSupportedLeague({
+      leagueName,
+      countryName,
+    });
+
+  if (!supportedLeague) {
+    return false;
+  }
+
+  const regularSeasonRounds =
+    Number(
+      supportedLeague
+        .regularSeasonRounds,
+    ) || 38;
+
+  const seasonMatches =
+    await loadSupportedLeagueSeasonMatches({
+      season,
+      leagueName:
+        supportedLeague
+          .leagueName,
+      countryName:
+        supportedLeague
+          .countryName,
+    });
+
   const rounds =
     new Map();
 
   for (
     const match
-      of centralSerieAState.matches
+      of seasonMatches
   ) {
     const round =
       roundNumberOf(
@@ -11957,7 +13247,8 @@ async function settlePermanentMultipleHistory() {
     if (
       !round ||
       round < 1 ||
-      round > 38
+      round >
+        regularSeasonRounds
     ) {
       continue;
     }
@@ -11987,15 +13278,15 @@ async function settlePermanentMultipleHistory() {
   ) {
     const archiveKey =
       buildMatchdayMultipleArchiveKey({
-        season:
-          CURRENT_SERIE_A_SEASON,
-        historicalSeason:
-          '2025',
+        season,
+        historicalSeason,
         round,
         leagueName:
-          'Serie A',
+          supportedLeague
+            .leagueName,
         countryName:
-          'Italy',
+          supportedLeague
+            .countryName,
       });
 
     const archived =
@@ -12025,8 +13316,7 @@ async function settlePermanentMultipleHistory() {
         snapshot:
           archived,
         roundMatches,
-        allowProvider:
-          false,
+        allowProvider,
       });
 
     const after3 =
@@ -12049,14 +13339,14 @@ async function settlePermanentMultipleHistory() {
   }
 
   await buildAndPersistMultiplesSummary({
-    season:
-      CURRENT_SERIE_A_SEASON,
-    historicalSeason:
-      '2025',
+    season,
+    historicalSeason,
     leagueName:
-      'Serie A',
+      supportedLeague
+        .leagueName,
     countryName:
-      'Italy',
+      supportedLeague
+        .countryName,
   });
 
   return changed;
@@ -12519,7 +13809,9 @@ async function precomputeUpcomingMatchdayMultiples() {
     // La pagina Pronostici Serie A deve leggere subito l'ultimo snapshot.
     await deleteCacheKey(
       [
-        'matchday-picks-v2',
+        matchdayPicksAggregatePrefixForRound(
+          round,
+        ),
         CURRENT_SERIE_A_SEASON,
         '2025',
         round,
@@ -12562,8 +13854,29 @@ app.get(
           ) || 1,
         );
 
+      const requestedLeague =
+        resolveSupportedLeague({
+          leagueName,
+          countryName,
+        });
+
+      const isCentralSerieARequest =
+        requestedLeague?.key ===
+          'serie-a' &&
+        String(season) ===
+          CURRENT_SERIE_A_SEASON;
+
+      const aggregatePrefix =
+        isCentralSerieARequest
+          ? matchdayPicksAggregatePrefixForRound(
+              parsedRound,
+            )
+          : `${matchdayPicksAggregatePrefixForRound(
+              parsedRound,
+            )}-real-results-v1`;
+
       const cacheKey = [
-        'matchday-picks-v2',
+        aggregatePrefix,
         season,
         historicalSeason,
         parsedRound,
@@ -12612,14 +13925,11 @@ app.get(
       }
 
       const seasonMatches =
-        String(season) ===
-            CURRENT_SERIE_A_SEASON &&
-        String(leagueName).toLowerCase() ===
-            'serie a' &&
-        String(countryName).toLowerCase() ===
-            'italy'
-          ? centralSerieAState.matches
-          : [];
+        await loadSupportedLeagueSeasonMatches({
+          season,
+          leagueName,
+          countryName,
+        });
 
       const roundMatches =
         seasonMatches
@@ -12716,10 +14026,15 @@ app.get(
           });
       }
 
+      const picksConcurrency =
+        isCentralSerieARequest
+          ? 3
+          : 1;
+
       const picks =
         await mapWithConcurrency(
           roundMatches,
-          3,
+          picksConcurrency,
           async (match) => {
             const home =
               match?.homeTeam ?? {};
@@ -12789,14 +14104,34 @@ app.get(
             }
 
             try {
-              const snapshot =
+              let snapshot =
                 await getExistingMatchdayPickSnapshot({
+                  match,
                   matchId:
                     match?.id,
                   historicalSeason,
                   leagueName,
                   countryName,
                 });
+
+              // La Serie A continua a usare esclusivamente il suo scheduler
+              // centrale già stabile. Per gli altri campionati supportati,
+              // se lo snapshot non esiste ancora lo generiamo al primo
+              // caricamento della giornata e poi lo riutilizziamo dalla cache.
+              if (
+                !snapshot?.pick &&
+                !isCentralSerieARequest
+              ) {
+                snapshot =
+                  await getOrCreateMatchdayPickSnapshot({
+                    match,
+                    homeTeamId,
+                    awayTeamId,
+                    historicalSeason,
+                    leagueName,
+                    countryName,
+                  });
+              }
 
               const result =
                 await getOrPersistMatchdayPickResult({
@@ -13051,11 +14386,25 @@ app.get(
 // ====================================================
 
 async function getExistingMatchdayPickSnapshot({
+  match = null,
   matchId,
   historicalSeason,
   leagueName,
   countryName,
 }) {
+  const referenceMatch =
+    match ??
+    centralSerieAState.matches.find(
+      (item) =>
+        String(item?.id) ===
+        String(matchId),
+    );
+
+  const snapshotVersion =
+    matchdayPickSnapshotVersionForMatch(
+      referenceMatch,
+    );
+
   const permanentRecord =
     await getPermanentMatchdayPickRecord({
       matchId,
@@ -13076,7 +14425,7 @@ async function getExistingMatchdayPickSnapshot({
   const current =
     await readMatchdayPickSnapshotVersion({
       version:
-        MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION,
+        snapshotVersion,
       matchId,
       historicalSeason,
       leagueName,
@@ -13087,33 +14436,38 @@ async function getExistingMatchdayPickSnapshot({
     return current.snapshot;
   }
 
-  for (
-    const legacyVersion
-      of MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS
+  if (
+    snapshotVersion ===
+      MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION
   ) {
-    const legacy =
-      await readMatchdayPickSnapshotVersion({
-        version:
-          legacyVersion,
+    for (
+      const legacyVersion
+        of MATCHDAY_PICK_SNAPSHOT_LEGACY_VERSIONS
+    ) {
+      const legacy =
+        await readMatchdayPickSnapshotVersion({
+          version:
+            legacyVersion,
+          matchId,
+          historicalSeason,
+          leagueName,
+          countryName,
+        });
+
+      if (!legacy.snapshot?.pick) {
+        continue;
+      }
+
+      return migrateLegacyMatchdayPickSnapshot({
+        legacyVersion,
         matchId,
         historicalSeason,
         leagueName,
         countryName,
+        snapshot:
+          legacy.snapshot,
       });
-
-    if (!legacy.snapshot?.pick) {
-      continue;
     }
-
-    return migrateLegacyMatchdayPickSnapshot({
-      legacyVersion,
-      matchId,
-      historicalSeason,
-      leagueName,
-      countryName,
-      snapshot:
-        legacy.snapshot,
-    });
   }
 
   return current.snapshot ??
@@ -13324,6 +14678,693 @@ function emptyRoundPredictSummary(
 }
 
 
+
+// ====================================================
+// CLASSIFICA UFFICIALE HIGHLIGHTLY - 5 CAMPIONATI
+// ====================================================
+//
+// La pagina Flutter userà questo endpoint per mostrare la classifica
+// ufficiale del campionato selezionato in una schermata separata.
+// Highlightly richiede leagueId + season per /standings: il leagueId
+// viene risolto automaticamente tramite /leagues.
+//
+app.get(
+  '/api/football/standings',
+  async (req, res) => {
+    try {
+      const {
+        season =
+          CURRENT_SERIE_A_SEASON,
+        leagueName =
+          'Serie A',
+        countryName =
+          'Italy',
+        refresh =
+          '0',
+      } = req.query;
+
+      const supportedLeague =
+        resolveSupportedLeague({
+          leagueName,
+          countryName,
+        });
+
+      if (!supportedLeague) {
+        return res
+          .status(400)
+          .json({
+            error:
+              `Campionato non supportato: ${leagueName} / ${countryName}`,
+          });
+      }
+
+      const normalizedSeason =
+        String(season);
+
+      const forceRefresh =
+        String(refresh) === '1';
+
+      const cacheKey = [
+        'official-standings-v1',
+        normalizedSeason,
+        supportedLeague.key,
+      ].join('-');
+
+      if (!forceRefresh) {
+        const memory =
+          getMemoryCache(
+            cacheKey,
+            OFFICIAL_STANDINGS_CACHE_TIME,
+          );
+
+        if (memory) {
+          return res.json({
+            ...memory,
+            cached: true,
+            cacheSource:
+              'memory',
+          });
+        }
+
+        const disk =
+          await getDiskCache(
+            cacheKey,
+            OFFICIAL_STANDINGS_CACHE_TIME,
+          );
+
+        if (disk) {
+          setMemoryCache(
+            cacheKey,
+            disk,
+          );
+
+          return res.json({
+            ...disk,
+            cached: true,
+            cacheSource:
+              'disk',
+          });
+        }
+      }
+
+      const leaguesPayload =
+        await cachedHighlightlyGet({
+          key: [
+            'official-standings-league-id-v1',
+            normalizedSeason,
+            supportedLeague.key,
+          ].join('-'),
+          apiPath:
+            '/leagues',
+          query: {
+            leagueName:
+              supportedLeague
+                .leagueName,
+            countryName:
+              supportedLeague
+                .countryName,
+            season:
+              normalizedSeason,
+            limit:
+              '20',
+            offset:
+              '0',
+          },
+          ttl:
+            LEAGUE_CACHE_TIME,
+        });
+
+      const leagueCandidates =
+        Array.isArray(
+          leaguesPayload?.data,
+        )
+          ? leaguesPayload.data
+          : Array.isArray(
+                leaguesPayload,
+              )
+              ? leaguesPayload
+              : [];
+
+      const exactLeague =
+        leagueCandidates.find(
+          (league) => {
+            const exactName =
+              normalizeLeagueText(
+                league?.name,
+              ) ===
+              normalizeLeagueText(
+                supportedLeague
+                  .leagueName,
+              );
+
+            const exactCountry =
+              normalizeLeagueText(
+                league?.country
+                  ?.name,
+              ) ===
+              normalizeLeagueText(
+                supportedLeague
+                  .countryName,
+              );
+
+            const seasons =
+              Array.isArray(
+                league?.seasons,
+              )
+                ? league.seasons
+                : [];
+
+            const exactSeason =
+              seasons.length === 0 ||
+              seasons.some(
+                (item) =>
+                  String(
+                    item?.season,
+                  ) ===
+                  normalizedSeason,
+              );
+
+            return (
+              exactName &&
+              exactCountry &&
+              exactSeason
+            );
+          },
+        ) ??
+        leagueCandidates.find(
+          (league) =>
+            normalizeLeagueText(
+              league?.name,
+            ) ===
+            normalizeLeagueText(
+              supportedLeague
+                .leagueName,
+            ),
+        ) ??
+        null;
+
+      const leagueId =
+        Number(
+          exactLeague?.id,
+        );
+
+      if (
+        !Number.isFinite(
+          leagueId,
+        )
+      ) {
+        return res
+          .status(404)
+          .json({
+            error:
+              'Classifica ufficiale non disponibile',
+            message:
+              `League ID non trovato per ${supportedLeague.leagueName} ${normalizedSeason}`,
+          });
+      }
+
+      const standingsPayload =
+        await highlightlyGet(
+          '/standings',
+          {
+            leagueId:
+              String(leagueId),
+            season:
+              normalizedSeason,
+          },
+        );
+
+      const groups =
+        Array.isArray(
+          standingsPayload?.groups,
+        )
+          ? standingsPayload.groups
+          : [];
+
+      const regularSeasonGroup =
+        groups.find(
+          (group) =>
+            normalizeLeagueText(
+              group?.name,
+            ).includes(
+              'regular season',
+            ),
+        ) ??
+        groups.find(
+          (group) =>
+            Array.isArray(
+              group?.standings,
+            ) &&
+            group.standings
+                .length >
+              0,
+        ) ??
+        null;
+
+      const rawStandings =
+        Array.isArray(
+          regularSeasonGroup
+            ?.standings,
+        )
+          ? regularSeasonGroup
+              .standings
+          : [];
+
+      const standings =
+        rawStandings
+          .map(
+            (row) => {
+              const played =
+                Number(
+                  row?.total?.games,
+                ) || 0;
+
+              const wins =
+                Number(
+                  row?.total?.wins,
+                ) || 0;
+
+              const draws =
+                Number(
+                  row?.total?.draws,
+                ) || 0;
+
+              const losses =
+                Number(
+                  row?.total?.loses,
+                ) || 0;
+
+              const goalsFor =
+                Number(
+                  row?.total
+                    ?.scoredGoals,
+                ) || 0;
+
+              const goalsAgainst =
+                Number(
+                  row?.total
+                    ?.receivedGoals,
+                ) || 0;
+
+              return {
+                position:
+                  Number(
+                    row?.position,
+                  ) || 0,
+
+                team: {
+                  id:
+                    row?.team?.id ??
+                    null,
+
+                  name:
+                    row?.team?.name ??
+                    '',
+
+                  logo:
+                    row?.team?.logo ??
+                    null,
+                },
+
+                played,
+                wins,
+                draws,
+                losses,
+                goalsFor,
+                goalsAgainst,
+
+                goalDifference:
+                  goalsFor -
+                  goalsAgainst,
+
+                points:
+                  Number(
+                    row?.points,
+                  ) || 0,
+              };
+            },
+          )
+          .filter(
+            (row) =>
+              row.position >
+                0 &&
+              row.team.name
+                .trim()
+                .length >
+                0,
+          )
+          .sort(
+            (a, b) =>
+              a.position -
+              b.position,
+          );
+
+      if (
+        standings.length ===
+        0
+      ) {
+        return res
+          .status(404)
+          .json({
+            error:
+              'Classifica ufficiale non disponibile',
+            message:
+              `Nessuna classifica restituita da Highlightly per ${supportedLeague.leagueName} ${normalizedSeason}`,
+          });
+      }
+
+      const payload = {
+        season:
+          normalizedSeason,
+
+        leagueName:
+          supportedLeague
+            .leagueName,
+
+        countryName:
+          supportedLeague
+            .countryName,
+
+        leagueId,
+
+        leagueLogo:
+          standingsPayload
+            ?.league?.logo ??
+          exactLeague?.logo ??
+          null,
+
+        groupName:
+          regularSeasonGroup
+            ?.name ??
+          null,
+
+        generatedAt:
+          new Date()
+            .toISOString(),
+
+        source:
+          'highlightly-official-standings',
+
+        standings,
+      };
+
+      setMemoryCache(
+        cacheKey,
+        payload,
+      );
+
+      await setDiskCache(
+        cacheKey,
+        payload,
+      );
+
+      res.json({
+        ...payload,
+        cached:
+          false,
+      });
+    } catch (error) {
+      sendApiError(
+        res,
+        error,
+      );
+    }
+  },
+);
+
+
+// ====================================================
+// RISULTATI GIORNATE PRECEDENTI - 5 CAMPIONATI
+// ====================================================
+//
+// Recupera esclusivamente risultati REALI conclusi dal provider.
+// Non crea, ricostruisce o modifica pronostici PREDICT retroattivi.
+// Serie A giornata 1/2 e snapshot storici restano quindi intoccati.
+//
+app.get(
+  '/api/football/season-results',
+  async (req, res) => {
+    try {
+      const {
+        season =
+          CURRENT_SERIE_A_SEASON,
+        leagueName =
+          'Serie A',
+        countryName =
+          'Italy',
+      } = req.query;
+
+      const supportedLeague =
+        resolveSupportedLeague({
+          leagueName,
+          countryName,
+        });
+
+      if (!supportedLeague) {
+        return res
+          .status(400)
+          .json({
+            error:
+              `Campionato non supportato: ${leagueName} / ${countryName}`,
+          });
+      }
+
+      const regularSeasonRounds =
+        Number(
+          supportedLeague
+            .regularSeasonRounds,
+        ) || 38;
+
+      const seasonMatches =
+        await loadSupportedLeagueSeasonMatches({
+          season,
+          leagueName:
+            supportedLeague
+              .leagueName,
+          countryName:
+            supportedLeague
+              .countryName,
+        });
+
+      const roundsMap =
+        new Map();
+
+      for (
+        const match
+          of seasonMatches
+      ) {
+        const round =
+          roundNumberOf(
+            match,
+          );
+
+        if (
+          !round ||
+          round < 1 ||
+          round >
+            regularSeasonRounds
+        ) {
+          continue;
+        }
+
+        if (!roundsMap.has(round)) {
+          roundsMap.set(
+            round,
+            {
+              round,
+              scheduledMatches: 0,
+              finishedMatches: 0,
+              completed: false,
+              matches: [],
+            },
+          );
+        }
+
+        const roundData =
+          roundsMap.get(round);
+
+        roundData.scheduledMatches +=
+          1;
+
+        const score =
+          parseScore(
+            match,
+          );
+
+        const finished =
+          isFinishedMatch(
+            match,
+          ) &&
+          Boolean(score);
+
+        if (!finished) {
+          continue;
+        }
+
+        roundData.finishedMatches +=
+          1;
+
+        const home =
+          match?.homeTeam ?? {};
+
+        const away =
+          match?.awayTeam ?? {};
+
+        roundData.matches.push({
+          matchId:
+            match?.id ?? null,
+
+          date:
+            match?.date ?? null,
+
+          round,
+
+          status:
+            match?.state
+              ?.description ??
+            'Finished',
+
+          homeTeam: {
+            id:
+              teamIdOf(home),
+
+            name:
+              home?.name ?? '',
+
+            logo:
+              home?.logo ?? null,
+          },
+
+          awayTeam: {
+            id:
+              teamIdOf(away),
+
+            name:
+              away?.name ?? '',
+
+            logo:
+              away?.logo ?? null,
+          },
+
+          score: {
+            home:
+              score.home,
+
+            away:
+              score.away,
+
+            display:
+              `${score.home}-${score.away}`,
+          },
+        });
+      }
+
+      const rounds =
+        Array.from(
+          roundsMap.values(),
+        )
+          .map(
+            (roundData) => ({
+              ...roundData,
+
+              completed:
+                roundData
+                  .scheduledMatches >
+                  0 &&
+                roundData
+                  .finishedMatches ===
+                  roundData
+                    .scheduledMatches,
+
+              matches:
+                roundData
+                  .matches
+                  .sort(
+                    (a, b) =>
+                      Date.parse(
+                        a?.date ?? '',
+                      ) -
+                      Date.parse(
+                        b?.date ?? '',
+                      ),
+                  ),
+            }),
+          )
+          // Mostriamo solo giornate in cui esiste almeno un risultato reale.
+          .filter(
+            (roundData) =>
+              roundData
+                .finishedMatches >
+              0,
+          )
+          .sort(
+            (a, b) =>
+              a.round -
+              b.round,
+          );
+
+      const completedRounds =
+        rounds.filter(
+          (roundData) =>
+            roundData.completed,
+        );
+
+      const finishedMatches =
+        rounds.reduce(
+          (
+            total,
+            roundData,
+          ) =>
+            total +
+            roundData
+              .finishedMatches,
+          0,
+        );
+
+      res.json({
+        season:
+          String(season),
+
+        leagueName:
+          supportedLeague
+            .leagueName,
+
+        countryName:
+          supportedLeague
+            .countryName,
+
+        regularSeasonRounds,
+
+        roundsWithResults:
+          rounds.length,
+
+        completedRounds:
+          completedRounds.length,
+
+        finishedMatches,
+
+        generatedAt:
+          new Date()
+            .toISOString(),
+
+        source:
+          'highlightly-real-results',
+
+        note:
+          'Solo risultati reali conclusi. Nessun pronostico PREDICT viene ricostruito retroattivamente.',
+
+        rounds,
+      });
+    } catch (error) {
+      sendApiError(
+        res,
+        error,
+      );
+    }
+  },
+);
+
+
 app.get(
   '/api/football/multiples-summary',
   async (req, res) => {
@@ -13370,28 +15411,46 @@ app.get(
         });
       }
 
-      if (
-        forceRefresh &&
-        String(season) ===
-          CURRENT_SERIE_A_SEASON &&
-        String(
+      const supportedLeague =
+        resolveSupportedLeague({
           leagueName,
-        ).toLowerCase() ===
-          'serie a' &&
-        String(
           countryName,
-        ).toLowerCase() ===
-          'italy'
-      ) {
-        await settlePermanentMultipleHistory();
+        });
+
+      if (!supportedLeague) {
+        return res
+          .status(400)
+          .json({
+            error:
+              `Campionato non supportato: ${leagueName} / ${countryName}`,
+          });
+      }
+
+      if (forceRefresh) {
+        await settlePermanentMultipleHistory({
+          season,
+          historicalSeason,
+          leagueName:
+            supportedLeague
+              .leagueName,
+          countryName:
+            supportedLeague
+              .countryName,
+          allowProvider:
+            true,
+        });
       }
 
       const payload =
         await buildAndPersistMultiplesSummary({
           season,
           historicalSeason,
-          leagueName,
-          countryName,
+          leagueName:
+            supportedLeague
+              .leagueName,
+          countryName:
+            supportedLeague
+              .countryName,
         });
 
       res.json({
@@ -13432,7 +15491,7 @@ app.get(
       } = req.query;
 
       const cacheKey = [
-        'season-picks-summary-v1',
+        'season-picks-summary-v2-multileague',
         season,
         historicalSeason,
         leagueName,
@@ -13492,15 +15551,39 @@ app.get(
         }
       }
 
+      const supportedLeague =
+        resolveSupportedLeague({
+          leagueName,
+          countryName,
+        });
+
+      if (!supportedLeague) {
+        return res
+          .status(400)
+          .json({
+            error:
+              `Campionato non supportato: ${leagueName} / ${countryName}`,
+          });
+      }
+
+      const regularSeasonRounds =
+        Number(
+          supportedLeague
+            .regularSeasonRounds,
+        ) || 38;
+
+      // Usa la stessa sorgente calendario già adottata da matchday-picks:
+      // Serie A continua a leggere lo scheduler centrale esistente,
+      // mentre Premier League, Bundesliga, Ligue 1 e La Liga leggono
+      // la stagione corrente Highlightly filtrata sulla Regular Season.
       const seasonMatches =
-        String(season) ===
-            CURRENT_SERIE_A_SEASON &&
-        String(leagueName).toLowerCase() ===
-            'serie a' &&
-        String(countryName).toLowerCase() ===
-            'italy'
-          ? centralSerieAState.matches
-          : [];
+        await loadSupportedLeagueSeasonMatches({
+          season,
+          leagueName:
+            supportedLeague.leagueName,
+          countryName:
+            supportedLeague.countryName,
+        });
 
       if (
         seasonMatches.length === 0 &&
@@ -13517,7 +15600,8 @@ app.get(
       const rounds =
         Array.from(
           {
-            length: 38,
+            length:
+              regularSeasonRounds,
           },
           (_, index) =>
             emptyRoundPredictSummary(
@@ -13548,7 +15632,8 @@ app.get(
             if (
               !round ||
               round < 1 ||
-              round > 38
+              round >
+                regularSeasonRounds
             ) {
               return null;
             }
@@ -13566,8 +15651,12 @@ app.get(
                 matchId:
                   match?.id,
                 historicalSeason,
-                leagueName,
-                countryName,
+                leagueName:
+                  supportedLeague
+                    .leagueName,
+                countryName:
+                  supportedLeague
+                    .countryName,
               });
 
             if (
@@ -13584,8 +15673,12 @@ app.get(
                 match,
                 snapshot,
                 historicalSeason,
-                leagueName,
-                countryName,
+                leagueName:
+                  supportedLeague
+                    .leagueName,
+                countryName:
+                  supportedLeague
+                    .countryName,
                 allowProvider:
                   forceRefresh,
               });
@@ -13693,8 +15786,14 @@ app.get(
             historicalSeason,
           ),
 
-        leagueName,
-        countryName,
+        leagueName:
+          supportedLeague
+            .leagueName,
+        countryName:
+          supportedLeague
+            .countryName,
+
+        regularSeasonRounds,
 
         generatedAt:
           new Date()
@@ -13887,6 +15986,7 @@ app.listen(
     );
 
     console.log(
+      '- /api/football/season-results?season=2026&leagueName=Premier%20League&countryName=England',
       '- /api/football/multiples-summary?season=2026&historicalSeason=2025',
     );
 
