@@ -15535,14 +15535,15 @@ app.get(
             ) ??
           [];
 
-        // La cache centrale può essere presente ma non ancora contenere
-        // la data richiesta. In quel caso NON restituiamo un array vuoto:
-        // lasciamo proseguire verso il fallback pubblico a cache breve.
+        // Le richieste pubbliche leggono solo la cache centrale PREDICT.
+        // Se il calendario centrale della stagione è già caricato, una data
+        // assente è un risultato valido vuoto e NON deve generare fallback
+        // verso Highlightly su iniziativa dell'utente.
         if (
+          centralSerieAState.matches.length > 0 &&
           Array.isArray(
             centralMatchesForDate,
-          ) &&
-          centralMatchesForDate.length > 0
+          )
         ) {
           return res.json({
             data:
@@ -15625,8 +15626,7 @@ app.get(
             centralState.matches.length > 0 &&
             Array.isArray(
               centralMatchesForDate,
-            ) &&
-            centralMatchesForDate.length > 0
+            )
           ) {
             return res.json({
               data:
@@ -15649,15 +15649,40 @@ app.get(
                   centralState.lastScheduleSyncAt,
                 lastLiveSyncAt:
                   centralState.lastLiveSyncAt,
+                providerCallsAllowed:
+                  false,
               },
             });
           }
+
+          // Un utente non deve mai trasformare un cache miss in una chiamata
+          // Highlightly. Se lo scheduler non ha ancora preparato la stagione,
+          // chiediamo al client di riprovare invece di contattare il provider.
+          return res
+            .status(503)
+            .json({
+              error:
+                'Cache PREDICT del campionato non ancora pronta',
+              retryLater:
+                true,
+              providerCallsAllowed:
+                false,
+              leagueKey:
+                supportedLeague.key,
+              leagueName:
+                supportedLeague.leagueName,
+              countryName:
+                supportedLeague.countryName,
+              season:
+                String(query.season),
+              date:
+                requestedDate,
+            });
         }
 
-        // Se lo stato centrale non è ancora disponibile (o per le coppe UEFA),
-        // leggiamo la singola data con una cache breve. Per le coppe UEFA
-        // vengono provati gli alias provider configurati senza imporre
-        // il filtro "Regular Season".
+        // Le coppe UEFA mantengono il percorso dedicato esistente.
+        // La protezione cache-only qui riguarda i 5 campionati nazionali,
+        // inclusa la Multipla internazionale.
         const dateResult =
           await fetchSupportedCompetitionMatchesPage({
             competition:
@@ -23895,7 +23920,32 @@ app.get(
           countryName:
             supportedLeague
               .countryName,
+          // Endpoint pubblico: solo stato centrale/cache PREDICT.
+          // Mai fallback Highlightly provocato dall'utente.
+          allowProviderFallback:
+            false,
         });
+
+      if (seasonMatches.length === 0) {
+        return res
+          .status(503)
+          .json({
+            error:
+              'Cache PREDICT del campionato non ancora pronta',
+            retryLater:
+              true,
+            providerCallsAllowed:
+              false,
+            season:
+              String(season),
+            leagueName:
+              supportedLeague
+                .leagueName,
+            countryName:
+              supportedLeague
+                .countryName,
+          });
+      }
 
       const nowMs =
         Date.now();
@@ -24276,7 +24326,16 @@ app.get(
           : 'round-mode',
       ].join('-');
 
+      const internalRequest =
+        req.get(
+          'x-predict-internal',
+        ) ===
+        INTERNAL_SYNC_TOKEN;
+
+      // refresh=1 proveniente dall'app resta una semplice rilettura cache.
+      // Solo un job interno autenticato può abilitare un refresh provider.
       const forceRefresh =
+        internalRequest &&
         String(refresh) === '1';
 
       if (!forceRefresh) {
@@ -24321,6 +24380,12 @@ app.get(
           season,
           leagueName,
           countryName,
+          // Per i 5 campionati nazionali l'utente legge esclusivamente
+          // lo stato centrale/cache. Le coppe mantengono per ora il loro
+          // percorso dedicato già esistente.
+          allowProviderFallback:
+            isCupRequest ||
+            internalRequest,
         });
 
       const roundMatches =
@@ -24527,12 +24592,17 @@ app.get(
                   countryName,
                 });
 
-              // Se lo snapshot non esiste ancora, lo generiamo on-demand
-              // per tutti i campionati nazionali supportati, Serie A compresa.
-              // In produzione lo scheduler centrale può continuare a pre-generare
-              // la Serie A; questo fallback evita però "Pronostici non disponibili"
-              // quando lo scheduler è disattivato o lo snapshot non è ancora presente.
-              if (!snapshot?.pick) {
+              // Nei 5 campionati nazionali lo snapshot deve essere stato
+              // preparato dallo scheduler PREDICT: l'apertura dell'app non deve
+              // generarlo on-demand e quindi non deve innescare Highlightly.
+              // Le coppe UEFA mantengono per ora il percorso dedicato esistente.
+              if (
+                !snapshot?.pick &&
+                (
+                  isCupRequest ||
+                  internalRequest
+                )
+              ) {
                 snapshot =
                   await getOrCreateMatchdayPickSnapshot({
                     match,
@@ -25864,7 +25934,14 @@ app.get(
           '0',
       } = req.query;
 
+      const internalRequest =
+        req.get(
+          'x-predict-internal',
+        ) ===
+        INTERNAL_SYNC_TOKEN;
+
       const forceRefresh =
+        internalRequest &&
         String(refresh) === '1';
 
       const supportedLeague =
@@ -25995,7 +26072,14 @@ app.get(
         countryName,
       ].join('-');
 
+      const internalRequest =
+        req.get(
+          'x-predict-internal',
+        ) ===
+        INTERNAL_SYNC_TOKEN;
+
       const forceRefresh =
+        internalRequest &&
         String(refresh) === '1';
 
       const historyArchiveKey =
@@ -26096,6 +26180,8 @@ app.get(
             supportedLeague.leagueName,
           countryName:
             supportedLeague.countryName,
+          allowProviderFallback:
+            internalRequest,
         });
 
       if (
