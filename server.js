@@ -22016,6 +22016,10 @@ async function buildNationalMultiGoalPreview({
         league.leagueName,
       countryName:
         league.countryName,
+      // In produzione la preview pubblica legge solo cache/stato centrale PREDICT.
+      // Il provider resta disponibile esclusivamente nei test locali espliciti.
+      allowProviderFallback:
+        allowProvider,
     });
 
   let round =
@@ -22400,32 +22404,21 @@ app.get(
       }
 
       // MULTIGOL INTERNAZIONALE:
-      // usa esclusivamente le partite ancora da giocare NELLA DATA ODIERNA
-      // (Europe/Rome). Non cerca più il prossimo turno futuro di ogni lega
-      // per riempire artificialmente 3X / 5X / 10X.
+      // usa il PROSSIMO TURNO FUTURO disponibile di ciascuno dei 5
+      // campionati nazionali supportati. Le selezioni vengono poi unite
+      // e ordinate per costruire 3X / 5X / 10X.
       //
-      // Il parametro date è opzionale ed è utile solo per test locali:
-      // se non viene passato, viene sempre usata la data odierna a Roma.
-      const requestedInternationalDate =
-        String(
-          date ?? '',
-        ).trim();
-
-      const internationalDate =
-        /^\d{4}-\d{2}-\d{2}$/.test(
-          requestedInternationalDate,
-        )
-          ? requestedInternationalDate
-          : highlightlyRomeDayKey();
-
+      // In produzione questo endpoint e' rigorosamente cache-only:
+      // nessuna apertura della pagina da parte di un utente puo' generare
+      // chiamate Highlightly. Se un'analisi non e' ancora presente nella
+      // cache PREDICT, quella partita viene semplicemente saltata.
       const leaguePreviews = [];
 
       const allCandidates = [];
 
       const skipped = [];
 
-      const nowMs =
-        Date.now();
+      const internationalRoundStarts = [];
 
       for (
         const league
@@ -22461,6 +22454,8 @@ app.get(
                 league.leagueName,
               countryName:
                 league.countryName,
+              allowProviderFallback:
+                providerAllowed,
             });
         } catch (error) {
           leaguePreviews.push({
@@ -22470,13 +22465,10 @@ app.get(
             countryName:
               league.countryName,
 
-            date:
-              internationalDate,
+            round:
+              null,
 
-            matchesToday:
-              0,
-
-            futureMatchesToday:
+            matchesInFutureRound:
               0,
 
             candidateCount:
@@ -22490,59 +22482,77 @@ app.get(
           continue;
         }
 
-        const matchesToday =
-          (
-            seasonMatches ?? []
-          ).filter(
-            (match) => {
-              const startMs =
-                Date.parse(
-                  match?.date ?? '',
-                );
-
-              if (
-                !Number.isFinite(
-                  startMs,
-                )
-              ) {
-                return false;
-              }
-
-              return (
-                highlightlyRomeDayKey(
-                  new Date(
-                    startMs,
-                  ),
-                ) ===
-                internationalDate
-              );
-            },
+        const nextRound =
+          nextFutureRoundForMultiGoal(
+            seasonMatches,
           );
 
-        const futureMatchesToday =
-          matchesToday.filter(
-            (match) => {
-              const startMs =
-                Date.parse(
-                  match?.date ?? '',
-                );
-
-              return (
-                Number.isFinite(
-                  startMs,
-                ) &&
-                startMs >
-                  nowMs
-              );
-            },
+        const nextRoundNumber =
+          Number(
+            nextRound?.round,
           );
+
+        const futureRoundMatches =
+          Array.isArray(
+            nextRound?.matches,
+          )
+            ? nextRound.matches
+            : [];
+
+        const firstStartMs =
+          Number(
+            nextRound?.firstStart,
+          );
+
+        if (
+          Number.isFinite(
+            firstStartMs,
+          )
+        ) {
+          internationalRoundStarts.push(
+            firstStartMs,
+          );
+        }
+
+        if (
+          !Number.isFinite(
+            nextRoundNumber,
+          ) ||
+          futureRoundMatches.length ===
+            0
+        ) {
+          leaguePreviews.push({
+            leagueName:
+              league.leagueName,
+
+            countryName:
+              league.countryName,
+
+            round:
+              null,
+
+            firstMatchAt:
+              null,
+
+            matchesInFutureRound:
+              0,
+
+            candidateCount:
+              0,
+
+            reason:
+              'Nessuna giornata futura disponibile nella cache PREDICT',
+          });
+
+          continue;
+        }
 
         let leagueCandidateCount =
           0;
 
         for (
           const match
-            of futureMatchesToday
+            of futureRoundMatches
         ) {
           try {
             const built =
@@ -22585,6 +22595,9 @@ app.get(
                 countryName:
                   league.countryName,
 
+                round:
+                  nextRoundNumber,
+
                 homeTeam:
                   match?.homeTeam
                     ?.name ??
@@ -22612,6 +22625,9 @@ app.get(
               countryName:
                 league.countryName,
 
+              round:
+                nextRoundNumber,
+
               homeTeam:
                 match?.homeTeam
                   ?.name ??
@@ -22636,14 +22652,20 @@ app.get(
           countryName:
             league.countryName,
 
-          date:
-            internationalDate,
+          round:
+            nextRoundNumber,
 
-          matchesToday:
-            matchesToday.length,
+          firstMatchAt:
+            Number.isFinite(
+              firstStartMs,
+            )
+              ? new Date(
+                  firstStartMs,
+                ).toISOString()
+              : null,
 
-          futureMatchesToday:
-            futureMatchesToday.length,
+          matchesInFutureRound:
+            futureRoundMatches.length,
 
           candidateCount:
             leagueCandidateCount,
@@ -22653,6 +22675,37 @@ app.get(
       sortMultiGoalMatchCandidates(
         allCandidates,
       );
+
+      const internationalDate =
+        internationalRoundStarts.length >
+          0
+          ? highlightlyRomeDayKey(
+              new Date(
+                Math.min(
+                  ...internationalRoundStarts,
+                ),
+              ),
+            )
+          : highlightlyRomeDayKey();
+
+      // Firma informativa delle giornate coinvolte. Ogni campionato puo'
+      // trovarsi su un numero di giornata diverso, quindi non esiste un
+      // singolo round internazionale numerico.
+      const internationalRoundSignature =
+        leaguePreviews
+          .filter(
+            (item) =>
+              Number.isFinite(
+                Number(
+                  item?.round,
+                ),
+              ),
+          )
+          .map(
+            (item) =>
+              `${item.leagueName}:${item.round}`,
+          )
+          .join('|');
 
       const multigol3 =
         await getOrFreezeMultiGoalAccumulator({
@@ -22669,9 +22722,9 @@ app.get(
                   historicalSeason,
                 ),
               round:
-                '',
+                internationalRoundSignature,
               leagueName:
-                '__international__',
+                '__international_next_rounds__',
               countryName:
                 '__international__',
               date:
@@ -22703,9 +22756,9 @@ app.get(
                   historicalSeason,
                 ),
               round:
-                '',
+                internationalRoundSignature,
               leagueName:
-                '__international__',
+                '__international_next_rounds__',
               countryName:
                 '__international__',
               date:
@@ -22737,9 +22790,9 @@ app.get(
                   historicalSeason,
                 ),
               round:
-                '',
+                internationalRoundSignature,
               leagueName:
-                '__international__',
+                '__international_next_rounds__',
               countryName:
                 '__international__',
               date:
@@ -22776,7 +22829,10 @@ app.get(
           internationalDate,
 
         note:
-          'Multiple Multigol Internazionali 3X, 5X e 10X: usa esclusivamente le partite ancora da giocare oggi nei 5 campionati nazionali. Non prende partite dei giorni successivi. Preview separata dall Analisi partita.',
+          'Multiple Multigol Internazionali 3X, 5X e 10X: combina le migliori selezioni disponibili nella cache PREDICT del prossimo turno futuro di ciascuno dei 5 campionati nazionali. Nessuna chiamata provider viene generata dagli utenti.',
+
+        roundSignature:
+          internationalRoundSignature,
 
         leagues:
           leaguePreviews,
