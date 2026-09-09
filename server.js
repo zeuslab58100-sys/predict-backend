@@ -789,10 +789,25 @@ async function fetchSupportedCompetitionMatchesPage({
     throw error;
   }
 
+  // Per le coppe UEFA usiamo esclusivamente il nome provider configurato.
+  // Il nome canonico PREDICT resta valido per il routing del frontend, ma non
+  // viene usato come secondo tentativo verso Highlightly: evita chiamate doppie
+  // come "UEFA Europa League" + "Europa League" sullo stesso cache miss.
   const candidates =
-    providerLeagueNamesOf(
-      competition,
-    );
+    competition?.isCup === true &&
+    Array.isArray(
+      competition?.providerLeagueNames,
+    ) &&
+    competition.providerLeagueNames.length > 0
+      ? competition.providerLeagueNames
+          .map(
+            (value) =>
+              String(value ?? '').trim(),
+          )
+          .filter(Boolean)
+      : providerLeagueNamesOf(
+          competition,
+        );
 
   const orderedCandidates = [
     ...(
@@ -15156,7 +15171,446 @@ function canonicalCupLiveMatch(
   };
 }
 
-async function loadSupportedCupLiveMatches(
+const CENTRAL_UEFA_SCHEDULE_INTERVAL =
+  6 * 60 * 60 * 1000;
+
+const CENTRAL_UEFA_TICK_INTERVAL =
+  15 * 60 * 1000;
+
+const CENTRAL_SHARED_LIVE_INTERVAL =
+  LIVE_MATCHES_CACHE_TIME;
+
+const CENTRAL_UEFA_CUPS =
+  Object.freeze(
+    SUPPORTED_LEAGUE_LIST.filter(
+      (item) =>
+        item?.isCup === true,
+    ),
+  );
+
+const centralUefaCupStates =
+  new Map(
+    CENTRAL_UEFA_CUPS.map(
+      (competition) => [
+        competition.key,
+        {
+          matches: [],
+          byDate: new Map(),
+          lastScheduleSyncAt: null,
+          lastLiveSyncAt: null,
+        },
+      ],
+    ),
+  );
+
+let centralUefaScheduleRunning =
+  false;
+
+let centralSharedLiveRunning =
+  false;
+
+function centralUefaCupStateOf(
+  competitionOrKey,
+) {
+  const key =
+    typeof competitionOrKey === 'string'
+      ? competitionOrKey
+      : competitionOrKey?.key;
+
+  return (
+    centralUefaCupStates.get(
+      String(key ?? ''),
+    ) ??
+    null
+  );
+}
+
+function rebuildCentralUefaCupIndex(
+  competition,
+) {
+  const state =
+    centralUefaCupStateOf(
+      competition,
+    );
+
+  if (!state) {
+    return;
+  }
+
+  const byDate =
+    new Map();
+
+  for (
+    const match
+      of state.matches
+  ) {
+    const dateKey =
+      liveRomeDateKey(
+        match?.date,
+      );
+
+    if (!dateKey) {
+      continue;
+    }
+
+    if (!byDate.has(dateKey)) {
+      byDate.set(
+        dateKey,
+        [],
+      );
+    }
+
+    byDate
+      .get(dateKey)
+      .push(match);
+  }
+
+  for (
+    const matches
+      of byDate.values()
+  ) {
+    matches.sort(
+      (a, b) =>
+        Date.parse(
+          a?.date ?? '',
+        ) -
+        Date.parse(
+          b?.date ?? '',
+        ),
+    );
+  }
+
+  state.byDate =
+    byDate;
+}
+
+function mergeCentralUefaCupMatches(
+  competition,
+  incoming,
+) {
+  const state =
+    centralUefaCupStateOf(
+      competition,
+    );
+
+  if (!state) {
+    return;
+  }
+
+  const byId =
+    new Map();
+
+  for (
+    const match
+      of state.matches
+  ) {
+    if (
+      match?.id !== undefined &&
+      match?.id !== null
+    ) {
+      byId.set(
+        String(match.id),
+        match,
+      );
+    }
+  }
+
+  for (
+    const match
+      of incoming ?? []
+  ) {
+    if (
+      match?.id !== undefined &&
+      match?.id !== null
+    ) {
+      byId.set(
+        String(match.id),
+        match,
+      );
+    }
+  }
+
+  state.matches =
+    Array.from(
+      byId.values(),
+    ).sort(
+      (a, b) =>
+        Date.parse(
+          a?.date ?? '',
+        ) -
+        Date.parse(
+          b?.date ?? '',
+        ),
+    );
+
+  rebuildCentralUefaCupIndex(
+    competition,
+  );
+}
+
+async function persistCentralUefaCupState() {
+  const competitions = {};
+
+  for (
+    const competition
+      of CENTRAL_UEFA_CUPS
+  ) {
+    const state =
+      centralUefaCupStateOf(
+        competition,
+      );
+
+    competitions[
+      competition.key
+    ] = {
+      matches:
+        state?.matches ?? [],
+      lastScheduleSyncAt:
+        state?.lastScheduleSyncAt ??
+        null,
+      lastLiveSyncAt:
+        state?.lastLiveSyncAt ??
+        null,
+    };
+  }
+
+  await setDiskCache(
+    'central-uefa-cups-state-v1',
+    {
+      competitions,
+      savedAt:
+        new Date()
+          .toISOString(),
+    },
+  );
+}
+
+async function restoreCentralUefaCupState() {
+  const disk =
+    await getDiskCache(
+      'central-uefa-cups-state-v1',
+      30 * 24 * 60 * 60 * 1000,
+    );
+
+  if (
+    !disk?.competitions ||
+    typeof disk.competitions !==
+      'object'
+  ) {
+    return false;
+  }
+
+  let restored =
+    false;
+
+  for (
+    const competition
+      of CENTRAL_UEFA_CUPS
+  ) {
+    const state =
+      centralUefaCupStateOf(
+        competition,
+      );
+
+    const saved =
+      disk.competitions[
+        competition.key
+      ];
+
+    if (
+      !state ||
+      !Array.isArray(
+        saved?.matches,
+      )
+    ) {
+      continue;
+    }
+
+    state.matches =
+      saved.matches;
+
+    state.lastScheduleSyncAt =
+      saved.lastScheduleSyncAt ??
+      null;
+
+    state.lastLiveSyncAt =
+      saved.lastLiveSyncAt ??
+      null;
+
+    rebuildCentralUefaCupIndex(
+      competition,
+    );
+
+    restored =
+      restored ||
+      state.matches.length > 0;
+  }
+
+  return restored;
+}
+
+async function syncCentralUefaCupSchedule(
+  competition,
+  {
+    force = false,
+  } = {},
+) {
+  const state =
+    centralUefaCupStateOf(
+      competition,
+    );
+
+  if (!state) {
+    return false;
+  }
+
+  const previous =
+    Date.parse(
+      state.lastScheduleSyncAt ??
+        '',
+    );
+
+  if (
+    !force &&
+    Number.isFinite(
+      previous,
+    ) &&
+    Date.now() - previous <
+      CENTRAL_UEFA_SCHEDULE_INTERVAL
+  ) {
+    return false;
+  }
+
+  console.log(
+    `PREDICT CENTRAL UEFA: sincronizzo calendario ${competition.leagueName}`,
+  );
+
+  const matches =
+    await fetchEntireLeagueSeason({
+      season:
+        competition.currentSeason,
+      leagueName:
+        competition.leagueName,
+      countryName:
+        competition.countryName,
+    });
+
+  state.matches =
+    uniqueMatches(
+      matches,
+    ).sort(
+      (a, b) =>
+        Date.parse(
+          a?.date ?? '',
+        ) -
+        Date.parse(
+          b?.date ?? '',
+        ),
+    );
+
+  state.lastScheduleSyncAt =
+    new Date()
+      .toISOString();
+
+  rebuildCentralUefaCupIndex(
+    competition,
+  );
+
+  console.log(
+    `PREDICT CENTRAL UEFA: ${competition.leagueName} aggiornata (${state.matches.length} partite)`,
+  );
+
+  return true;
+}
+
+async function syncCentralUefaSchedules({
+  force = false,
+} = {}) {
+  let changed =
+    false;
+
+  for (
+    const competition
+      of CENTRAL_UEFA_CUPS
+  ) {
+    try {
+      const competitionChanged =
+        await syncCentralUefaCupSchedule(
+          competition,
+          {
+            force,
+          },
+        );
+
+      changed =
+        competitionChanged ||
+        changed;
+    } catch (error) {
+      console.warn(
+        `PREDICT CENTRAL UEFA calendario ${competition.leagueName} non aggiornato:`,
+        error?.message ??
+          error,
+      );
+
+      if (
+        isHighlightlyRateLimitError(
+          error,
+        )
+      ) {
+        console.warn(
+          'PREDICT CENTRAL UEFA: rate limit 429 rilevato, interrompo il ciclo calendario.',
+        );
+        break;
+      }
+    }
+  }
+
+  if (changed) {
+    await persistCentralUefaCupState();
+  }
+
+  return changed;
+}
+
+function buildCentralUefaLiveMatches(
+  now = new Date(),
+) {
+  const matches = [];
+
+  for (
+    const competition
+      of CENTRAL_UEFA_CUPS
+  ) {
+    const state =
+      centralUefaCupStateOf(
+        competition,
+      );
+
+    for (
+      const match
+        of state?.matches ?? []
+    ) {
+      if (
+        centralMatchIsLiveNow(
+          match,
+          now,
+        )
+      ) {
+        matches.push(
+          canonicalCupLiveMatch(
+            match,
+            competition,
+            now,
+          ),
+        );
+      }
+    }
+  }
+
+  return matches;
+}
+
+async function syncCentralUefaLive(
   now = new Date(),
 ) {
   const today =
@@ -15165,115 +15619,302 @@ async function loadSupportedCupLiveMatches(
     );
 
   if (!today) {
-    return [];
+    return false;
   }
 
-  const cupMatches = [];
+  let changed =
+    false;
 
   for (
     const competition
-      of SUPPORTED_LEAGUE_LIST.filter(
-        (item) =>
-          item?.isCup === true,
-      )
+      of CENTRAL_UEFA_CUPS
   ) {
-    try {
-      // Prima leggiamo il calendario con cache lenta.
-      // Solo se la coppa ha una finestra plausibilmente LIVE
-      // facciamo il refresh breve da 55 secondi.
-      const scheduleResult =
-        await fetchSupportedCompetitionMatchesPage({
-          competition,
-          season:
-            competition.currentSeason,
-          date:
-            today,
-          limit:
-            '100',
-          offset:
-            '0',
-          cacheKeyPrefix:
-            'predict-cup-live-schedule-v1',
-          ttl:
-            CUP_LIVE_SCHEDULE_CACHE_TIME,
-        });
+    const state =
+      centralUefaCupStateOf(
+        competition,
+      );
 
-      const scheduledToday =
-        (
-          scheduleResult.matches ??
-          []
-        ).filter(
-          (match) =>
-            liveRomeDateKey(
-              match?.date,
-            ) === today,
+    const scheduledToday =
+      state?.byDate
+        ?.get(
+          today,
+        ) ??
+      [];
+
+    if (
+      !state ||
+      !cupHasPossibleLiveWindow(
+        scheduledToday,
+        now,
+      )
+    ) {
+      continue;
+    }
+
+    const providerLeagueName =
+      competition
+        .providerLeagueNames?.[0] ??
+      competition.leagueName;
+
+    try {
+      console.log(
+        `PREDICT CENTRAL UEFA LIVE ${competition.leagueName}: aggiorno ${today}`,
+      );
+
+      const data =
+        await highlightlyGet(
+          '/matches',
+          {
+            date:
+              today,
+            leagueName:
+              providerLeagueName,
+            countryName:
+              providerCountryNameOf(
+                competition,
+              ),
+            season:
+              competition.currentSeason,
+            timezone:
+              'Europe/Rome',
+            limit:
+              '100',
+            offset:
+              '0',
+          },
         );
 
-      if (
-        !cupHasPossibleLiveWindow(
-          scheduledToday,
-          now,
-        )
-      ) {
-        continue;
-      }
+      const matches =
+        extractMatches(
+          data,
+        );
 
-      const liveResult =
-        await fetchSupportedCompetitionMatchesPage({
-          competition,
-          season:
-            competition.currentSeason,
-          date:
-            today,
-          limit:
-            '100',
-          offset:
-            '0',
-          cacheKeyPrefix:
-            'predict-cup-live-active-v1',
-          ttl:
-            LIVE_MATCHES_CACHE_TIME,
-          preferredProviderLeagueName:
-            scheduleResult
-              .providerLeagueName ??
-            null,
-        });
+      mergeCentralUefaCupMatches(
+        competition,
+        matches,
+      );
 
-      for (
-        const match
-          of liveResult.matches ??
-          []
-      ) {
-        if (
-          centralMatchIsLiveNow(
-            match,
-            now,
-          )
-        ) {
-          cupMatches.push(
-            canonicalCupLiveMatch(
-              match,
-              competition,
-              now,
-            ),
-          );
-        }
-      }
+      state.lastLiveSyncAt =
+        new Date()
+          .toISOString();
+
+      changed =
+        true;
+
+      console.log(
+        `PREDICT CENTRAL UEFA LIVE ${competition.leagueName}: ${matches.length} partite aggiornate`,
+      );
     } catch (error) {
       console.warn(
-        `PREDICT CUP LIVE ${competition.leagueName}:`,
+        `PREDICT CENTRAL UEFA LIVE ${competition.leagueName} non aggiornato:`,
         error?.message ??
-        error,
+          error,
       );
+
+      if (
+        isHighlightlyRateLimitError(
+          error,
+        )
+      ) {
+        console.warn(
+          'PREDICT CENTRAL UEFA LIVE: rate limit 429 rilevato, interrompo il ciclo live.',
+        );
+        break;
+      }
     }
   }
 
-  return cupMatches;
+  if (changed) {
+    await persistCentralUefaCupState();
+  }
+
+  return changed;
 }
 
+function buildMergedCentralLivePayload(
+  now = new Date(),
+) {
+  const domesticPayload =
+    buildCentralLiveMatchesPayload(
+      now,
+    );
 
-let centralLiveMatchesRefreshPromise =
-  null;
+  const cupLiveMatches =
+    buildCentralUefaLiveMatches(
+      now,
+    );
+
+  const mergedLiveMatches =
+    [
+      ...(
+        Array.isArray(
+          domesticPayload?.data,
+        )
+          ? domesticPayload.data
+          : []
+      ),
+      ...cupLiveMatches,
+    ]
+      .filter(
+        (match, index, items) =>
+          items.findIndex(
+            (candidate) =>
+              String(
+                candidate?.id ??
+                '',
+              ) ===
+              String(
+                match?.id ??
+                '',
+              ),
+          ) === index,
+      )
+      .sort(
+        (a, b) =>
+          Date.parse(
+            a?.date ?? '',
+          ) -
+          Date.parse(
+            b?.date ?? '',
+          ),
+      );
+
+  return {
+    ...domesticPayload,
+    data:
+      mergedLiveMatches,
+    providerCallsAllowed:
+      false,
+  };
+}
+
+async function refreshCentralSharedLiveCache() {
+  const now =
+    new Date();
+
+  try {
+    if (
+      centralLiveWindowActive(
+        now,
+      )
+    ) {
+      await syncCentralSerieALive();
+    }
+  } catch (error) {
+    console.warn(
+      'PREDICT CENTRAL LIVE 5 LEGHE: refresh non riuscito:',
+      error?.message ??
+        error,
+    );
+  }
+
+  try {
+    await syncCentralUefaLive(
+      now,
+    );
+  } catch (error) {
+    console.warn(
+      'PREDICT CENTRAL UEFA LIVE: refresh non riuscito:',
+      error?.message ??
+        error,
+    );
+  }
+
+  const payload =
+    buildMergedCentralLivePayload(
+      now,
+    );
+
+  const cacheKey =
+    'predict-central-live-matches-v2-cups';
+
+  setMemoryCache(
+    cacheKey,
+    payload,
+  );
+
+  await setDiskCache(
+    cacheKey,
+    payload,
+  );
+
+  return payload;
+}
+
+async function centralUefaScheduleTick() {
+  if (
+    centralUefaScheduleRunning
+  ) {
+    return;
+  }
+
+  centralUefaScheduleRunning =
+    true;
+
+  try {
+    await syncCentralUefaSchedules();
+  } catch (error) {
+    console.error(
+      'PREDICT CENTRAL UEFA ERROR:',
+      error?.message ??
+        error,
+    );
+  } finally {
+    centralUefaScheduleRunning =
+      false;
+  }
+}
+
+async function startCentralUefaScheduler() {
+  await restoreCentralUefaCupState();
+  await centralUefaScheduleTick();
+
+  setInterval(
+    centralUefaScheduleTick,
+    CENTRAL_UEFA_TICK_INTERVAL,
+  );
+
+  console.log(
+    'PREDICT CENTRAL UEFA: scheduler calendario attivo ogni 15 minuti (refresh provider max ogni 6 ore)',
+  );
+}
+
+async function centralSharedLiveTick() {
+  if (
+    centralSharedLiveRunning
+  ) {
+    return;
+  }
+
+  centralSharedLiveRunning =
+    true;
+
+  try {
+    await refreshCentralSharedLiveCache();
+  } catch (error) {
+    console.error(
+      'PREDICT CENTRAL LIVE CACHE ERROR:',
+      error?.message ??
+        error,
+    );
+  } finally {
+    centralSharedLiveRunning =
+      false;
+  }
+}
+
+async function startCentralSharedLiveScheduler() {
+  await centralSharedLiveTick();
+
+  setInterval(
+    centralSharedLiveTick,
+    CENTRAL_SHARED_LIVE_INTERVAL,
+  );
+
+  console.log(
+    'PREDICT CENTRAL LIVE: cache condivisa attiva ogni 55 secondi',
+  );
+}
 
 app.get(
   '/api/football/live',
@@ -15282,149 +15923,33 @@ app.get(
       const cacheKey =
         'predict-central-live-matches-v2-cups';
 
+      const publicLiveCacheTtl =
+        LIVE_MATCHES_CACHE_TIME * 2;
+
       const cached =
         getMemoryCache(
           cacheKey,
-          LIVE_MATCHES_CACHE_TIME,
+          publicLiveCacheTtl,
         ) ??
         await getDiskCache(
           cacheKey,
-          LIVE_MATCHES_CACHE_TIME,
+          publicLiveCacheTtl,
         );
 
       if (cached) {
         return res.json({
           ...cached,
           cached: true,
+          providerCallsAllowed:
+            false,
         });
       }
 
-      if (
-        !centralLiveMatchesRefreshPromise
-      ) {
-        centralLiveMatchesRefreshPromise =
-          (async () => {
-            if (
-              centralLiveWindowActive(
-                new Date(),
-              )
-            ) {
-              await syncCentralSerieALive();
-            }
-
-            const now =
-              new Date();
-
-            let payload =
-              buildCentralLiveMatchesPayload(
-                now,
-              );
-
-            // Se la cache centrale non conosce ancora la partita appena iniziata,
-            // facciamo una sola scoperta forzata sulle 5 leghe nazionali.
-            if (
-              !Array.isArray(payload?.data) ||
-              payload.data.length === 0
-            ) {
-              await syncCentralSerieALive({
-                force: true,
-              });
-
-              payload =
-                buildCentralLiveMatchesPayload(
-                  now,
-                );
-            }
-
-            // Le coppe UEFA usano una cache separata:
-            // calendario lento e refresh 55s solo nella finestra realmente LIVE.
-            // In questo modo non aggiungiamo 3 chiamate provider al minuto
-            // quando Champions/Europa/Conference non stanno giocando.
-            const cupLiveMatches =
-              await loadSupportedCupLiveMatches(
-                now,
-              );
-
-            const mergedLiveMatches =
-              [
-                ...(
-                  Array.isArray(
-                    payload?.data,
-                  )
-                    ? payload.data
-                    : []
-                ),
-                ...cupLiveMatches,
-              ]
-                .filter(
-                  (match, index, items) =>
-                    items.findIndex(
-                      (candidate) =>
-                        String(
-                          candidate?.id ??
-                          '',
-                        ) ===
-                        String(
-                          match?.id ??
-                          '',
-                        ),
-                    ) === index,
-                )
-                .sort(
-                  (a, b) =>
-                    Date.parse(
-                      a?.date ?? '',
-                    ) -
-                    Date.parse(
-                      b?.date ?? '',
-                    ),
-                );
-
-            payload = {
-              ...payload,
-              data:
-                mergedLiveMatches,
-            };
-
-            setMemoryCache(
-              cacheKey,
-              payload,
-            );
-
-            await setDiskCache(
-              cacheKey,
-              payload,
-            );
-
-            return payload;
-          })()
-            .finally(
-              () => {
-                centralLiveMatchesRefreshPromise =
-                  null;
-              },
-            );
-      }
-
-      const payload =
-        await centralLiveMatchesRefreshPromise;
-
-      return res.json({
-        ...payload,
-        cached: false,
-      });
-    } catch (error) {
-      console.error(
-        'PREDICT LIVE MATCHES ERROR:',
-        error?.message ??
-        error,
-      );
-
-      // Se Highlightly è temporaneamente indisponibile, restituiamo comunque
-      // ciò che è presente nella cache centrale PREDICT senza esporre il client
-      // direttamente al provider.
+      // L'endpoint pubblico non effettua mai refresh verso Highlightly.
+      // Se il job centrale non ha ancora scritto la cache, restituiamo
+      // esclusivamente ciò che è già presente negli stati PREDICT.
       const fallback =
-        buildCentralLiveMatchesPayload(
+        buildMergedCentralLivePayload(
           new Date(),
         );
 
@@ -15432,7 +15957,27 @@ app.get(
         ...fallback,
         cached: true,
         degraded: true,
+        retryLater: true,
+        providerCallsAllowed:
+          false,
       });
+    } catch (error) {
+      console.error(
+        'PREDICT LIVE MATCHES ERROR:',
+        error?.message ??
+          error,
+      );
+
+      return res
+        .status(503)
+        .json({
+          error:
+            'Cache LIVE PREDICT temporaneamente non disponibile',
+          retryLater:
+            true,
+          providerCallsAllowed:
+            false,
+        });
     }
   },
 );
@@ -15680,93 +16225,77 @@ app.get(
             });
         }
 
-        // Le coppe UEFA mantengono il percorso dedicato esistente.
-        // La protezione cache-only qui riguarda i 5 campionati nazionali,
-        // inclusa la Multipla internazionale.
-        const dateResult =
-          await fetchSupportedCompetitionMatchesPage({
-            competition:
-              supportedLeague,
-            season:
-              String(
-                query.season,
-              ),
-            date:
+        // Coppe UEFA: anche le richieste pubbliche leggono esclusivamente
+        // lo stato centrale preparato dal backend. Un cache miss dell'utente
+        // non deve mai diventare una chiamata Highlightly.
+        const centralCupState =
+          centralUefaCupStateOf(
+            supportedLeague,
+          );
+
+        const centralCupMatchesForDate =
+          centralCupState?.byDate
+            ?.get(
               requestedDate,
-            limit:
-              String(
-                limit,
-              ),
-            offset:
-              String(
-                offset,
-              ),
-            cacheKeyPrefix:
-              'supported-public-matches-v3',
-            ttl:
-              SUPPORTED_LEAGUE_PUBLIC_MATCHES_CACHE_TIME,
+            ) ??
+          [];
+
+        if (
+          centralCupState &&
+          centralCupState.matches.length > 0 &&
+          Array.isArray(
+            centralCupMatchesForDate,
+          )
+        ) {
+          return res.json({
+            data:
+              centralCupMatchesForDate,
+
+            meta: {
+              source:
+                'predict-central-uefa-cache',
+              leagueKey:
+                supportedLeague.key,
+              leagueName:
+                supportedLeague.leagueName,
+              countryName:
+                supportedLeague.countryName,
+              season:
+                String(query.season),
+              date:
+                requestedDate,
+              isCup:
+                true,
+              lastScheduleSyncAt:
+                centralCupState.lastScheduleSyncAt,
+              lastLiveSyncAt:
+                centralCupState.lastLiveSyncAt,
+              providerCallsAllowed:
+                false,
+            },
           });
+        }
 
-        const matchesForDate =
-          dateResult.matches
-            .filter(
-              (match) =>
-                supportedLeague
-                  .isCup === true ||
-                regularSeasonMatch(
-                  match,
-                ),
-            )
-            .sort(
-              (a, b) =>
-                Date.parse(
-                  a?.date ?? '',
-                ) -
-                Date.parse(
-                  b?.date ?? '',
-                ),
-            );
-
-        return res.json({
-          data:
-            matchesForDate,
-
-          meta: {
-            source:
-              supportedLeague.key ===
-                'serie-a'
-                ? 'predict-central-cache'
-                : supportedLeague
-                    .isCup === true
-                  ? 'predict-supported-cup-live-cache'
-                  : 'predict-supported-league-live-cache',
+        return res
+          .status(503)
+          .json({
+            error:
+              'Cache PREDICT della coppa UEFA non ancora pronta',
+            retryLater:
+              true,
+            providerCallsAllowed:
+              false,
             leagueKey:
               supportedLeague.key,
             leagueName:
-              supportedLeague
-                .leagueName,
+              supportedLeague.leagueName,
             countryName:
-              supportedLeague
-                .countryName,
-            providerLeagueName:
-              dateResult
-                .providerLeagueName,
+              supportedLeague.countryName,
             season:
-              String(
-                query.season,
-              ),
+              String(query.season),
             date:
               requestedDate,
-            isCup:
-              supportedLeague
-                .isCup === true,
-            cacheTtlSeconds:
-              Math.round(
-                SUPPORTED_LEAGUE_PUBLIC_MATCHES_CACHE_TIME /
-                1000,
-              ),
-          },
-        });
+          });
       }
 
       const internalRequest =
@@ -26777,6 +27306,8 @@ app.listen(
           );
 
           await startCentralSerieAScheduler();
+          await startCentralUefaScheduler();
+          await startCentralSharedLiveScheduler();
           await startFavoriteTeamNotificationScheduler();
         },
       )
