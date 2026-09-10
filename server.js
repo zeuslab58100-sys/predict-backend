@@ -24981,6 +24981,168 @@ async function buildAndPersistMultiplesSummary({
   return payload;
 }
 
+async function buildAndPersistUefaMultiplesSummary({
+  season,
+  historicalSeason,
+  leagueName,
+  countryName,
+}) {
+  const supportedLeague =
+    resolveSupportedLeague({
+      leagueName,
+      countryName,
+    });
+
+  if (
+    !supportedLeague ||
+    supportedLeague.isCup !== true
+  ) {
+    throw new Error(
+      `Coppa UEFA non supportata: ${leagueName} / ${countryName}`,
+    );
+  }
+
+  const state =
+    centralUefaCupStateOf(
+      supportedLeague,
+    );
+
+  const dateKeys =
+    Array.from(
+      state?.byDate?.keys?.() ??
+        [],
+    ).sort();
+
+  const multipla3 =
+    emptyMultipleSummary();
+
+  const multipla5 =
+    emptyMultipleSummary();
+
+  let officialRounds = 0;
+
+  for (
+    const dateKey
+      of dateKeys
+  ) {
+    const round =
+      Number(
+        String(
+          dateKey,
+        ).replace(
+          /-/g,
+          '',
+        ),
+      );
+
+    if (
+      !Number.isFinite(
+        round,
+      )
+    ) {
+      continue;
+    }
+
+    const archived =
+      await getCompatiblePermanentMultipleArchive({
+        season,
+        historicalSeason,
+        round,
+        leagueName:
+          supportedLeague
+            .leagueName,
+        countryName:
+          supportedLeague
+            .countryName,
+      });
+
+    if (
+      !archived?.frozen ||
+      !archived?.available
+    ) {
+      continue;
+    }
+
+    officialRounds += 1;
+
+    addMultipleToSummary(
+      multipla3,
+      archived.multipla3,
+    );
+
+    addMultipleToSummary(
+      multipla5,
+      archived.multipla5,
+    );
+  }
+
+  for (
+    const summary
+      of [
+        multipla3,
+        multipla5,
+      ]
+  ) {
+    summary.successRate =
+      summary.verified > 0
+        ? round2(
+            (
+              summary.won /
+              summary.verified
+            ) *
+              100,
+          )
+        : null;
+  }
+
+  const payload = {
+    season:
+      String(season),
+    historicalSeason:
+      String(
+        historicalSeason,
+      ),
+    leagueName:
+      supportedLeague
+        .leagueName,
+    countryName:
+      supportedLeague
+        .countryName,
+    regularSeasonRounds:
+      null,
+    generatedAt:
+      new Date()
+        .toISOString(),
+    officialRounds,
+    officialDates:
+      officialRounds,
+    dateBased:
+      true,
+    multipla3,
+    multipla5,
+  };
+
+  const summaryKey =
+    buildSeasonMultiplesSummaryArchiveKey({
+      season,
+      historicalSeason,
+      leagueName:
+        supportedLeague
+          .leagueName,
+      countryName:
+        supportedLeague
+          .countryName,
+    });
+
+  await setPermanentCache(
+    summaryKey,
+    payload,
+  );
+
+  return payload;
+}
+
+
 async function settlePermanentMultipleHistory({
   season =
     CURRENT_SERIE_A_SEASON,
@@ -27838,6 +28000,33 @@ app.get(
             error:
               `Campionato non supportato: ${leagueName} / ${countryName}`,
           });
+      }
+
+      if (
+        supportedLeague.isCup === true
+      ) {
+        // Riepilogo UEFA esclusivamente dagli archivi permanenti già congelati.
+        // Nessuna rigenerazione delle multiple e nessuna chiamata Highlightly.
+        const payload =
+          await buildAndPersistUefaMultiplesSummary({
+            season,
+            historicalSeason,
+            leagueName:
+              supportedLeague
+                .leagueName,
+            countryName:
+              supportedLeague
+                .countryName,
+          });
+
+        return res.json({
+          ...payload,
+          cached: true,
+          cacheSource:
+            'uefa-multiple-history-cache-only',
+          providerCallsAllowed:
+            false,
+        });
       }
 
       if (
