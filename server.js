@@ -2977,6 +2977,20 @@ function buildBookmakerMarketProbabilities(oddsPayload) {
   };
 }
 
+function bookmakerProbabilitiesHaveAnyMarket(probabilities) {
+  if (!probabilities || typeof probabilities !== 'object') {
+    return false;
+  }
+
+  return Boolean(
+    probabilities.oneXTwo ||
+    probabilities.bothTeamsToScore ||
+    Object.keys(probabilities.totalGoals ?? {}).length > 0 ||
+    Object.keys(probabilities.totalCards ?? {}).length > 0 ||
+    Object.keys(probabilities.totalCorners ?? {}).length > 0
+  );
+}
+
 async function getBookmakerProbabilitiesForMatch(matchId) {
   if (!matchId) {
     return null;
@@ -16226,8 +16240,41 @@ async function precomputeUpcomingUefaPredictData() {
             false,
         });
 
+      const existingPrediction =
+        existingAnalysis?.prediction ??
+        {};
+
+      const existingTopSignals =
+        Array.isArray(
+          existingPrediction.topSignals,
+        )
+          ? existingPrediction.topSignals
+          : [];
+
+      const existingCoreMarketsMissing =
+        [
+          existingPrediction?.oneXTwo?.home,
+          existingPrediction?.oneXTwo?.draw,
+          existingPrediction?.oneXTwo?.away,
+          existingPrediction?.goals?.gg,
+          existingPrediction?.goals?.noGoal,
+          existingPrediction?.goals?.over25,
+          existingPrediction?.goals?.under25,
+        ].every(
+          (value) =>
+            value === null ||
+            value === undefined,
+        );
+
+      const needsUefaFallbackRefresh =
+        Boolean(existingAnalysis) &&
+        existingPrediction.bookmakerFallback !== true &&
+        existingTopSignals.length === 0 &&
+        existingCoreMarketsMissing;
+
       const needsAnalysis =
-        !existingAnalysis;
+        !existingAnalysis ||
+        needsUefaFallbackRefresh;
       const needsSnapshot =
         !existingSnapshot?.pick;
 
@@ -16254,6 +16301,30 @@ async function precomputeUpcomingUefaPredictData() {
       processed += 1;
 
       try {
+        if (needsUefaFallbackRefresh) {
+          const staleAnalysisKey =
+            buildMatchAnalysisCacheKey({
+              homeTeamId,
+              awayTeamId,
+              historicalSeason:
+                competition.historicalSeason,
+              leagueName:
+                competition.leagueName,
+              countryName:
+                competition.countryName,
+              cacheVariant:
+                uefaAnalysisCacheVariant,
+            });
+
+          await deleteCacheKey(
+            staleAnalysisKey,
+          );
+
+          console.log(
+            `PREDICT CENTRAL UEFA ${competition.leagueName}: rigenero analisi senza mercati bookmaker ${match?.id ?? ''}`,
+          );
+        }
+
         let snapshot =
           existingSnapshot;
 
@@ -17677,6 +17748,134 @@ app.get(
 
 
 // ====================================================
+// COMPATIBILITÀ APP PUBBLICATA - CONTESTO ANALISI
+// ====================================================
+// Le build già pubblicate di MatchdayPicksPage possono aprire MatchAnalysisPage
+// senza propagare leagueName/countryName. In quel caso Flutter ricade sui
+// default Serie A / Italy. Correggiamo SOLO lato server e SOLO da cache centrale:
+// se la coppia casa/trasferta appartiene in modo univoco a un'altra competizione
+// supportata, usiamo quel contesto reale. Nessuna chiamata provider viene avviata.
+function inferCachedCompetitionForAnalysis({
+  homeTeamId,
+  awayTeamId,
+  matchId = null,
+}) {
+  const wantedHome =
+    String(homeTeamId ?? '');
+  const wantedAway =
+    String(awayTeamId ?? '');
+  const wantedMatchId =
+    matchId === null ||
+    matchId === undefined ||
+    String(matchId).trim() === ''
+      ? null
+      : String(matchId);
+
+  if (!wantedHome || !wantedAway) {
+    return null;
+  }
+
+  const candidates = [];
+
+  for (
+    const {
+      league,
+      match,
+    } of centralDomesticEntries()
+  ) {
+    const idMatches =
+      wantedMatchId !== null &&
+      String(match?.id ?? '') ===
+        wantedMatchId;
+
+    const teamsMatch =
+      String(
+        teamIdOf(match?.homeTeam),
+      ) === wantedHome &&
+      String(
+        teamIdOf(match?.awayTeam),
+      ) === wantedAway;
+
+    if (idMatches || teamsMatch) {
+      candidates.push({
+        league,
+        match,
+      });
+    }
+  }
+
+  for (
+    const {
+      competition,
+      match,
+    } of centralUefaEntries()
+  ) {
+    const idMatches =
+      wantedMatchId !== null &&
+      String(match?.id ?? '') ===
+        wantedMatchId;
+
+    const teamsMatch =
+      String(
+        teamIdOf(match?.homeTeam),
+      ) === wantedHome &&
+      String(
+        teamIdOf(match?.awayTeam),
+      ) === wantedAway;
+
+    if (idMatches || teamsMatch) {
+      candidates.push({
+        league: competition,
+        match,
+      });
+    }
+  }
+
+  if (candidates.length === 0) {
+    return null;
+  }
+
+  if (wantedMatchId !== null) {
+    const exactById =
+      candidates.filter(
+        (item) =>
+          String(item?.match?.id ?? '') ===
+          wantedMatchId,
+      );
+
+    if (exactById.length === 1) {
+      return exactById[0];
+    }
+  }
+
+  const byCompetition =
+    new Map();
+
+  for (const item of candidates) {
+    const key =
+      String(item?.league?.key ?? '');
+
+    if (key && !byCompetition.has(key)) {
+      byCompetition.set(
+        key,
+        item,
+      );
+    }
+  }
+
+  // Senza matchId non indoviniamo se la stessa coppia compare in più
+  // competizioni supportate: in quel caso lasciamo il contesto richiesto.
+  if (byCompetition.size !== 1) {
+    return null;
+  }
+
+  return Array.from(
+    byCompetition.values(),
+  )[0] ?? null;
+}
+
+
+// ====================================================
 // ANALISI PARTITA COMPLETA
 // ====================================================
 
@@ -17684,7 +17883,7 @@ app.get(
   '/api/football/match-analysis',
   async (req, res) => {
     try {
-      const {
+      let {
         homeTeamId,
         awayTeamId,
         matchId,
@@ -17724,6 +17923,67 @@ app.get(
           'x-predict-internal',
         ) ===
         INTERNAL_SYNC_TOKEN;
+
+      // Compatibilità con le build già pubblicate: MatchdayPicksPage può
+      // arrivare qui con i default Serie A/Italy anche quando la partita è
+      // di Premier, Bundesliga, Ligue 1, Liga o coppa UEFA. Correggiamo il
+      // contesto soltanto se la coppia è presente in UNA SOLA competizione
+      // delle cache centrali. Il controllo è cache-only e non usa Highlightly.
+      const publicDefaultCompetitionContext =
+        !internalRequest &&
+        normalizeLeagueText(
+          leagueName,
+        ) ===
+          normalizeLeagueText(
+            'Serie A',
+          ) &&
+        normalizeLeagueText(
+          countryName,
+        ) ===
+          normalizeLeagueText(
+            'Italy',
+          );
+
+      if (publicDefaultCompetitionContext) {
+        const inferredCompetition =
+          inferCachedCompetitionForAnalysis({
+            homeTeamId,
+            awayTeamId,
+            matchId,
+          });
+
+        if (
+          inferredCompetition?.league &&
+          inferredCompetition.league.key !==
+            'serie-a'
+        ) {
+          leagueName =
+            inferredCompetition.league
+              .leagueName;
+          countryName =
+            inferredCompetition.league
+              .countryName;
+
+          if (
+            (matchId === null ||
+              matchId === undefined ||
+              String(matchId).trim() === '') &&
+            inferredCompetition.match?.id !==
+              null &&
+            inferredCompetition.match?.id !==
+              undefined
+          ) {
+            matchId =
+              String(
+                inferredCompetition.match.id,
+              );
+          }
+
+          console.log(
+            `PREDICT ANALYSIS CONTEXT: ${homeTeamId}-${awayTeamId} -> ${leagueName}/${countryName} da cache centrale`,
+          );
+        }
+      }
 
       const supportedLeague =
         resolveSupportedLeague({
@@ -18381,6 +18641,26 @@ app.get(
           effectiveMatchId,
         );
 
+      // Coppe UEFA: se Highlightly non restituisce alcun mercato bookmaker
+      // per la singola partita, non lasciamo l'analisi vuota. Il job interno
+      // usa temporaneamente il modello PREDICT al 100% e marca chiaramente
+      // il risultato come fallback. La richiesta pubblica resta cache-only.
+      const uefaBookmakerFallback =
+        uefaCupBlendMode &&
+        !bookmakerProbabilitiesHaveAnyMarket(
+          bookmakerProbabilities,
+        );
+
+      const effectivePredictBlendWeight =
+        uefaBookmakerFallback
+          ? 1
+          : predictBlendWeight;
+
+      const effectiveBookmakerBlendWeight =
+        uefaBookmakerFallback
+          ? 0
+          : bookmakerBlendWeight;
+
       const prediction =
         calculatePrediction({
           homeTeam:
@@ -18401,9 +18681,9 @@ app.get(
 
           bookmakerProbabilities,
           predictWeight:
-            predictBlendWeight,
+            effectivePredictBlendWeight,
           bookmakerWeight:
-            bookmakerBlendWeight,
+            effectiveBookmakerBlendWeight,
         });
 
       prediction.inputs = {
@@ -18619,16 +18899,20 @@ app.get(
       applyBookmakerAdvancedBlend(
         advanced,
         bookmakerProbabilities,
-        predictBlendWeight,
-        bookmakerBlendWeight,
-        comparisonMode ||
-          bookmakerOnlyMode,
+        effectivePredictBlendWeight,
+        effectiveBookmakerBlendWeight,
+        !uefaBookmakerFallback &&
+          (
+            comparisonMode ||
+            bookmakerOnlyMode
+          ),
       );
 
       // Nel regime 10/90 (e nel confronto A/B) il feed bookmaker non espone
       // ancora quote sui tiri in porta. Per evitare un Top Signal che diventi
       // accidentalmente 100% PREDICT, i tiri restano fuori quando manca la quota.
       if (
+        !uefaBookmakerFallback &&
         (
           comparisonMode ||
           bookmakerOnlyMode
@@ -18682,6 +18966,117 @@ app.get(
         homeTeam,
         awayTeam,
       });
+
+      if (uefaBookmakerFallback) {
+        prediction.bookmakerFallback = true;
+        prediction.bookmakerFallbackMode =
+          'predict-only';
+        prediction.bookmakerFallbackReason =
+          'Quote bookmaker non disponibili nel feed Highlightly per questa partita';
+        prediction.bookmakerBlendApplied = {
+          predictWeight: 1,
+          bookmakerWeight: 0,
+        };
+
+        // Penalità prudenziale: il segnale resta utilizzabile, ma non viene
+        // presentato con la stessa affidabilità del normale blend UEFA 5/95.
+        const fallbackReliabilityFactor = 0.85;
+        const reliability =
+          prediction.reliability;
+
+        if (reliability && typeof reliability === 'object') {
+          for (const key of [
+            'overall',
+            'oneXTwo',
+            'goals',
+            'exactScore',
+            'corners',
+            'shotsOnTarget',
+            'cards',
+          ]) {
+            const value =
+              Number(reliability[key]);
+
+            if (Number.isFinite(value)) {
+              reliability[key] =
+                round2(
+                  clamp(
+                    value *
+                      fallbackReliabilityFactor,
+                    0,
+                    100,
+                  ),
+                );
+            }
+          }
+
+          reliability.overallLabel =
+            reliabilityLabel(
+              Number(reliability.overall) || 0,
+            );
+          reliability.oneXTwoLabel =
+            reliabilityLabel(
+              Number(reliability.oneXTwo) || 0,
+            );
+          reliability.goalsLabel =
+            reliabilityLabel(
+              Number(reliability.goals) || 0,
+            );
+          reliability.exactScoreLabel =
+            reliabilityLabel(
+              Number(reliability.exactScore) || 0,
+            );
+          reliability.cornersLabel =
+            Number(reliability.corners) > 0
+              ? reliabilityLabel(
+                  Number(reliability.corners),
+                )
+              : 'N/D';
+          reliability.shotsOnTargetLabel =
+            Number(reliability.shotsOnTarget) > 0
+              ? reliabilityLabel(
+                  Number(reliability.shotsOnTarget),
+                )
+              : 'N/D';
+          reliability.cardsLabel =
+            Number(reliability.cards) > 0
+              ? reliabilityLabel(
+                  Number(reliability.cards),
+                )
+              : 'N/D';
+
+          prediction.dataCoverage =
+            reliability.overallLabel
+              .toLowerCase();
+
+          for (const signal of prediction.topSignals ?? []) {
+            const market =
+              signal.market ??
+              'goals';
+            const score =
+              market === 'oneXTwo'
+                ? reliability.oneXTwo
+                : market === 'corners'
+                  ? reliability.corners
+                  : market === 'shotsOnTarget'
+                    ? reliability.shotsOnTarget
+                    : market === 'cards'
+                      ? reliability.cards
+                      : reliability.goals;
+
+            signal.reliability =
+              round2(
+                Number(score) || 0,
+              );
+            signal.reliabilityLabel =
+              Number(score) > 0
+                ? reliabilityLabel(
+                    Number(score),
+                  )
+                : 'N/D';
+          }
+        }
+      }
 
       const analysisPayload = {
         season:
