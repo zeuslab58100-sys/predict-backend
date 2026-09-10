@@ -15106,6 +15106,15 @@ async function centralSerieATick() {
         });
       }
 
+      // Anche le Multiple Internazionali 3X/5X vengono mantenute dal server.
+      // Solo cache PREDICT: nessuna chiamata provider aggiuntiva.
+      await settlePermanentInternationalMultipleHistory({
+        season:
+          CURRENT_SERIE_A_SEASON,
+        historicalSeason:
+          '2025',
+      });
+
       await archivePermanentAnalysisHistoryForFrozenMatches();
     }
 
@@ -25862,6 +25871,1536 @@ async function getOrUpdateMatchdayMultiplesSnapshot({
   return snapshot;
 }
 
+
+
+// ====================================================
+// MULTIPLE INTERNAZIONALI 3X / 5X - STORICO PERMANENTE
+// ====================================================
+//
+// Usa esclusivamente lo stato centrale/cache PREDICT dei 5 campionati.
+// Nessuna chiamata Highlightly viene avviata da queste funzioni.
+// L'algoritmo resta identico al client:
+// - migliore pronostico di ogni campionato per probabilità
+// - 3X = i 3 migliori tra i 5
+// - 5X = uno per ciascuno dei 5 campionati
+// Il congelamento avviene al primo cutoff tra i 5 campionati.
+
+function buildInternationalMultipleSnapshotCacheKey({
+  season,
+  historicalSeason,
+  roundSignature,
+}) {
+  return [
+    'international-multiples-snapshot-v1',
+    season,
+    historicalSeason,
+    roundSignature,
+  ].join('-');
+}
+
+function buildInternationalMultipleArchiveKey({
+  season,
+  historicalSeason,
+  roundSignature,
+}) {
+  return [
+    'international-multiples-history-v1',
+    season,
+    historicalSeason,
+    roundSignature,
+  ].join('-');
+}
+
+function buildInternationalMultipleHistoryIndexKey({
+  season,
+  historicalSeason,
+}) {
+  return [
+    'international-multiples-history-index-v1',
+    season,
+    historicalSeason,
+  ].join('-');
+}
+
+function buildInternationalMultipleSummaryKey({
+  season,
+  historicalSeason,
+}) {
+  return [
+    'international-multiples-summary-v1',
+    season,
+    historicalSeason,
+  ].join('-');
+}
+
+function resolveCentralDefaultRoundForInternational(
+  league,
+) {
+  const state =
+    centralLeagueStateOf(
+      league,
+    );
+
+  const seasonMatches =
+    Array.isArray(
+      state?.matches,
+    )
+      ? state.matches
+      : [];
+
+  if (seasonMatches.length === 0) {
+    return null;
+  }
+
+  const regularSeasonRounds =
+    Number(
+      league?.regularSeasonRounds,
+    ) || 38;
+
+  const nowMs =
+    Date.now();
+
+  const relevanceCutoffMs =
+    nowMs -
+    24 * 60 * 60 * 1000;
+
+  const roundsMap =
+    new Map();
+
+  for (
+    const match
+      of seasonMatches
+  ) {
+    const round =
+      roundNumberOf(
+        match,
+      );
+
+    if (
+      !round ||
+      round < 1 ||
+      round >
+        regularSeasonRounds
+    ) {
+      continue;
+    }
+
+    if (!roundsMap.has(round)) {
+      roundsMap.set(
+        round,
+        {
+          round,
+          scheduledMatches: 0,
+          finishedMatches: 0,
+          unfinishedMatches: 0,
+          relevantUnfinishedDates: [],
+        },
+      );
+    }
+
+    const roundData =
+      roundsMap.get(
+        round,
+      );
+
+    roundData.scheduledMatches +=
+      1;
+
+    if (
+      isFinishedMatch(
+        match,
+      )
+    ) {
+      roundData.finishedMatches +=
+        1;
+      continue;
+    }
+
+    roundData.unfinishedMatches +=
+      1;
+
+    const startMs =
+      Date.parse(
+        match?.date ?? '',
+      );
+
+    if (
+      Number.isFinite(
+        startMs,
+      ) &&
+      startMs >=
+        relevanceCutoffMs
+    ) {
+      roundData
+        .relevantUnfinishedDates
+        .push(
+          startMs,
+        );
+    }
+  }
+
+  const rounds =
+    Array.from(
+      roundsMap.values(),
+    )
+      .filter(
+        (roundData) =>
+          roundData
+            .scheduledMatches >
+          0,
+      )
+      .map(
+        (roundData) => {
+          const completed =
+            roundData
+              .finishedMatches ===
+            roundData
+              .scheduledMatches;
+
+          const nextRelevantAtMs =
+            roundData
+              .relevantUnfinishedDates
+              .length >
+            0
+              ? Math.min(
+                  ...roundData
+                    .relevantUnfinishedDates,
+                )
+              : null;
+
+          return {
+            ...roundData,
+            completed,
+            nextRelevantAtMs,
+          };
+        },
+      )
+      .sort(
+        (a, b) =>
+          a.round -
+          b.round,
+      );
+
+  const relevantCandidates =
+    rounds
+      .filter(
+        (roundData) =>
+          !roundData.completed &&
+          Number.isFinite(
+            roundData
+              .nextRelevantAtMs,
+          ),
+      )
+      .sort(
+        (a, b) => {
+          const dateDiff =
+            a.nextRelevantAtMs -
+            b.nextRelevantAtMs;
+
+          if (dateDiff !== 0) {
+            return dateDiff;
+          }
+
+          return (
+            a.round -
+            b.round
+          );
+        },
+      );
+
+  if (
+    relevantCandidates.length >
+    0
+  ) {
+    return (
+      relevantCandidates[0]
+        .round
+    );
+  }
+
+  const incompleteRounds =
+    rounds
+      .filter(
+        (roundData) =>
+          !roundData.completed &&
+          roundData
+            .unfinishedMatches >
+          0,
+      )
+      .sort(
+        (a, b) =>
+          a.round -
+          b.round,
+      );
+
+  if (
+    incompleteRounds.length >
+    0
+  ) {
+    return (
+      incompleteRounds[0]
+        .round
+    );
+  }
+
+  if (rounds.length > 0) {
+    return (
+      rounds[
+        rounds.length - 1
+      ].round
+    );
+  }
+
+  return null;
+}
+
+function sortInternationalCandidates(
+  candidates,
+) {
+  return [
+    ...(candidates ?? []),
+  ].sort(
+    (a, b) => {
+      const probabilityCompare =
+        Number(
+          b?.pick?.probability ??
+          0,
+        ) -
+        Number(
+          a?.pick?.probability ??
+          0,
+        );
+
+      if (
+        Math.abs(
+          probabilityCompare,
+        ) >
+        0.000001
+      ) {
+        return probabilityCompare;
+      }
+
+      return (
+        Number(
+          b?.pick?.signalStrength ??
+          0,
+        ) -
+        Number(
+          a?.pick?.signalStrength ??
+          0,
+        )
+      );
+    },
+  );
+}
+
+function buildInternationalMultipleFromCandidates(
+  candidates,
+  requestedEvents,
+) {
+  const selections =
+    (candidates ?? [])
+      .slice(
+        0,
+        requestedEvents,
+      )
+      .map(
+        (item) => ({
+          matchId:
+            item?.matchId ?? null,
+
+          date:
+            item?.date ?? null,
+
+          homeTeam:
+            item?.homeTeam ?? null,
+
+          awayTeam:
+            item?.awayTeam ?? null,
+
+          pick:
+            item?.pick ?? null,
+
+          pickGeneratedAt:
+            item?.pickGeneratedAt ?? null,
+
+          modelVersion:
+            item?.modelVersion ??
+            'PREDICT v5',
+
+          season:
+            item?.season ?? null,
+
+          historicalSeason:
+            item?.historicalSeason ?? null,
+
+          round:
+            item?.round ?? null,
+
+          leagueName:
+            item?.leagueName ?? null,
+
+          countryName:
+            item?.countryName ?? null,
+
+          result:
+            item?.result ?? {
+              status:
+                'pending',
+              settled:
+                false,
+            },
+        }),
+      );
+
+  return {
+    requestedEvents,
+
+    eventsCount:
+      selections.length,
+
+    ready:
+      selections.length ===
+      requestedEvents,
+
+    selections,
+
+    result:
+      buildMultipleResultSummary({
+        selections,
+      }),
+  };
+}
+
+async function buildInternationalMultipleCandidateState({
+  season =
+    CURRENT_SERIE_A_SEASON,
+  historicalSeason =
+    '2025',
+} = {}) {
+  const bestByLeague =
+    [];
+
+  const freezeDates =
+    [];
+
+  const firstMatchDates =
+    [];
+
+  const roundParts =
+    [];
+
+  const leagues =
+    [];
+
+  for (
+    const league
+      of CENTRAL_DOMESTIC_LEAGUES
+  ) {
+    const round =
+      resolveCentralDefaultRoundForInternational(
+        league,
+      );
+
+    if (
+      !round ||
+      round < 1
+    ) {
+      roundParts.push(
+        `${league.key}:0`,
+      );
+
+      leagues.push({
+        leagueName:
+          league.leagueName,
+        countryName:
+          league.countryName,
+        round:
+          null,
+        candidate:
+          false,
+      });
+
+      continue;
+    }
+
+    roundParts.push(
+      `${league.key}:${round}`,
+    );
+
+    const state =
+      centralLeagueStateOf(
+        league,
+      );
+
+    const roundMatches =
+      (state?.matches ?? [])
+        .filter(
+          (match) =>
+            roundNumberOf(
+              match,
+            ) ===
+            round,
+        )
+        .sort(
+          (a, b) =>
+            Date.parse(
+              a?.date ?? '',
+            ) -
+            Date.parse(
+              b?.date ?? '',
+            ),
+        );
+
+    const validStarts =
+      roundMatches
+        .map(
+          (match) =>
+            Date.parse(
+              match?.date ?? '',
+            ),
+        )
+        .filter(
+          (value) =>
+            Number.isFinite(
+              value,
+            ),
+        )
+        .sort(
+          (a, b) =>
+            a - b,
+        );
+
+    if (
+      validStarts.length >
+      0
+    ) {
+      const firstMatchAtMs =
+        validStarts[0];
+
+      firstMatchDates.push(
+        firstMatchAtMs,
+      );
+
+      freezeDates.push(
+        firstMatchAtMs -
+        MATCHDAY_MULTIPLE_FREEZE_WINDOW,
+      );
+    }
+
+    const leagueCandidates =
+      [];
+
+    for (
+      const match
+        of roundMatches
+    ) {
+      const pickSnapshot =
+        await getExistingMatchdayPickSnapshot({
+          matchId:
+            match?.id,
+          historicalSeason:
+            league.historicalSeason ??
+            historicalSeason,
+          leagueName:
+            league.leagueName,
+          countryName:
+            league.countryName,
+        });
+
+      const probability =
+        Number(
+          pickSnapshot
+            ?.pick
+            ?.probability,
+        );
+
+      if (
+        !pickSnapshot?.pick ||
+        !Number.isFinite(
+          probability,
+        )
+      ) {
+        continue;
+      }
+
+      leagueCandidates.push({
+        matchId:
+          match?.id ?? null,
+
+        date:
+          match?.date ?? null,
+
+        homeTeam:
+          match?.homeTeam ?? null,
+
+        awayTeam:
+          match?.awayTeam ?? null,
+
+        pick:
+          pickSnapshot.pick,
+
+        pickGeneratedAt:
+          pickSnapshot
+            .generatedAt ??
+          null,
+
+        modelVersion:
+          pickSnapshot
+            .modelVersion ??
+          'PREDICT v5',
+
+        season:
+          league.currentSeason ??
+          season,
+
+        historicalSeason:
+          league.historicalSeason ??
+          historicalSeason,
+
+        round,
+
+        leagueName:
+          league.leagueName,
+
+        countryName:
+          league.countryName,
+      });
+    }
+
+    const rankedLeagueCandidates =
+      sortInternationalCandidates(
+        leagueCandidates,
+      );
+
+    if (
+      rankedLeagueCandidates
+        .length >
+      0
+    ) {
+      bestByLeague.push(
+        rankedLeagueCandidates[0],
+      );
+    }
+
+    leagues.push({
+      leagueName:
+        league.leagueName,
+      countryName:
+        league.countryName,
+      round,
+      candidate:
+        rankedLeagueCandidates
+          .length >
+        0,
+      candidateMatchId:
+        rankedLeagueCandidates[0]
+          ?.matchId ??
+        null,
+    });
+  }
+
+  const ranked =
+    sortInternationalCandidates(
+      bestByLeague,
+    );
+
+  return {
+    season:
+      String(season),
+
+    historicalSeason:
+      String(
+        historicalSeason,
+      ),
+
+    roundSignature:
+      roundParts.join('|'),
+
+    candidateCount:
+      ranked.length,
+
+    candidates:
+      ranked,
+
+    freezeAtMs:
+      freezeDates.length >
+      0
+        ? Math.min(
+            ...freezeDates,
+          )
+        : null,
+
+    firstMatchAtMs:
+      firstMatchDates.length >
+      0
+        ? Math.min(
+            ...firstMatchDates,
+          )
+        : null,
+
+    leagues,
+  };
+}
+
+async function getExistingInternationalMultipleSnapshot({
+  season,
+  historicalSeason,
+  roundSignature,
+}) {
+  const archiveKey =
+    buildInternationalMultipleArchiveKey({
+      season,
+      historicalSeason,
+      roundSignature,
+    });
+
+  const archived =
+    await getPermanentCache(
+      archiveKey,
+    );
+
+  if (
+    archived?.frozen ===
+      true &&
+    archived?.available ===
+      true
+  ) {
+    return archived;
+  }
+
+  const cacheKey =
+    buildInternationalMultipleSnapshotCacheKey({
+      season,
+      historicalSeason,
+      roundSignature,
+    });
+
+  const memory =
+    getMemoryCache(
+      cacheKey,
+      MATCHDAY_MULTIPLE_SNAPSHOT_CACHE_TIME,
+    );
+
+  if (memory) {
+    return memory;
+  }
+
+  const disk =
+    await getDiskCache(
+      cacheKey,
+      MATCHDAY_MULTIPLE_SNAPSHOT_CACHE_TIME,
+    );
+
+  if (disk) {
+    setMemoryCache(
+      cacheKey,
+      disk,
+    );
+
+    return disk;
+  }
+
+  return null;
+}
+
+async function persistOfficialInternationalMultipleSnapshot(
+  snapshot,
+) {
+  if (
+    !snapshot?.frozen ||
+    !snapshot?.available ||
+    !snapshot?.roundSignature
+  ) {
+    return snapshot;
+  }
+
+  const archiveKey =
+    buildInternationalMultipleArchiveKey({
+      season:
+        snapshot.season,
+      historicalSeason:
+        snapshot.historicalSeason,
+      roundSignature:
+        snapshot.roundSignature,
+    });
+
+  const existing =
+    await getPermanentCache(
+      archiveKey,
+    );
+
+  if (
+    existing?.frozen ===
+      true &&
+    existing?.available ===
+      true
+  ) {
+    return existing;
+  }
+
+  const archived = {
+    ...snapshot,
+
+    archiveKey,
+
+    archivedAt:
+      new Date()
+        .toISOString(),
+  };
+
+  await setPermanentCache(
+    archiveKey,
+    archived,
+  );
+
+  const indexKey =
+    buildInternationalMultipleHistoryIndexKey({
+      season:
+        snapshot.season,
+      historicalSeason:
+        snapshot.historicalSeason,
+    });
+
+  const currentIndex =
+    await getPermanentCache(
+      indexKey,
+    );
+
+  const items =
+    Array.isArray(
+      currentIndex?.items,
+    )
+      ? [
+          ...currentIndex.items,
+        ]
+      : [];
+
+  if (
+    !items.some(
+      (item) =>
+        item?.archiveKey ===
+        archiveKey,
+    )
+  ) {
+    items.push({
+      archiveKey,
+
+      roundSignature:
+        snapshot.roundSignature,
+
+      frozenAt:
+        snapshot.frozenAt ??
+        snapshot.generatedAt ??
+        null,
+
+      freezeAt:
+        snapshot.freezeAt ??
+        null,
+    });
+  }
+
+  await setPermanentCache(
+    indexKey,
+    {
+      version:
+        1,
+
+      updatedAt:
+        new Date()
+          .toISOString(),
+
+      items,
+    },
+  );
+
+  return archived;
+}
+
+async function getOrUpdateInternationalMultiplesSnapshot({
+  season =
+    CURRENT_SERIE_A_SEASON,
+  historicalSeason =
+    '2025',
+} = {}) {
+  const state =
+    await buildInternationalMultipleCandidateState({
+      season,
+      historicalSeason,
+    });
+
+  const {
+    roundSignature,
+    candidates,
+    candidateCount,
+    freezeAtMs,
+    firstMatchAtMs,
+    leagues,
+  } = state;
+
+  if (
+    !roundSignature ||
+    !Number.isFinite(
+      freezeAtMs,
+    )
+  ) {
+    return {
+      available:
+        false,
+
+      season:
+        String(season),
+
+      historicalSeason:
+        String(
+          historicalSeason,
+        ),
+
+      international:
+        true,
+
+      roundSignature,
+
+      candidateCount,
+
+      frozen:
+        false,
+
+      status:
+        'unavailable',
+
+      reason:
+        'Cache PREDICT dei campionati non ancora sufficiente per la multipla internazionale.',
+
+      leagues,
+
+      multipla3:
+        buildInternationalMultipleFromCandidates(
+          candidates,
+          3,
+        ),
+
+      multipla5:
+        buildInternationalMultipleFromCandidates(
+          candidates,
+          5,
+        ),
+    };
+  }
+
+  const cacheKey =
+    buildInternationalMultipleSnapshotCacheKey({
+      season,
+      historicalSeason,
+      roundSignature,
+    });
+
+  const existing =
+    await getExistingInternationalMultipleSnapshot({
+      season,
+      historicalSeason,
+      roundSignature,
+    });
+
+  const existingReady =
+    existing?.multipla3
+      ?.ready === true &&
+    existing?.multipla5
+      ?.ready === true;
+
+  if (
+    existing?.frozen ===
+      true &&
+    existingReady
+  ) {
+    return await persistOfficialInternationalMultipleSnapshot(
+      existing,
+    );
+  }
+
+  const now =
+    Date.now();
+
+  if (
+    Number.isFinite(
+      firstMatchAtMs,
+    ) &&
+    now >=
+      firstMatchAtMs &&
+    !existingReady &&
+    candidateCount < 5
+  ) {
+    return {
+      available:
+        false,
+
+      season:
+        String(season),
+
+      historicalSeason:
+        String(
+          historicalSeason,
+        ),
+
+      international:
+        true,
+
+      roundSignature,
+
+      candidateCount,
+
+      generatedAt:
+        new Date()
+          .toISOString(),
+
+      firstMatchAt:
+        new Date(
+          firstMatchAtMs,
+        ).toISOString(),
+
+      freezeAt:
+        new Date(
+          freezeAtMs,
+        ).toISOString(),
+
+      frozen:
+        false,
+
+      status:
+        'closed',
+
+      reason:
+        'Nessuna multipla internazionale completa era disponibile prima dell’inizio del primo evento.',
+
+      leagues,
+
+      multipla3:
+        buildInternationalMultipleFromCandidates(
+          candidates,
+          3,
+        ),
+
+      multipla5:
+        buildInternationalMultipleFromCandidates(
+          candidates,
+          5,
+        ),
+    };
+  }
+
+  if (
+    now >=
+      freezeAtMs &&
+    existingReady
+  ) {
+    const frozenSnapshot = {
+      ...existing,
+
+      available:
+        true,
+
+      international:
+        true,
+
+      frozen:
+        true,
+
+      status:
+        'frozen',
+
+      frozenAt:
+        existing?.frozenAt ??
+        new Date(now)
+          .toISOString(),
+
+      freezeAt:
+        existing?.freezeAt ??
+        new Date(
+          freezeAtMs,
+        ).toISOString(),
+
+      firstMatchAt:
+        existing?.firstMatchAt ??
+        (
+          Number.isFinite(
+            firstMatchAtMs,
+          )
+            ? new Date(
+                firstMatchAtMs,
+              ).toISOString()
+            : null
+        ),
+    };
+
+    setMemoryCache(
+      cacheKey,
+      frozenSnapshot,
+    );
+
+    await setDiskCache(
+      cacheKey,
+      frozenSnapshot,
+    );
+
+    return await persistOfficialInternationalMultipleSnapshot(
+      frozenSnapshot,
+    );
+  }
+
+  const generatedAt =
+    new Date()
+      .toISOString();
+
+  const snapshot = {
+    available:
+      candidateCount >=
+      3,
+
+    season:
+      String(season),
+
+    historicalSeason:
+      String(
+        historicalSeason,
+      ),
+
+    international:
+      true,
+
+    leagueName:
+      'Multiple Internazionali',
+
+    countryName:
+      '__international__',
+
+    roundSignature,
+
+    candidateCount,
+
+    generatedAt,
+
+    firstMatchAt:
+      Number.isFinite(
+        firstMatchAtMs,
+      )
+        ? new Date(
+            firstMatchAtMs,
+          ).toISOString()
+        : null,
+
+    freezeAt:
+      new Date(
+        freezeAtMs,
+      ).toISOString(),
+
+    freezeHoursBeforeFirstMatch:
+      MATCHDAY_MULTIPLE_FREEZE_WINDOW /
+      (60 * 60 * 1000),
+
+    frozen:
+      now >=
+        freezeAtMs &&
+      candidateCount >=
+        5,
+
+    status:
+      now >=
+          freezeAtMs &&
+        candidateCount >=
+          5
+        ? 'frozen'
+        : (
+            now >=
+              freezeAtMs
+              ? 'preparing-freeze'
+              : 'provisional'
+          ),
+
+    frozenAt:
+      now >=
+          freezeAtMs &&
+        candidateCount >=
+          5
+        ? generatedAt
+        : null,
+
+    description:
+      'Multipla Internazionale PREDICT: migliore pronostico di ciascuno dei 5 campionati nazionali; 3X con i 3 migliori, 5X con uno per ogni campionato. Solo cache PREDICT.',
+
+    leagues,
+
+    multipla3:
+      buildInternationalMultipleFromCandidates(
+        candidates,
+        3,
+      ),
+
+    multipla5:
+      buildInternationalMultipleFromCandidates(
+        candidates,
+        5,
+      ),
+  };
+
+  setMemoryCache(
+    cacheKey,
+    snapshot,
+  );
+
+  await setDiskCache(
+    cacheKey,
+    snapshot,
+  );
+
+  if (snapshot.frozen) {
+    return await persistOfficialInternationalMultipleSnapshot(
+      snapshot,
+    );
+  }
+
+  return snapshot;
+}
+
+async function evaluateFrozenInternationalMultipleAccumulator(
+  accumulator,
+) {
+  if (
+    !accumulator?.ready ||
+    !Array.isArray(
+      accumulator?.selections,
+    )
+  ) {
+    return accumulator;
+  }
+
+  const selections =
+    [];
+
+  for (
+    const selection
+      of accumulator.selections
+  ) {
+    let result =
+      selection?.result ?? {
+        status:
+          'pending',
+        settled:
+          false,
+      };
+
+    if (
+      result?.settled !==
+        true &&
+      selection?.matchId !==
+        null &&
+      selection?.matchId !==
+        undefined &&
+      selection?.historicalSeason &&
+      selection?.leagueName &&
+      selection?.countryName
+    ) {
+      const permanentPickRecord =
+        await getPermanentMatchdayPickRecord({
+          matchId:
+            selection.matchId,
+
+          historicalSeason:
+            selection.historicalSeason,
+
+          leagueName:
+            selection.leagueName,
+
+          countryName:
+            selection.countryName,
+        });
+
+      if (
+        permanentPickRecord
+          ?.result
+          ?.settled === true
+      ) {
+        result = {
+          ...permanentPickRecord
+            .result,
+        };
+      }
+    }
+
+    if (
+      result?.settled !==
+        true
+    ) {
+      const entry =
+        centralFindMatchEntryById(
+          selection?.matchId,
+        );
+
+      if (entry?.match) {
+        try {
+          result =
+            await evaluateMatchdayPick(
+              entry.match,
+              selection?.pick,
+              {
+                allowProvider:
+                  false,
+              },
+            );
+        } catch (error) {
+          result = {
+            status:
+              result?.status ??
+              'pending',
+
+            settled:
+              Boolean(
+                result?.settled,
+              ),
+
+            error:
+              error?.message ??
+              String(error),
+          };
+        }
+      }
+    }
+
+    selections.push({
+      ...selection,
+      result,
+    });
+  }
+
+  const nextAccumulator = {
+    ...accumulator,
+    selections,
+  };
+
+  const summary =
+    buildMultipleResultSummary(
+      nextAccumulator,
+    );
+
+  const oldResult =
+    accumulator?.result;
+
+  return {
+    ...nextAccumulator,
+
+    result: {
+      ...summary,
+
+      settledAt:
+        oldResult?.settledAt ??
+        (
+          summary.settled
+            ? new Date()
+                .toISOString()
+            : null
+        ),
+
+      updatedAt:
+        new Date()
+          .toISOString(),
+    },
+  };
+}
+
+async function settleAndPersistInternationalMultipleSnapshot(
+  snapshot,
+) {
+  if (
+    !snapshot?.frozen ||
+    !snapshot?.available ||
+    !snapshot?.archiveKey
+  ) {
+    return snapshot;
+  }
+
+  const multipla3 =
+    await evaluateFrozenInternationalMultipleAccumulator(
+      snapshot.multipla3,
+    );
+
+  const multipla5 =
+    await evaluateFrozenInternationalMultipleAccumulator(
+      snapshot.multipla5,
+    );
+
+  const updated = {
+    ...snapshot,
+
+    updatedAt:
+      new Date()
+        .toISOString(),
+
+    multipla3,
+
+    multipla5,
+  };
+
+  await setPermanentCache(
+    snapshot.archiveKey,
+    updated,
+  );
+
+  return updated;
+}
+
+async function buildAndPersistInternationalMultiplesSummary({
+  season =
+    CURRENT_SERIE_A_SEASON,
+  historicalSeason =
+    '2025',
+} = {}) {
+  const indexKey =
+    buildInternationalMultipleHistoryIndexKey({
+      season,
+      historicalSeason,
+    });
+
+  const index =
+    await getPermanentCache(
+      indexKey,
+    );
+
+  const items =
+    Array.isArray(
+      index?.items,
+    )
+      ? index.items
+      : [];
+
+  const multipla3 =
+    emptyMultipleSummary();
+
+  const multipla5 =
+    emptyMultipleSummary();
+
+  let officialRounds =
+    0;
+
+  for (
+    const item
+      of items
+  ) {
+    const record =
+      await getPermanentCache(
+        item?.archiveKey,
+      );
+
+    if (
+      !record?.frozen ||
+      !record?.available
+    ) {
+      continue;
+    }
+
+    const settled =
+      await settleAndPersistInternationalMultipleSnapshot(
+        record,
+      );
+
+    officialRounds +=
+      1;
+
+    addMultipleToSummary(
+      multipla3,
+      settled?.multipla3,
+    );
+
+    addMultipleToSummary(
+      multipla5,
+      settled?.multipla5,
+    );
+  }
+
+  for (
+    const summary
+      of [
+        multipla3,
+        multipla5,
+      ]
+  ) {
+    summary.successRate =
+      summary.verified >
+        0
+        ? round2(
+            (
+              summary.won /
+              summary.verified
+            ) *
+              100,
+          )
+        : null;
+  }
+
+  const payload = {
+    season:
+      String(season),
+
+    historicalSeason:
+      String(
+        historicalSeason,
+      ),
+
+    leagueName:
+      'Multiple Internazionali',
+
+    countryName:
+      '__international__',
+
+    international:
+      true,
+
+    generatedAt:
+      new Date()
+        .toISOString(),
+
+    officialRounds,
+
+    officialDates:
+      officialRounds,
+
+    dateBased:
+      true,
+
+    multipla3,
+
+    multipla5,
+  };
+
+  await setPermanentCache(
+    buildInternationalMultipleSummaryKey({
+      season,
+      historicalSeason,
+    }),
+    payload,
+  );
+
+  return payload;
+}
+
+async function settlePermanentInternationalMultipleHistory({
+  season =
+    CURRENT_SERIE_A_SEASON,
+  historicalSeason =
+    '2025',
+} = {}) {
+  // Prima aggiorna/congela lo snapshot corrente usando solo la cache PREDICT.
+  await getOrUpdateInternationalMultiplesSnapshot({
+    season,
+    historicalSeason,
+  });
+
+  // Poi verifica gli archivi già congelati e aggiorna il riepilogo.
+  return await buildAndPersistInternationalMultiplesSummary({
+    season,
+    historicalSeason,
+  });
+}
+
+
 async function precomputeUpcomingMatchdayMultiples() {
   const now =
     Date.now();
@@ -28185,6 +29724,85 @@ app.get(
           'Solo risultati reali conclusi. Nessun pronostico PREDICT viene ricostruito retroattivamente.',
 
         rounds,
+      });
+    } catch (error) {
+      sendApiError(
+        res,
+        error,
+      );
+    }
+  },
+);
+
+
+
+app.get(
+  '/api/football/international-multiples',
+  async (req, res) => {
+    try {
+      const {
+        season =
+          CURRENT_SERIE_A_SEASON,
+        historicalSeason =
+          '2025',
+      } = req.query;
+
+      const payload =
+        await getOrUpdateInternationalMultiplesSnapshot({
+          season,
+          historicalSeason,
+        });
+
+      return res.json({
+        ...payload,
+
+        cached:
+          true,
+
+        cacheSource:
+          'international-multiple-cache-only',
+
+        providerCallsAllowed:
+          false,
+      });
+    } catch (error) {
+      sendApiError(
+        res,
+        error,
+      );
+    }
+  },
+);
+
+
+app.get(
+  '/api/football/international-multiples-summary',
+  async (req, res) => {
+    try {
+      const {
+        season =
+          CURRENT_SERIE_A_SEASON,
+        historicalSeason =
+          '2025',
+      } = req.query;
+
+      const payload =
+        await settlePermanentInternationalMultipleHistory({
+          season,
+          historicalSeason,
+        });
+
+      return res.json({
+        ...payload,
+
+        cached:
+          true,
+
+        cacheSource:
+          'international-multiple-history-cache-only',
+
+        providerCallsAllowed:
+          false,
       });
     } catch (error) {
       sendApiError(
