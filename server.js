@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const fs = require('fs/promises');
 const path = require('path');
 const crypto = require('crypto');
+const { AsyncLocalStorage } = require('async_hooks');
 const {
   initializeApp: initializeFirebaseAdminApp,
   cert: firebaseAdminCert,
@@ -16,6 +17,11 @@ const {
 dotenv.config();
 
 const app = express();
+
+// Contesto per-request: una richiesta HTTP pubblica non può mai trasformarsi
+// in una chiamata Highlightly. I job centrali (fuori da una richiesta HTTP)
+// e le sole richieste interne autenticate restano autorizzati.
+const highlightlyRequestContext = new AsyncLocalStorage();
 
 const PORT = process.env.PORT || 3000;
 const HIGHLIGHTLY_BASE_URL = 'https://soccer.highlightly.net';
@@ -459,6 +465,25 @@ const INTERNAL_SYNC_TOKEN =
   crypto
     .randomBytes(32)
     .toString('hex');
+
+// Barriera globale anti-consumo da client:
+// qualunque route HTTP è cache-only salvo header interno segreto.
+// In questo modo anche un endpoint dimenticato o un futuro cache miss
+// non può consumare la quota Highlightly per iniziativa di un utente.
+app.use((req, res, next) => {
+  const internalRequest =
+    req.get('x-predict-internal') ===
+    INTERNAL_SYNC_TOKEN;
+
+  highlightlyRequestContext.run(
+    {
+      isHttpRequest: true,
+      providerCallsAllowed:
+        internalRequest,
+    },
+    next,
+  );
+});
 
 
 // Stagione corrente mostrata nell'app.
@@ -2402,6 +2427,30 @@ async function highlightlyGet(
   apiPath,
   query = {},
 ) {
+  const requestContext =
+    highlightlyRequestContext.getStore();
+
+  if (
+    requestContext?.isHttpRequest === true &&
+    requestContext?.providerCallsAllowed !== true
+  ) {
+    const error = new Error(
+      'Dati PREDICT in preparazione sul server centrale',
+    );
+
+    error.statusCode = 503;
+    error.code =
+      'PREDICT_PUBLIC_PROVIDER_BLOCKED';
+    error.details = {
+      retryLater: true,
+      providerCallsAllowed: false,
+      apiPath:
+        String(apiPath || ''),
+    };
+
+    throw error;
+  }
+
   if (!process.env.HIGHLIGHTLY_API_KEY) {
     throw new Error(
       'HIGHLIGHTLY_API_KEY non configurata',
@@ -3700,14 +3749,27 @@ function sendApiError(
 ) {
   console.error(error);
 
+  const publicProviderBlocked =
+    error?.code ===
+    'PREDICT_PUBLIC_PROVIDER_BLOCKED';
+
   res
     .status(error.statusCode || 500)
     .json({
-      error: error.statusCode
-        ? 'Errore Highlightly'
-        : 'Errore interno del server',
+      error: publicProviderBlocked
+        ? 'Cache PREDICT non ancora pronta'
+        : error.statusCode
+          ? 'Errore Highlightly'
+          : 'Errore interno del server',
 
       message: error.message,
+
+      ...(publicProviderBlocked
+        ? {
+            retryLater: true,
+            providerCallsAllowed: false,
+          }
+        : {}),
 
       details:
         error.details || null,
@@ -14067,12 +14129,21 @@ async function precomputeUpcomingPredictData() {
             league.leagueName,
           countryName:
             league.countryName,
+          // Deve coincidere esattamente con la chiave usata da /match-analysis.
+          // La vecchia variante 10/90 faceva risultare l'analisi sempre mancante
+          // e poteva rigenerarla inutilmente ogni 30 minuti.
           cacheVariant:
-            bookmakerOnlyModeForRound(
-              roundNumberOf(match),
-            )
-              ? `predict10-bookmaker90-analysisstats-v3-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
-              : null,
+            [
+              bookmakerOnlyModeForRound(
+                roundNumberOf(match),
+              )
+                ? `predict95-bookmaker5-nullfix-analysisstats-v4-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+                : null,
+              'hist2020to2025-allfamilies-v1',
+            ]
+              .filter(Boolean)
+              .join('-') ||
+            null,
           cacheTtl:
             analysisPrecomputeTtl,
           allowPermanent:
@@ -14616,11 +14687,17 @@ async function archivePermanentAnalysisHistoryForFrozenMatches() {
           }
 
           const cacheVariant =
-            bookmakerOnlyModeForRound(
-              roundNumberOf(match),
-            )
-              ? `predict10-bookmaker90-nullfix-v2-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
-              : null;
+            [
+              bookmakerOnlyModeForRound(
+                roundNumberOf(match),
+              )
+                ? `predict95-bookmaker5-nullfix-analysisstats-v4-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+                : null,
+              'hist2020to2025-allfamilies-v1',
+            ]
+              .filter(Boolean)
+              .join('-') ||
+            null;
 
           const analysis =
             await getExistingMatchAnalysisSnapshot({
@@ -14853,6 +14930,90 @@ async function settlePermanentPickHistoryForFinishedMatches() {
   );
 }
 
+let centralStandingsSyncRunning = false;
+
+async function syncCentralOfficialStandings() {
+  if (centralStandingsSyncRunning) {
+    return false;
+  }
+
+  centralStandingsSyncRunning = true;
+
+  try {
+    let completed = 0;
+
+    for (
+      const league
+        of CENTRAL_DOMESTIC_LEAGUES
+    ) {
+      if (
+        league?.supportsStandings ===
+        false
+      ) {
+        continue;
+      }
+
+      try {
+        const params =
+          new URLSearchParams({
+            season:
+              String(
+                league.currentSeason,
+              ),
+            leagueName:
+              String(
+                league.leagueName,
+              ),
+            countryName:
+              String(
+                league.countryName,
+              ),
+            refresh:
+              '0',
+          });
+
+        const response =
+          await fetch(
+            `http://127.0.0.1:${PORT}/api/football/standings?${params.toString()}`,
+            {
+              headers: {
+                'x-predict-internal':
+                  INTERNAL_SYNC_TOKEN,
+              },
+            },
+          );
+
+        if (!response.ok) {
+          const body =
+            await response.text();
+
+          console.warn(
+            `PREDICT CENTRAL CLASSIFICA ${league.leagueName}: ${response.status} ${body}`,
+          );
+
+          if (response.status === 429) {
+            break;
+          }
+
+          continue;
+        }
+
+        completed += 1;
+      } catch (error) {
+        console.warn(
+          `PREDICT CENTRAL CLASSIFICA ${league.leagueName} non aggiornata:`,
+          error?.message ??
+            error,
+        );
+      }
+    }
+
+    return completed > 0;
+  } finally {
+    centralStandingsSyncRunning = false;
+  }
+}
+
 async function centralSerieATick() {
   if (
     centralSerieAState.syncRunning
@@ -14869,6 +15030,10 @@ async function centralSerieATick() {
 
     const liveUpdated =
       await syncCentralSerieALive();
+
+    // La classifica viene mantenuta dal backend: il pulsante dell'app
+    // non deve mai provocare una chiamata Highlightly.
+    await syncCentralOfficialStandings();
 
     const finishedDataChanged =
       await settleCentralFinishedMatches();
@@ -14973,6 +15138,58 @@ app.get(
   (req, res) => {
     res.json({
       ok: true,
+
+      backgroundJobsEnabled:
+        PREDICT_BACKGROUND_JOBS_ENABLED,
+
+      providerAccessPolicy: {
+        publicHttpProviderCallsAllowed:
+          false,
+        internalSchedulerOnly:
+          true,
+        guard:
+          'AsyncLocalStorage request barrier',
+      },
+
+      centralStandingsSyncRunning,
+
+      uefa: {
+        precomputeRunning:
+          centralUefaPrecomputeRunning,
+        predictionHorizonHours:
+          CENTRAL_UEFA_PREDICTION_HORIZON /
+          (60 * 60 * 1000),
+        maxNewPicksPerTick:
+          CENTRAL_UEFA_PRECOMPUTE_MAX_PER_TICK,
+        competitions:
+          Object.fromEntries(
+            CENTRAL_UEFA_CUPS.map(
+              (competition) => {
+                const state =
+                  centralUefaCupStateOf(
+                    competition,
+                  );
+
+                return [
+                  competition.key,
+                  {
+                    leagueName:
+                      competition.leagueName,
+                    matchesCached:
+                      state?.matches.length ??
+                      0,
+                    lastScheduleSyncAt:
+                      state?.lastScheduleSyncAt ??
+                      null,
+                    lastLiveSyncAt:
+                      state?.lastLiveSyncAt ??
+                      null,
+                  },
+                ];
+              },
+            ),
+          ),
+      },
 
       highlightlyBudget:
         getHighlightlyDailyBudgetSnapshot(),
@@ -15177,6 +15394,14 @@ const CENTRAL_UEFA_SCHEDULE_INTERVAL =
 const CENTRAL_UEFA_TICK_INTERVAL =
   15 * 60 * 1000;
 
+// I pronostici UEFA vengono preparati centralmente con anticipo controllato.
+// Due nuovi match per ciclo evitano picchi di quota e sono sufficienti perché
+// il calendario UEFA è noto con largo anticipo.
+const CENTRAL_UEFA_PREDICTION_HORIZON =
+  3 * 24 * 60 * 60 * 1000;
+const CENTRAL_UEFA_PRECOMPUTE_MAX_PER_TICK = 2;
+const CENTRAL_UEFA_PRECOMPUTE_MIN_REMAINING = 1200;
+
 const CENTRAL_SHARED_LIVE_INTERVAL =
   LIVE_MATCHES_CACHE_TIME;
 
@@ -15206,6 +15431,9 @@ const centralUefaCupStates =
 let centralUefaScheduleRunning =
   false;
 
+let centralUefaPrecomputeRunning =
+  false;
+
 let centralSharedLiveRunning =
   false;
 
@@ -15223,6 +15451,33 @@ function centralUefaCupStateOf(
     ) ??
     null
   );
+}
+
+function centralUefaEntries() {
+  const entries = [];
+
+  for (
+    const competition
+      of CENTRAL_UEFA_CUPS
+  ) {
+    const state =
+      centralUefaCupStateOf(
+        competition,
+      );
+
+    for (
+      const match
+        of state?.matches ?? []
+    ) {
+      entries.push({
+        competition,
+        state,
+        match,
+      });
+    }
+  }
+
+  return entries;
 }
 
 function rebuildCentralUefaCupIndex(
@@ -15841,6 +16096,380 @@ async function refreshCentralSharedLiveCache() {
   return payload;
 }
 
+async function precomputeUpcomingUefaPredictData() {
+  if (centralUefaPrecomputeRunning) {
+    return false;
+  }
+
+  centralUefaPrecomputeRunning = true;
+
+  try {
+    await ensureHighlightlyDailyBudgetLoaded();
+
+    const initialBudget =
+      getHighlightlyDailyBudgetSnapshot();
+
+    if (
+      initialBudget.internalRemaining <=
+      CENTRAL_UEFA_PRECOMPUTE_MIN_REMAINING
+    ) {
+      console.warn(
+        `PREDICT CENTRAL UEFA PRECOMPUTE: sospeso, restano ${initialBudget.internalRemaining} chiamate interne`,
+      );
+      return false;
+    }
+
+    const now = Date.now();
+
+    const upcoming =
+      centralUefaEntries()
+        .filter(
+          ({ match }) => {
+            const startMs =
+              Date.parse(
+                match?.date ?? '',
+              );
+
+            return (
+              Number.isFinite(startMs) &&
+              startMs > now &&
+              startMs - now <=
+                CENTRAL_UEFA_PREDICTION_HORIZON
+            );
+          },
+        )
+        .sort(
+          (a, b) =>
+            Date.parse(
+              a.match?.date ?? '',
+            ) -
+            Date.parse(
+              b.match?.date ?? '',
+            ),
+        );
+
+    let generated = 0;
+
+    for (const entry of upcoming) {
+      if (
+        generated >=
+        CENTRAL_UEFA_PRECOMPUTE_MAX_PER_TICK
+      ) {
+        break;
+      }
+
+      const {
+        competition,
+        match,
+      } = entry;
+
+      const homeTeamId =
+        teamIdOf(
+          match?.homeTeam,
+        );
+      const awayTeamId =
+        teamIdOf(
+          match?.awayTeam,
+        );
+
+      if (
+        !homeTeamId ||
+        !awayTeamId
+      ) {
+        continue;
+      }
+
+      const existingSnapshot =
+        await getExistingMatchdayPickSnapshot({
+          match,
+          matchId:
+            match?.id,
+          historicalSeason:
+            competition.historicalSeason,
+          leagueName:
+            competition.leagueName,
+          countryName:
+            competition.countryName,
+        });
+
+      if (existingSnapshot?.pick) {
+        continue;
+      }
+
+      const budget =
+        getHighlightlyDailyBudgetSnapshot();
+
+      if (
+        budget.internalRemaining <=
+        CENTRAL_UEFA_PRECOMPUTE_MIN_REMAINING
+      ) {
+        console.warn(
+          `PREDICT CENTRAL UEFA PRECOMPUTE: stop prudenziale, restano ${budget.internalRemaining} chiamate interne`,
+        );
+        break;
+      }
+
+      console.log(
+        `PREDICT CENTRAL UEFA ${competition.leagueName}: preparo pronostico ${match?.id ?? ''} (${homeTeamId}-${awayTeamId})`,
+      );
+
+      try {
+        const snapshot =
+          await getOrCreateMatchdayPickSnapshot({
+            match,
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              competition.historicalSeason,
+            leagueName:
+              competition.leagueName,
+            countryName:
+              competition.countryName,
+          });
+
+        if (!snapshot?.pick) {
+          continue;
+        }
+
+        generated += 1;
+
+        const requestedDate =
+          predictRomeDateKey(
+            match?.date,
+          );
+
+        if (requestedDate) {
+          const aggregatePrefix =
+            `${matchdayPicksAggregatePrefixForRound(
+              1,
+            )}-real-results-v1`;
+
+          await deleteCacheKey(
+            [
+              aggregatePrefix,
+              competition.currentSeason,
+              competition.historicalSeason,
+              1,
+              competition.leagueName,
+              competition.countryName,
+              requestedDate,
+            ].join('-'),
+          );
+        }
+      } catch (error) {
+        console.warn(
+          `PREDICT CENTRAL UEFA pronostico ${competition.leagueName} ${match?.id ?? ''} non riuscito:`,
+          error?.message ??
+            error,
+        );
+
+        if (
+          isHighlightlyRateLimitError(
+            error,
+          )
+        ) {
+          break;
+        }
+      }
+    }
+
+    return generated > 0;
+  } finally {
+    centralUefaPrecomputeRunning = false;
+  }
+}
+
+async function maintainCentralUefaMatchdayMultiples() {
+  const now = Date.now();
+  const groups = new Map();
+
+  for (
+    const {
+      match,
+      competition,
+    } of centralUefaEntries()
+  ) {
+    const startMs =
+      Date.parse(
+        match?.date ?? '',
+      );
+    const dateKey =
+      predictRomeDateKey(
+        match?.date,
+      );
+
+    if (
+      !dateKey ||
+      !Number.isFinite(startMs) ||
+      startMs - now >
+        CENTRAL_UEFA_PREDICTION_HORIZON ||
+      now - startMs >
+        24 * 60 * 60 * 1000
+    ) {
+      continue;
+    }
+
+    const key =
+      `${competition.key}:${dateKey}`;
+
+    if (!groups.has(key)) {
+      groups.set(
+        key,
+        {
+          competition,
+          dateKey,
+          matches: [],
+        },
+      );
+    }
+
+    groups.get(key)
+      .matches
+      .push(match);
+  }
+
+  for (
+    const group
+      of groups.values()
+  ) {
+    const {
+      competition,
+      dateKey,
+    } = group;
+
+    const roundMatches =
+      group.matches.sort(
+        (a, b) =>
+          Date.parse(
+            a?.date ?? '',
+          ) -
+          Date.parse(
+            b?.date ?? '',
+          ),
+      );
+
+    const picks = [];
+
+    for (const match of roundMatches) {
+      const snapshot =
+        await getExistingMatchdayPickSnapshot({
+          match,
+          matchId:
+            match?.id,
+          historicalSeason:
+            competition.historicalSeason,
+          leagueName:
+            competition.leagueName,
+          countryName:
+            competition.countryName,
+        });
+
+      if (snapshot?.pick) {
+        picks.push({
+          matchId:
+            match?.id ?? null,
+          date:
+            match?.date ?? null,
+          homeTeam:
+            match?.homeTeam ?? null,
+          awayTeam:
+            match?.awayTeam ?? null,
+          pick:
+            snapshot.pick,
+          pickGeneratedAt:
+            snapshot.generatedAt ?? null,
+          modelVersion:
+            snapshot.modelVersion ??
+            'PREDICT v5',
+        });
+      }
+
+      if (
+        isFinishedMatch(match) &&
+        snapshot?.pick
+      ) {
+        try {
+          await getOrPersistMatchdayPickResult({
+            match,
+            snapshot,
+            historicalSeason:
+              competition.historicalSeason,
+            leagueName:
+              competition.leagueName,
+            countryName:
+              competition.countryName,
+            allowProvider:
+              false,
+          });
+        } catch (error) {
+          console.warn(
+            `PREDICT CENTRAL UEFA risultato ${match?.id ?? ''} non aggiornato:`,
+            error?.message ??
+              error,
+          );
+        }
+      }
+    }
+
+    const multipleRoundKey =
+      Number(
+        dateKey.replace(
+          /-/g,
+          '',
+        ),
+      );
+
+    let multiples =
+      await getOrUpdateMatchdayMultiplesSnapshot({
+        season:
+          competition.currentSeason,
+        historicalSeason:
+          competition.historicalSeason,
+        round:
+          multipleRoundKey,
+        leagueName:
+          competition.leagueName,
+        countryName:
+          competition.countryName,
+        roundMatches,
+        picks,
+      });
+
+    if (
+      multiples?.frozen &&
+      multiples?.available
+    ) {
+      multiples =
+        await settleAndPersistMatchdayMultipleSnapshot({
+          snapshot:
+            multiples,
+          roundMatches,
+          allowProvider:
+            false,
+        });
+    }
+
+    const aggregatePrefix =
+      `${matchdayPicksAggregatePrefixForRound(
+        1,
+      )}-real-results-v1`;
+
+    await deleteCacheKey(
+      [
+        aggregatePrefix,
+        competition.currentSeason,
+        competition.historicalSeason,
+        1,
+        competition.leagueName,
+        competition.countryName,
+        dateKey,
+      ].join('-'),
+    );
+  }
+
+  return groups.size > 0;
+}
+
 async function centralUefaScheduleTick() {
   if (
     centralUefaScheduleRunning
@@ -15853,6 +16482,8 @@ async function centralUefaScheduleTick() {
 
   try {
     await syncCentralUefaSchedules();
+    await precomputeUpcomingUefaPredictData();
+    await maintainCentralUefaMatchdayMultiples();
   } catch (error) {
     console.error(
       'PREDICT CENTRAL UEFA ERROR:',
@@ -15875,7 +16506,7 @@ async function startCentralUefaScheduler() {
   );
 
   console.log(
-    'PREDICT CENTRAL UEFA: scheduler calendario attivo ogni 15 minuti (refresh provider max ogni 6 ore)',
+    'PREDICT CENTRAL UEFA: scheduler calendario/pronostici/multiple attivo ogni 15 minuti (refresh calendario provider max ogni 6 ore)',
   );
 }
 
@@ -16989,6 +17620,11 @@ app.get(
           });
       }
 
+      const internalRequest =
+        req.get(
+          'x-predict-internal',
+        ) ===
+        INTERNAL_SYNC_TOKEN;
 
       const supportedLeague =
         resolveSupportedLeague({
@@ -17008,6 +17644,10 @@ app.get(
                 currentSeason,
               leagueName,
               countryName,
+              // Una richiesta pubblica può leggere solo gli stati/cache centrali.
+              // La generazione dati provider resta riservata ai job interni.
+              allowProviderFallback:
+                internalRequest,
             })
           : centralSerieAState.matches;
 
@@ -17316,22 +17956,12 @@ app.get(
         });
       }
 
-      const internalRequest =
-        req.get(
-          'x-predict-internal',
-        ) ===
-        INTERNAL_SYNC_TOKEN;
-
-      // Tutte le leghe supportate possono generare l'analisi completa
-      // on-demand quando l'utente apre una partita dall'app.
-      // Questo include anche la Serie A quando lo scheduler centrale e' OFF
-      // e non esiste ancora uno snapshot preparato per la partita richiesta.
+      // La generazione completa dell'analisi è riservata al server PREDICT.
+      // In produzione il client legge esclusivamente snapshot/cache già preparati.
+      // Il confronto A/B resta disponibile solo fuori produzione come prima.
       const publicOnDemandAnalysisAllowed =
         comparisonMode ||
-        (
-          supportedLeague !== null &&
-          supportedLeague !== undefined
-        );
+        internalRequest;
 
       // Per una partita futura, se l'analisi esiste sul disco ma ha
       // superato il TTL operativo di 30 minuti, la mostriamo comunque
@@ -18229,6 +18859,25 @@ async function loadSupportedLeagueSeasonMatches({
       centralState.matches.length > 0
     ) {
       return centralState.matches;
+    }
+  }
+
+  const isCentralUefaCurrent =
+    league.isCup === true &&
+    String(season) ===
+      String(league.currentSeason);
+
+  if (isCentralUefaCurrent) {
+    const centralCupState =
+      centralUefaCupStateOf(
+        league,
+      );
+
+    if (
+      centralCupState &&
+      centralCupState.matches.length > 0
+    ) {
+      return centralCupState.matches;
     }
   }
 
@@ -24965,11 +25614,10 @@ app.get(
           season,
           leagueName,
           countryName,
-          // Per i 5 campionati nazionali l'utente legge esclusivamente
-          // lo stato centrale/cache. Le coppe mantengono per ora il loro
-          // percorso dedicato già esistente.
+          // Tutte le competizioni supportate, comprese le coppe UEFA,
+          // sono cache-only per il client. Solo il server interno può usare
+          // il provider in caso di cache miss.
           allowProviderFallback:
-            isCupRequest ||
             internalRequest,
         });
 
@@ -25177,16 +25825,11 @@ app.get(
                   countryName,
                 });
 
-              // Nei 5 campionati nazionali lo snapshot deve essere stato
-              // preparato dallo scheduler PREDICT: l'apertura dell'app non deve
-              // generarlo on-demand e quindi non deve innescare Highlightly.
-              // Le coppe UEFA mantengono per ora il percorso dedicato esistente.
+              // Lo snapshot deve essere preparato dai job centrali PREDICT.
+              // L'apertura dell'app, anche sulle coppe UEFA, non lo genera mai.
               if (
                 !snapshot?.pick &&
-                (
-                  isCupRequest ||
-                  internalRequest
-                )
+                internalRequest
               ) {
                 snapshot =
                   await getOrCreateMatchdayPickSnapshot({
@@ -25842,7 +26485,16 @@ app.get(
       const normalizedSeason =
         String(season);
 
+      const internalRequest =
+        req.get(
+          'x-predict-internal',
+        ) ===
+        INTERNAL_SYNC_TOKEN;
+
+      // Il pulsante Aggiorna dell'app rilegge la cache. Solo il job interno
+      // può forzare un refresh provider.
       const forceRefresh =
+        internalRequest &&
         String(refresh) === '1';
 
       const cacheKey = [
@@ -25886,6 +26538,46 @@ app.get(
               'disk',
           });
         }
+      }
+
+      if (!internalRequest) {
+        // Se lo scheduler è momentaneamente in ritardo, preferiamo una classifica
+        // già nota (anche più vecchia del TTL operativo) a una chiamata provider
+        // provocata dall'utente.
+        const stale =
+          getMemoryCache(
+            cacheKey,
+            PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+          ) ??
+          await getDiskCache(
+            cacheKey,
+            PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+          );
+
+        if (stale) {
+          setMemoryCache(
+            cacheKey,
+            stale,
+          );
+
+          return res.json({
+            ...stale,
+            cached: true,
+            cacheSource:
+              'stale-central-cache',
+            refreshPending: true,
+            providerCallsAllowed: false,
+          });
+        }
+
+        return res
+          .status(503)
+          .json({
+            error:
+              'Classifica PREDICT in preparazione sul server centrale',
+            retryLater: true,
+            providerCallsAllowed: false,
+          });
       }
 
       const leaguesPayload =
@@ -27200,20 +27892,29 @@ app.get(
           });
       }
 
+      const cacheKey =
+        `lineups-${matchId}`;
+
       const data =
-        await cachedHighlightlyGet({
-          key:
-            `lineups-${matchId}`,
+        getMemoryCache(
+          cacheKey,
+          PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+        ) ??
+        await getDiskCache(
+          cacheKey,
+          PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+        );
 
-          apiPath:
-            `/lineups/${matchId}`,
-
-          query: {},
-
-          // Highlightly aggiorna le formazioni circa ogni 15 minuti.
-          ttl:
-            LINEUPS_CACHE_TIME,
-        });
+      if (!data) {
+        return res
+          .status(503)
+          .json({
+            error:
+              'Formazioni PREDICT non ancora disponibili in cache',
+            retryLater: true,
+            providerCallsAllowed: false,
+          });
+      }
 
       res.json(data);
     } catch (error) {
@@ -27246,21 +27947,29 @@ app.get(
           });
       }
 
+      const cacheKey =
+        `events-${matchId}`;
+
       const data =
-        await cachedHighlightlyGet({
-          key:
-            `events-${matchId}`,
+        getMemoryCache(
+          cacheKey,
+          PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+        ) ??
+        await getDiskCache(
+          cacheKey,
+          PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+        );
 
-          apiPath:
-            `/events/${matchId}`,
-
-          query: {},
-
-          // Highlightly aggiorna gli eventi live circa ogni minuto.
-          // 55 secondi evita doppie chiamate ravvicinate mantenendo il live reattivo.
-          ttl:
-            LIVE_EVENTS_CACHE_TIME,
-        });
+      if (!data) {
+        return res
+          .status(503)
+          .json({
+            error:
+              'Eventi LIVE PREDICT non ancora disponibili in cache',
+            retryLater: true,
+            providerCallsAllowed: false,
+          });
+      }
 
       res.json(data);
     } catch (error) {
@@ -27293,19 +28002,29 @@ app.get(
           });
       }
 
+      const cacheKey =
+        `statistics-${matchId}`;
+
       const data =
-        await cachedHighlightlyGet({
-          key:
-            `statistics-${matchId}`,
+        getMemoryCache(
+          cacheKey,
+          PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+        ) ??
+        await getDiskCache(
+          cacheKey,
+          PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+        );
 
-          apiPath:
-            `/statistics/${matchId}`,
-
-          query: {},
-
-          ttl:
-            RECENT_CACHE_TIME,
-        });
+      if (!data) {
+        return res
+          .status(503)
+          .json({
+            error:
+              'Statistiche PREDICT non ancora disponibili in cache',
+            retryLater: true,
+            providerCallsAllowed: false,
+          });
+      }
 
       res.json(data);
     } catch (error) {
