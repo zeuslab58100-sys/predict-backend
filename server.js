@@ -397,6 +397,7 @@ const MATCHDAY_PICK_BOOKMAKER_ONLY_VERSION = 'v10-strength-p95-b5';
 const UEFA_CUP_PREDICT_WEIGHT = 0.05;
 const UEFA_CUP_BOOKMAKER_WEIGHT = 0.95;
 const UEFA_CUP_MATCHDAY_PICK_VERSION = 'v12-uefa-p5-b95-no-odds-no-signal';
+const UEFA_CUP_MATCHDAY_PICK_LEGACY_VERSION = 'v11-uefa-p5-b95';
 
 // Storico visuale dedicato alle 3 coppe UEFA.
 // Parte definitivamente dall'08/09/2026 e non usa i campionati nazionali.
@@ -20357,6 +20358,55 @@ async function getOrCreateMatchdayPickSnapshot({
     return current.snapshot;
   }
 
+  // Compatibilità selettiva UEFA v11 -> v12:
+  // recuperiamo la vecchia pick SOLO se le quote bookmaker risultano già
+  // presenti nella cache locale. Se non ci sono quote, nessun pronostico.
+  // Questo evita nuove chiamate Highlightly e non rigenera pick/multiple.
+  if (
+    requestedLeague?.isCup === true &&
+    snapshotVersion ===
+      UEFA_CUP_MATCHDAY_PICK_VERSION
+  ) {
+    const legacyUefa =
+      await readMatchdayPickSnapshotVersion({
+        version:
+          UEFA_CUP_MATCHDAY_PICK_LEGACY_VERSION,
+        matchId,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+
+    if (legacyUefa.snapshot?.pick) {
+      const cachedBookmakerProbabilities =
+        await getCachedBookmakerProbabilitiesForMatch(
+          matchId,
+        );
+
+      if (
+        bookmakerProbabilitiesHaveAnyMarket(
+          cachedBookmakerProbabilities,
+        )
+      ) {
+        if (
+          predictionFreezeActive ||
+          !beforeKickoff
+        ) {
+          await persistPermanentMatchdayPickRecord({
+            match,
+            snapshot:
+              legacyUefa.snapshot,
+            historicalSeason,
+            leagueName,
+            countryName,
+          });
+        }
+
+        return legacyUefa.snapshot;
+      }
+    }
+  }
+
   if (
     snapshotVersion ===
       MATCHDAY_PICK_SNAPSHOT_CURRENT_VERSION
@@ -26702,6 +26752,40 @@ async function getExistingMatchdayPickSnapshot({
 
   if (current.snapshot?.pick) {
     return current.snapshot;
+  }
+
+  // Coppe UEFA: una pick v11 già esistente resta valida solo quando
+  // troviamo in cache almeno un mercato bookmaker utilizzabile.
+  // In assenza quote (es. Manchester United-Sabah) restituiamo null.
+  if (
+    requestedLeague?.isCup === true &&
+    snapshotVersion ===
+      UEFA_CUP_MATCHDAY_PICK_VERSION
+  ) {
+    const legacyUefa =
+      await readMatchdayPickSnapshotVersion({
+        version:
+          UEFA_CUP_MATCHDAY_PICK_LEGACY_VERSION,
+        matchId,
+        historicalSeason,
+        leagueName,
+        countryName,
+      });
+
+    if (legacyUefa.snapshot?.pick) {
+      const cachedBookmakerProbabilities =
+        await getCachedBookmakerProbabilitiesForMatch(
+          matchId,
+        );
+
+      if (
+        bookmakerProbabilitiesHaveAnyMarket(
+          cachedBookmakerProbabilities,
+        )
+      ) {
+        return legacyUefa.snapshot;
+      }
+    }
   }
 
   if (
