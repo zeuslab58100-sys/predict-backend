@@ -16084,6 +16084,69 @@ function buildMergedCentralLivePayload(
   };
 }
 
+async function refreshCentralLiveLineupsCache(
+  livePayload,
+) {
+  const liveMatches =
+    Array.isArray(
+      livePayload?.data,
+    )
+      ? livePayload.data
+      : [];
+
+  let refreshed =
+    0;
+
+  for (
+    const match
+      of liveMatches
+  ) {
+    const matchId =
+      String(
+        match?.id ??
+        '',
+      ).trim();
+
+    if (!matchId) {
+      continue;
+    }
+
+    try {
+      await cachedHighlightlyGet({
+        key:
+          `lineups-${matchId}`,
+        apiPath:
+          `/lineups/${matchId}`,
+        query: {},
+        ttl:
+          LINEUPS_CACHE_TIME,
+      });
+
+      refreshed +=
+        1;
+    } catch (error) {
+      console.warn(
+        `PREDICT CENTRAL LIVE FORMAZIONI ${matchId} non aggiornate:`,
+        error?.message ??
+          error,
+      );
+
+      if (
+        isHighlightlyRateLimitError(
+          error,
+        )
+      ) {
+        console.warn(
+          'PREDICT CENTRAL LIVE FORMAZIONI: rate limit 429 rilevato, interrompo il ciclo formazioni.',
+        );
+        break;
+      }
+    }
+  }
+
+  return refreshed;
+}
+
 async function refreshCentralLiveEventsCache(
   livePayload,
 ) {
@@ -16191,6 +16254,18 @@ async function refreshCentralSharedLiveCache() {
   } catch (error) {
     console.warn(
       'PREDICT CENTRAL LIVE EVENTI: refresh non riuscito:',
+      error?.message ??
+        error,
+    );
+  }
+
+  try {
+    await refreshCentralLiveLineupsCache(
+      payload,
+    );
+  } catch (error) {
+    console.warn(
+      'PREDICT CENTRAL LIVE FORMAZIONI: refresh non riuscito:',
       error?.message ??
         error,
     );
