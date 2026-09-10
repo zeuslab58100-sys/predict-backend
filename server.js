@@ -16084,6 +16084,69 @@ function buildMergedCentralLivePayload(
   };
 }
 
+async function refreshCentralLiveEventsCache(
+  livePayload,
+) {
+  const liveMatches =
+    Array.isArray(
+      livePayload?.data,
+    )
+      ? livePayload.data
+      : [];
+
+  let refreshed =
+    0;
+
+  for (
+    const match
+      of liveMatches
+  ) {
+    const matchId =
+      String(
+        match?.id ??
+        '',
+      ).trim();
+
+    if (!matchId) {
+      continue;
+    }
+
+    try {
+      await cachedHighlightlyGet({
+        key:
+          `events-${matchId}`,
+        apiPath:
+          `/events/${matchId}`,
+        query: {},
+        ttl:
+          LIVE_EVENTS_CACHE_TIME,
+      });
+
+      refreshed +=
+        1;
+    } catch (error) {
+      console.warn(
+        `PREDICT CENTRAL LIVE EVENTI ${matchId} non aggiornati:`,
+        error?.message ??
+          error,
+      );
+
+      if (
+        isHighlightlyRateLimitError(
+          error,
+        )
+      ) {
+        console.warn(
+          'PREDICT CENTRAL LIVE EVENTI: rate limit 429 rilevato, interrompo il ciclo eventi.',
+        );
+        break;
+      }
+    }
+  }
+
+  return refreshed;
+}
+
 async function refreshCentralSharedLiveCache() {
   const now =
     new Date();
@@ -16120,6 +16183,18 @@ async function refreshCentralSharedLiveCache() {
     buildMergedCentralLivePayload(
       now,
     );
+
+  try {
+    await refreshCentralLiveEventsCache(
+      payload,
+    );
+  } catch (error) {
+    console.warn(
+      'PREDICT CENTRAL LIVE EVENTI: refresh non riuscito:',
+      error?.message ??
+        error,
+    );
+  }
 
   const cacheKey =
     'predict-central-live-matches-v2-cups';
