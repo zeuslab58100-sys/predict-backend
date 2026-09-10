@@ -16148,11 +16148,21 @@ async function precomputeUpcomingUefaPredictData() {
             ),
         );
 
-    let generated = 0;
+    // Limitiamo il numero di PARTITE lavorate per ciclo, non soltanto
+    // quelle concluse con successo. In questo modo anche un provider
+    // temporaneamente incompleto non può trasformare il precompute in
+    // una raffica di richieste nello stesso tick.
+    let processed = 0;
+    let completed = 0;
+
+    // Deve essere identica alla variante ufficiale usata dalla route
+    // /api/football/match-analysis per Champions/Europa/Conference.
+    const uefaAnalysisCacheVariant =
+      'uefa-predict5-bookmaker95-analysisstats-v3-fullvenuehistory';
 
     for (const entry of upcoming) {
       if (
-        generated >=
+        processed >=
         CENTRAL_UEFA_PRECOMPUTE_MAX_PER_TICK
       ) {
         break;
@@ -16192,7 +16202,39 @@ async function precomputeUpcomingUefaPredictData() {
             competition.countryName,
         });
 
-      if (existingSnapshot?.pick) {
+      // Il pronostico e l'analisi sono due cache diverse. Un pick già
+      // esistente NON deve far saltare il controllo dell'analisi:
+      // altrimenti la pagina Analisi può restare 503 per sempre dopo
+      // che il pubblico è stato correttamente reso cache-only.
+      const existingAnalysis =
+        await getExistingMatchAnalysisSnapshot({
+          homeTeamId,
+          awayTeamId,
+          historicalSeason:
+            competition.historicalSeason,
+          leagueName:
+            competition.leagueName,
+          countryName:
+            competition.countryName,
+          cacheVariant:
+            uefaAnalysisCacheVariant,
+          cacheTtl:
+            PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+          allowPermanent:
+            false,
+          allowLegacy:
+            false,
+        });
+
+      const needsAnalysis =
+        !existingAnalysis;
+      const needsSnapshot =
+        !existingSnapshot?.pick;
+
+      if (
+        !needsAnalysis &&
+        !needsSnapshot
+      ) {
         continue;
       }
 
@@ -16209,14 +16251,57 @@ async function precomputeUpcomingUefaPredictData() {
         break;
       }
 
-      console.log(
-        `PREDICT CENTRAL UEFA ${competition.leagueName}: preparo pronostico ${match?.id ?? ''} (${homeTeamId}-${awayTeamId})`,
-      );
+      processed += 1;
 
       try {
-        const snapshot =
-          await getOrCreateMatchdayPickSnapshot({
-            match,
+        let snapshot =
+          existingSnapshot;
+
+        if (needsSnapshot) {
+          console.log(
+            `PREDICT CENTRAL UEFA ${competition.leagueName}: preparo analisi/pronostico ${match?.id ?? ''} (${homeTeamId}-${awayTeamId})`,
+          );
+
+          // Questa funzione genera prima l'analisi completa e poi il pick.
+          // Se l'analisi era già presente, la route interna la rilegge dalla
+          // cache senza nuove chiamate provider.
+          snapshot =
+            await getOrCreateMatchdayPickSnapshot({
+              match,
+              homeTeamId,
+              awayTeamId,
+              historicalSeason:
+                competition.historicalSeason,
+              leagueName:
+                competition.leagueName,
+              countryName:
+                competition.countryName,
+            });
+        } else if (needsAnalysis) {
+          console.log(
+            `PREDICT CENTRAL UEFA ${competition.leagueName}: preparo analisi ${match?.id ?? ''} (${homeTeamId}-${awayTeamId})`,
+          );
+
+          // Caso importante: il pick può esistere già mentre la cache
+          // dell'analisi ufficiale manca. Prima questo caso veniva saltato.
+          await internalMatchAnalysis({
+            homeTeamId,
+            awayTeamId,
+            matchId:
+              match?.id,
+            historicalSeason:
+              competition.historicalSeason,
+            leagueName:
+              competition.leagueName,
+            countryName:
+              competition.countryName,
+          });
+        }
+
+        // Consideriamo completata la lavorazione quando l'analisi ufficiale
+        // è stata preparata; se serviva anche il pick, deve essere presente.
+        const refreshedAnalysis =
+          await getExistingMatchAnalysisSnapshot({
             homeTeamId,
             awayTeamId,
             historicalSeason:
@@ -16225,40 +16310,54 @@ async function precomputeUpcomingUefaPredictData() {
               competition.leagueName,
             countryName:
               competition.countryName,
+            cacheVariant:
+              uefaAnalysisCacheVariant,
+            cacheTtl:
+              PREDICT_HISTORY_ARCHIVE_CACHE_TIME,
+            allowPermanent:
+              false,
+            allowLegacy:
+              false,
           });
 
-        if (!snapshot?.pick) {
-          continue;
+        if (
+          refreshedAnalysis &&
+          (
+            !needsSnapshot ||
+            snapshot?.pick
+          )
+        ) {
+          completed += 1;
         }
 
-        generated += 1;
+        if (snapshot?.pick) {
+          const requestedDate =
+            predictRomeDateKey(
+              match?.date,
+            );
 
-        const requestedDate =
-          predictRomeDateKey(
-            match?.date,
-          );
+          if (requestedDate) {
+            const aggregatePrefix =
+              `${matchdayPicksAggregatePrefixForRound(
+                1,
+              )}-real-results-v1`;
 
-        if (requestedDate) {
-          const aggregatePrefix =
-            `${matchdayPicksAggregatePrefixForRound(
-              1,
-            )}-real-results-v1`;
-
-          await deleteCacheKey(
-            [
-              aggregatePrefix,
-              competition.currentSeason,
-              competition.historicalSeason,
-              1,
-              competition.leagueName,
-              competition.countryName,
-              requestedDate,
-            ].join('-'),
-          );
+            await deleteCacheKey(
+              [
+                aggregatePrefix,
+                competition.currentSeason,
+                competition.historicalSeason,
+                1,
+                competition.leagueName,
+                competition.countryName,
+                requestedDate,
+              ].join('-'),
+            );
+          }
         }
       } catch (error) {
         console.warn(
-          `PREDICT CENTRAL UEFA pronostico ${competition.leagueName} ${match?.id ?? ''} non riuscito:`,
+          `PREDICT CENTRAL UEFA precompute ${competition.leagueName} ${match?.id ?? ''} non riuscito:`,
           error?.message ??
             error,
         );
@@ -16273,7 +16372,7 @@ async function precomputeUpcomingUefaPredictData() {
       }
     }
 
-    return generated > 0;
+    return completed > 0;
   } finally {
     centralUefaPrecomputeRunning = false;
   }
