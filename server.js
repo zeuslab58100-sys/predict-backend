@@ -396,7 +396,7 @@ const MATCHDAY_PICK_BOOKMAKER_ONLY_VERSION = 'v10-strength-p95-b5';
 // Champions / Europa / Conference: 5% PREDICT / 95% bookmaker.
 const UEFA_CUP_PREDICT_WEIGHT = 0.05;
 const UEFA_CUP_BOOKMAKER_WEIGHT = 0.95;
-const UEFA_CUP_MATCHDAY_PICK_VERSION = 'v11-uefa-p5-b95';
+const UEFA_CUP_MATCHDAY_PICK_VERSION = 'v12-uefa-p5-b95-no-odds-no-signal';
 
 // Storico visuale dedicato alle 3 coppe UEFA.
 // Parte definitivamente dall'08/09/2026 e non usa i campionati nazionali.
@@ -10549,6 +10549,23 @@ function buildPredictPresentationSignals(
     ...analysis.prediction,
   };
 
+  // Coppe UEFA: senza quote bookmaker non pubblichiamo alcun segnale.
+  // Le statistiche grezze dell'analisi restano disponibili, ma non vengono
+  // trasformate in Primary Signal o Top Signals.
+  if (prediction.bookmakerFallback === true) {
+    prediction.primarySignal = null;
+    prediction.topSignals = [];
+    prediction.signalsAvailable = false;
+    prediction.signalsUnavailableReason =
+      prediction.bookmakerFallbackReason ??
+      'Quote bookmaker non disponibili per questa partita';
+
+    return {
+      ...analysis,
+      prediction,
+    };
+  }
+
   const advanced =
     analysis.advanced ?? {};
 
@@ -18977,9 +18994,12 @@ app.get(
           predictWeight: 1,
           bookmakerWeight: 0,
         };
+        prediction.signalsAvailable = false;
+        prediction.signalsUnavailableReason =
+          'Quote bookmaker non disponibili nel feed Highlightly per questa partita';
 
-        // Penalità prudenziale: il segnale resta utilizzabile, ma non viene
-        // presentato con la stessa affidabilità del normale blend UEFA 5/95.
+        // Manteniamo il calcolo statistico PREDICT come supporto all'analisi,
+        // ma senza pubblicare Primary Signal, Top Signals o pronostico.
         const fallbackReliabilityFactor = 0.85;
         const reliability =
           prediction.reliability;
@@ -19525,6 +19545,12 @@ function buildMostProbablePick(
 ) {
   const prediction =
     analysis?.prediction ?? {};
+
+  // Coppe UEFA: se l'analisi è in fallback perché mancano le quote bookmaker,
+  // non generiamo alcun pronostico principale.
+  if (prediction?.bookmakerFallback === true) {
+    return null;
+  }
 
   const advanced =
     analysis?.advanced ?? {};
