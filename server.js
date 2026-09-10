@@ -25068,6 +25068,15 @@ async function buildAndPersistUefaMultiplesSummary({
         ].join('-'),
       )}-`;
 
+    const cupDatePrefix =
+      `${sanitizeCachePart(
+        [
+          'matchday-picks-cup-date-history-v2-multiples',
+          season,
+          historicalSeason,
+        ].join('-'),
+      )}-`;
+
     const suffix =
       `-${sanitizeCachePart(
         supportedLeague
@@ -25086,6 +25095,7 @@ async function buildAndPersistUefaMultiplesSummary({
           of [
             currentPrefix,
             legacyPrefix,
+            cupDatePrefix,
           ]
       ) {
         if (
@@ -25108,7 +25118,12 @@ async function buildAndPersistUefaMultiplesSummary({
 
         const round =
           Number(
-            roundPart,
+            String(
+              roundPart,
+            ).replace(
+              /-/g,
+              '',
+            ),
           );
 
         if (
@@ -25155,7 +25170,7 @@ async function buildAndPersistUefaMultiplesSummary({
     const round
       of rounds
   ) {
-    const archived =
+    let archived =
       await getCompatiblePermanentMultipleArchive({
         season,
         historicalSeason,
@@ -25167,6 +25182,68 @@ async function buildAndPersistUefaMultiplesSummary({
           supportedLeague
             .countryName,
       });
+
+    // Compatibilità con le prime multiple UEFA:
+    // alcune date erano state archiviate nel payload storico della data
+    // prima dell'introduzione dell'archivio dedicato delle multiple.
+    if (
+      !archived?.frozen ||
+      !archived?.available
+    ) {
+      const roundText =
+        String(round)
+          .padStart(
+            8,
+            '0',
+          );
+
+      if (
+        roundText.length ===
+        8
+      ) {
+        const dateKey =
+          `${roundText.slice(
+            0,
+            4,
+          )}-${roundText.slice(
+            4,
+            6,
+          )}-${roundText.slice(
+            6,
+            8,
+          )}`;
+
+        const cupDateHistoryKey =
+          [
+            'matchday-picks-cup-date-history-v2-multiples',
+            season,
+            historicalSeason,
+            dateKey,
+            supportedLeague
+              .leagueName,
+            supportedLeague
+              .countryName,
+          ].join('-');
+
+        const cupDateArchive =
+          await getPermanentCache(
+            cupDateHistoryKey,
+          );
+
+        if (
+          cupDateArchive
+            ?.multiples
+            ?.frozen === true &&
+          cupDateArchive
+            ?.multiples
+            ?.available === true
+        ) {
+          archived =
+            cupDateArchive
+              .multiples;
+        }
+      }
+    }
 
     if (
       !archived?.frozen ||
