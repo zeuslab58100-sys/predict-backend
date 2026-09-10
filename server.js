@@ -25007,23 +25007,21 @@ async function buildAndPersistUefaMultiplesSummary({
       supportedLeague,
     );
 
-  const dateKeys =
-    Array.from(
-      state?.byDate?.keys?.() ??
-        [],
-    ).sort();
-
-  const multipla3 =
-    emptyMultipleSummary();
-
-  const multipla5 =
-    emptyMultipleSummary();
-
-  let officialRounds = 0;
+  // Le date attualmente caricate dal calendario centrale non bastano
+  // per costruire lo storico completo: le vecchie date UEFA possono
+  // non essere più presenti in state.byDate.
+  //
+  // Partiamo dalle date correnti e aggiungiamo tutte le date realmente
+  // archiviate nel cache disk permanente. Nessuna chiamata provider.
+  const archivedRounds =
+    new Set();
 
   for (
     const dateKey
-      of dateKeys
+      of Array.from(
+        state?.byDate?.keys?.() ??
+          [],
+      )
   ) {
     const round =
       Number(
@@ -25036,13 +25034,127 @@ async function buildAndPersistUefaMultiplesSummary({
       );
 
     if (
-      !Number.isFinite(
+      Number.isFinite(
         round,
       )
     ) {
-      continue;
+      archivedRounds.add(
+        round,
+      );
     }
+  }
 
+  try {
+    const fileNames =
+      await fs.readdir(
+        CACHE_DIR,
+      );
+
+    const currentPrefix =
+      `${sanitizeCachePart(
+        [
+          'matchday-multiples-history-v2-strength',
+          season,
+          historicalSeason,
+        ].join('-'),
+      )}-`;
+
+    const legacyPrefix =
+      `${sanitizeCachePart(
+        [
+          'matchday-multiples-history-v1',
+          season,
+          historicalSeason,
+        ].join('-'),
+      )}-`;
+
+    const suffix =
+      `-${sanitizeCachePart(
+        supportedLeague
+          .leagueName,
+      )}-${sanitizeCachePart(
+        supportedLeague
+          .countryName,
+      )}.json`;
+
+    for (
+      const fileName
+        of fileNames
+    ) {
+      for (
+        const prefix
+          of [
+            currentPrefix,
+            legacyPrefix,
+          ]
+      ) {
+        if (
+          !fileName.startsWith(
+            prefix,
+          ) ||
+          !fileName.endsWith(
+            suffix,
+          )
+        ) {
+          continue;
+        }
+
+        const roundPart =
+          fileName.slice(
+            prefix.length,
+            fileName.length -
+              suffix.length,
+          );
+
+        const round =
+          Number(
+            roundPart,
+          );
+
+        if (
+          Number.isFinite(
+            round,
+          )
+        ) {
+          archivedRounds.add(
+            round,
+          );
+        }
+      }
+    }
+  } catch (error) {
+    if (
+      error?.code !==
+      'ENOENT'
+    ) {
+      console.warn(
+        `Riepilogo UEFA ${supportedLeague.leagueName}: impossibile leggere archivio cache:`,
+        error?.message ??
+          error,
+      );
+    }
+  }
+
+  const rounds =
+    Array.from(
+      archivedRounds,
+    ).sort(
+      (a, b) =>
+        a - b,
+    );
+
+  const multipla3 =
+    emptyMultipleSummary();
+
+  const multipla5 =
+    emptyMultipleSummary();
+
+  let officialRounds = 0;
+
+  for (
+    const round
+      of rounds
+  ) {
     const archived =
       await getCompatiblePermanentMultipleArchive({
         season,
