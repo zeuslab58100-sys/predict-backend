@@ -25265,6 +25265,51 @@ async function buildAndPersistUefaMultiplesSummary({
     );
   }
 
+  // Baseline storico Champions League 2026:
+  // prima dell'archivio UEFA attuale risultano già 2 multiple 3X vinte
+  // e 2 multiple 5X vinte. Usiamo un minimo storico, non un incremento,
+  // così un eventuale archivio recuperato in futuro non crea doppioni.
+  const championsLegacyBaseline =
+    String(
+      supportedLeague
+        .leagueName,
+    ) ===
+      'Champions League' &&
+    String(season) ===
+      '2026' &&
+    String(
+      historicalSeason,
+    ) ===
+      '2025';
+
+  if (
+    championsLegacyBaseline
+  ) {
+    multipla3.won =
+      Math.max(
+        multipla3.won,
+        2,
+      );
+
+    multipla3.verified =
+      Math.max(
+        multipla3.verified,
+        2,
+      );
+
+    multipla5.won =
+      Math.max(
+        multipla5.won,
+        2,
+      );
+
+    multipla5.verified =
+      Math.max(
+        multipla5.verified,
+        2,
+      );
+  }
+
   for (
     const summary
       of [
@@ -25307,6 +25352,8 @@ async function buildAndPersistUefaMultiplesSummary({
       officialRounds,
     dateBased:
       true,
+    legacyBaselineApplied:
+      championsLegacyBaseline,
     multipla3,
     multipla5,
   };
