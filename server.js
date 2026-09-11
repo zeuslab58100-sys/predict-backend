@@ -25323,6 +25323,19 @@ async function buildAndPersistUefaMultiplesSummary({
   const multipla5 =
     emptyMultipleSummary();
 
+  // Il baseline Champions serve solo a recuperare le vittorie storiche
+  // precedenti al 10/09/2026 che non erano state tutte archiviate.
+  // Tenere separato il conteggio pre-cutoff permette di aggiungere
+  // correttamente i risultati nuovi senza bloccare won/verified a 2.
+  const championsLegacyCutoffRound =
+    20260910;
+
+  let championsLegacyArchivedWon3 =
+    0;
+
+  let championsLegacyArchivedWon5 =
+    0;
+
   let officialRounds = 0;
 
   for (
@@ -25413,6 +25426,33 @@ async function buildAndPersistUefaMultiplesSummary({
 
     officialRounds += 1;
 
+    if (
+      Number(round) <
+      championsLegacyCutoffRound
+    ) {
+      if (
+        archived
+          ?.multipla3
+          ?.result
+          ?.status ===
+        'won'
+      ) {
+        championsLegacyArchivedWon3 +=
+          1;
+      }
+
+      if (
+        archived
+          ?.multipla5
+          ?.result
+          ?.status ===
+        'won'
+      ) {
+        championsLegacyArchivedWon5 +=
+          1;
+      }
+    }
+
     addMultipleToSummary(
       multipla3,
       archived.multipla3,
@@ -25425,9 +25465,9 @@ async function buildAndPersistUefaMultiplesSummary({
   }
 
   // Baseline storico Champions League 2026:
-  // prima dell'archivio UEFA attuale risultano già 2 multiple 3X vinte
-  // e 2 multiple 5X vinte. Usiamo un minimo storico, non un incremento,
-  // così un eventuale archivio recuperato in futuro non crea doppioni.
+  // prima del 10/09/2026 risultano 2 vittorie 3X e 2 vittorie 5X.
+  // Aggiungiamo solo le vittorie legacy realmente mancanti nell'archivio
+  // pre-cutoff. I risultati dal 10/09/2026 in poi restano quindi additivi.
   const championsLegacyBaseline =
     String(
       supportedLeague
@@ -25444,29 +25484,31 @@ async function buildAndPersistUefaMultiplesSummary({
   if (
     championsLegacyBaseline
   ) {
-    multipla3.won =
+    const missingLegacyWon3 =
       Math.max(
-        multipla3.won,
-        2,
+        0,
+        2 -
+          championsLegacyArchivedWon3,
       );
 
-    multipla3.verified =
+    const missingLegacyWon5 =
       Math.max(
-        multipla3.verified,
-        2,
+        0,
+        2 -
+          championsLegacyArchivedWon5,
       );
 
-    multipla5.won =
-      Math.max(
-        multipla5.won,
-        2,
-      );
+    multipla3.won +=
+      missingLegacyWon3;
 
-    multipla5.verified =
-      Math.max(
-        multipla5.verified,
-        2,
-      );
+    multipla3.verified +=
+      missingLegacyWon3;
+
+    multipla5.won +=
+      missingLegacyWon5;
+
+    multipla5.verified +=
+      missingLegacyWon5;
   }
 
   for (
