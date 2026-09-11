@@ -14210,9 +14210,13 @@ async function precomputeUpcomingPredictData() {
       return;
     }
 
-    // Massimo 5 partite mancanti per ciclo su tutti i cinque
+    // Massimo 10 partite lavorate per ciclo su tutti i cinque
     // campionati, con concorrenza 2 per proteggere la quota API.
-    const pendingMatches = [];
+    // Le analisi mancanti hanno sempre priorità sui soli pronostici:
+    // un pronostico temporaneamente non disponibile non deve bloccare
+    // il refresh delle analisi delle partite successive.
+    const missingAnalysisMatches = [];
+    const missingSnapshotOnlyMatches = [];
 
     for (
       const entry
@@ -14325,7 +14329,7 @@ async function precomputeUpcomingPredictData() {
         continue;
       }
 
-      pendingMatches.push({
+      const pendingEntry = {
         ...entry,
         homeTeamId,
         awayTeamId,
@@ -14333,20 +14337,33 @@ async function precomputeUpcomingPredictData() {
           !existingAnalysis,
         needsSnapshot:
           !existingSnapshot?.pick,
-      });
+      };
 
-      if (
-        pendingMatches.length >= 10
-      ) {
-        break;
+      if (!existingAnalysis) {
+        missingAnalysisMatches.push(
+          pendingEntry,
+        );
+      } else {
+        missingSnapshotOnlyMatches.push(
+          pendingEntry,
+        );
       }
     }
+
+    const pendingMatches = [
+      ...missingAnalysisMatches,
+      ...missingSnapshotOnlyMatches,
+    ].slice(0, 10);
 
     if (
       pendingMatches.length === 0
     ) {
       return;
     }
+
+    console.log(
+      `PREDICT CENTRAL PRECOMPUTE: ${missingAnalysisMatches.length} analisi mancanti, ${missingSnapshotOnlyMatches.length} soli pronostici; lavoro ${pendingMatches.length}`,
+    );
 
     const affectedRounds =
       new Map();
