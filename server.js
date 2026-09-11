@@ -14154,7 +14154,7 @@ async function precomputeUpcomingPredictData() {
           : Number.POSITIVE_INFINITY;
 
       // Le partite lontane dal calcio d'inizio non devono occupare di nuovo
-      // i 5 slot del precompute ogni 30 minuti: altrimenti la coda delle
+      // gli slot del precompute ogni 30 minuti: altrimenti la coda delle
       // gare successive puo' restare bloccata sui primi match.
       // Nelle ultime 6 ore torniamo invece al refresh ogni 30 minuti,
       // cosi' l'analisi resta aggiornata prima del freeze a -1 ora.
@@ -14229,7 +14229,7 @@ async function precomputeUpcomingPredictData() {
       });
 
       if (
-        pendingMatches.length >= 5
+        pendingMatches.length >= 10
       ) {
         break;
       }
@@ -18370,13 +18370,22 @@ app.get(
           matchStartMs -
             PREMATCH_PREDICTION_FREEZE_WINDOW;
 
+      const timeToKickoffMs =
+        Number.isFinite(matchStartMs)
+          ? matchStartMs - Date.now()
+          : Number.POSITIVE_INFINITY;
+
       const analysisCacheTtl =
         predictionFreezeActive
           ? 14 * 24 * 60 * 60 * 1000
-          : matchIsUpcoming ||
-              (!centralMatch && effectiveMatchId)
-            ? 30 * 60 * 1000
-            : 14 * 24 * 60 * 60 * 1000;
+          : matchIsUpcoming
+            ? timeToKickoffMs <=
+                6 * 60 * 60 * 1000
+              ? 30 * 60 * 1000
+              : 6 * 60 * 60 * 1000
+            : !centralMatch && effectiveMatchId
+              ? 30 * 60 * 1000
+              : 14 * 24 * 60 * 60 * 1000;
 
       const analysisCacheKey =
         buildMatchAnalysisCacheKey({
@@ -18514,15 +18523,14 @@ app.get(
         comparisonMode ||
         internalRequest;
 
-      // Per una partita futura, se l'analisi esiste sul disco ma ha
-      // superato il TTL operativo di 30 minuti, la mostriamo comunque
-      // all'app come fallback invece di rispondere 503.
-      // Le richieste interne dello scheduler bypassano il fallback:
-      // devono rigenerare davvero lo snapshot.
+      // Se esiste gia' un'analisi sul disco ma ha superato il TTL operativo,
+      // il client pubblico riceve comunque l'ultimo snapshot disponibile
+      // invece di un 503. Lo scheduler interno bypassa questo fallback e puo'
+      // rigenerare l'analisi quando previsto, senza mai scaricare il costo
+      // delle chiamate provider sugli utenti.
       if (
-        matchIsUpcoming &&
-        !predictionFreezeActive &&
-        !internalRequest
+        !internalRequest &&
+        !comparisonMode
       ) {
         const staleAnalysisDisk =
           await getDiskCache(
@@ -18542,6 +18550,8 @@ app.get(
               'predict-analysis-disk-stale',
             refreshPending:
               true,
+            providerCallsAllowed:
+              false,
           });
         }
       }
