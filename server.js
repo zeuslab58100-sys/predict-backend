@@ -1192,6 +1192,113 @@ async function getDiskCache(key, ttl) {
   }
 }
 
+// Recupera l'analisi più recente già persistita per la stessa partita logica
+// anche quando la chiave corrente è cambiata (per esempio dopo incremento
+// teamDataRevision o cambio variante del modello). Serve SOLO come fallback
+// pubblico stale: non viene copiata nella chiave corrente e non impedisce
+// allo scheduler centrale di rigenerare l'analisi aggiornata.
+async function getNewestCompatibleStaleMatchAnalysis({
+  homeTeamId,
+  awayTeamId,
+  historicalSeason,
+  leagueName,
+  countryName,
+  currentCacheKey = null,
+}) {
+  try {
+    await ensureCacheDirectory();
+
+    const identityPrefix =
+      sanitizeCachePart(
+        [
+          'match-analysis-snapshot-v2',
+          homeTeamId,
+          awayTeamId,
+          historicalSeason,
+          leagueName,
+          countryName,
+        ].join('-'),
+      );
+
+    const currentFileName =
+      currentCacheKey
+        ? `${sanitizeCachePart(currentCacheKey)}.json`
+        : null;
+
+    const entries =
+      await fs.readdir(
+        CACHE_DIR,
+        {
+          withFileTypes: true,
+        },
+      );
+
+    let newest = null;
+
+    for (const entry of entries) {
+      if (
+        !entry?.isFile?.() ||
+        !entry.name.endsWith('.json') ||
+        !entry.name.startsWith(identityPrefix) ||
+        entry.name === currentFileName
+      ) {
+        continue;
+      }
+
+      // Le cache A/B locali non sono mai una risposta ufficiale da mostrare
+      // come fallback agli utenti di produzione.
+      if (
+        entry.name.includes('local-ab-') ||
+        entry.name.includes('comparison')
+      ) {
+        continue;
+      }
+
+      try {
+        const raw =
+          await fs.readFile(
+            path.join(
+              CACHE_DIR,
+              entry.name,
+            ),
+            'utf8',
+          );
+
+        const parsed = JSON.parse(raw);
+        const createdAt =
+          Number(parsed?.createdAt);
+
+        if (
+          !Number.isFinite(createdAt) ||
+          parsed?.data === undefined ||
+          Date.now() - createdAt >
+            PREDICT_HISTORY_ARCHIVE_CACHE_TIME
+        ) {
+          continue;
+        }
+
+        if (
+          !newest ||
+          createdAt > newest.createdAt
+        ) {
+          newest = {
+            createdAt,
+            data:
+              parsed.data,
+          };
+        }
+      } catch {
+        // Una singola cache corrotta/non leggibile non deve impedire
+        // il recupero delle altre analisi persistite compatibili.
+      }
+    }
+
+    return newest?.data ?? null;
+  } catch {
+    return null;
+  }
+}
+
 async function setDiskCache(key, data) {
   try {
     await ensureCacheDirectory();
@@ -18548,6 +18655,40 @@ app.get(
             ...presentedAnalysis,
             cacheSource:
               'predict-analysis-disk-stale',
+            refreshPending:
+              true,
+            providerCallsAllowed:
+              false,
+          });
+        }
+
+        // Se la chiave corrente è cambiata dopo l'arrivo di nuovi dati
+        // (teamDataRevision) o dopo una nuova variante del modello, la vecchia
+        // analisi può essere ancora presente sul disco con la chiave precedente.
+        // La mostriamo temporaneamente invece di esporre un 503, mentre il
+        // precompute centrale prepara in background l'analisi aggiornata.
+        const compatibleStaleAnalysis =
+          await getNewestCompatibleStaleMatchAnalysis({
+            homeTeamId,
+            awayTeamId,
+            historicalSeason:
+              season,
+            leagueName,
+            countryName,
+            currentCacheKey:
+              analysisCacheKey,
+          });
+
+        if (compatibleStaleAnalysis) {
+          const presentedAnalysis =
+            buildPredictPresentationSignals(
+              compatibleStaleAnalysis,
+            );
+
+          return res.json({
+            ...presentedAnalysis,
+            cacheSource:
+              'predict-analysis-compatible-disk-stale',
             refreshPending:
               true,
             providerCallsAllowed:
