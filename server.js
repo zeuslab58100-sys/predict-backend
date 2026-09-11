@@ -14146,10 +14146,25 @@ async function precomputeUpcomingPredictData() {
           analysisMatchStartMs -
             PREMATCH_PREDICTION_FREEZE_WINDOW;
 
+      const timeToKickoffMs =
+        Number.isFinite(
+          analysisMatchStartMs,
+        )
+          ? analysisMatchStartMs - now
+          : Number.POSITIVE_INFINITY;
+
+      // Le partite lontane dal calcio d'inizio non devono occupare di nuovo
+      // i 5 slot del precompute ogni 30 minuti: altrimenti la coda delle
+      // gare successive puo' restare bloccata sui primi match.
+      // Nelle ultime 6 ore torniamo invece al refresh ogni 30 minuti,
+      // cosi' l'analisi resta aggiornata prima del freeze a -1 ora.
       const analysisPrecomputeTtl =
         analysisFreezeActive
           ? 14 * 24 * 60 * 60 * 1000
-          : 30 * 60 * 1000;
+          : timeToKickoffMs <=
+              6 * 60 * 60 * 1000
+            ? 30 * 60 * 1000
+            : 6 * 60 * 60 * 1000;
 
       const existingAnalysis =
         await getExistingMatchAnalysisSnapshot({
