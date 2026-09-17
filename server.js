@@ -26320,53 +26320,6 @@ async function getOrUpdateMatchdayMultiplesSnapshot({
   roundMatches,
   picks,
 }) {
-  const validStarts =
-    (roundMatches ?? [])
-      .map(
-        (match) =>
-          Date.parse(
-            match?.date ?? '',
-          ),
-      )
-      .filter(
-        (value) =>
-          Number.isFinite(value),
-      )
-      .sort(
-        (a, b) =>
-          a - b,
-      );
-
-  if (validStarts.length === 0) {
-    return {
-      available: false,
-      frozen: false,
-      status: 'unavailable',
-      reason:
-        'Orario della prima partita non disponibile',
-      multipla3:
-        buildMultipleFromRankedPicks(
-          [],
-          3,
-        ),
-      multipla5:
-        buildMultipleFromRankedPicks(
-          [],
-          5,
-        ),
-    };
-  }
-
-  const firstMatchStartMs =
-    validStarts[0];
-
-  const freezeAtMs =
-    firstMatchStartMs -
-    MATCHDAY_MULTIPLE_FREEZE_WINDOW;
-
-  const now =
-    Date.now();
-
   const key =
     buildMatchdayMultipleCacheKey({
       season,
@@ -26409,6 +26362,83 @@ async function getOrUpdateMatchdayMultiplesSnapshot({
       existing,
     );
   }
+
+  const rankedPicks =
+    buildRankedMultipleCandidates(
+      picks,
+    );
+
+  // Il cutoff della Multipla deve essere determinato dalle partite che
+  // partecipano davvero alla costruzione della Multipla. Un match sporco o
+  // fuori data privo di pronostico valido non deve anticipare firstMatchAt.
+  const pickStarts =
+    rankedPicks
+      .map(
+        (item) =>
+          Date.parse(
+            item?.date ?? '',
+          ),
+      )
+      .filter(
+        (value) =>
+          Number.isFinite(value),
+      )
+      .sort(
+        (a, b) =>
+          a - b,
+      );
+
+  const roundStarts =
+    (roundMatches ?? [])
+      .map(
+        (match) =>
+          Date.parse(
+            match?.date ?? '',
+          ),
+      )
+      .filter(
+        (value) =>
+          Number.isFinite(value),
+      )
+      .sort(
+        (a, b) =>
+          a - b,
+      );
+
+  const validStarts =
+    pickStarts.length > 0
+      ? pickStarts
+      : roundStarts;
+
+  if (validStarts.length === 0) {
+    return {
+      available: false,
+      frozen: false,
+      status: 'unavailable',
+      reason:
+        'Orario della prima partita non disponibile',
+      multipla3:
+        buildMultipleFromRankedPicks(
+          [],
+          3,
+        ),
+      multipla5:
+        buildMultipleFromRankedPicks(
+          [],
+          5,
+        ),
+    };
+  }
+
+  const firstMatchStartMs =
+    validStarts[0];
+
+  const freezeAtMs =
+    firstMatchStartMs -
+    MATCHDAY_MULTIPLE_FREEZE_WINDOW;
+
+  const now =
+    Date.now();
 
   if (
     now >= firstMatchStartMs &&
@@ -26492,11 +26522,6 @@ async function getOrUpdateMatchdayMultiplesSnapshot({
       frozenSnapshot,
     );
   }
-
-  const rankedPicks =
-    buildRankedMultipleCandidates(
-      picks,
-    );
 
   if (
     now >= freezeAtMs &&
@@ -28618,19 +28643,97 @@ app.get(
           .length >
         0
       ) {
-        selectedRound =
-          relevantCandidates[0]
-            .round;
-
-        const selectedData =
+        const currentCandidate =
           relevantCandidates[0];
 
-        reason =
-          selectedData
+        // Manteniamo la giornata in corso quando esiste già una Multipla
+        // valida da mostrare. Passiamo alla prima giornata futura soltanto
+        // se la giornata corrente è già iniziata e la sua Multipla non è
+        // disponibile/utile (es. snapshot vuoto o chiuso). In questo modo
+        // correggiamo i casi sporchi senza cambiare il comportamento normale
+        // degli altri campionati durante le partite in corso.
+        const nextUpcomingCandidate =
+          relevantCandidates.find(
+            (roundData) =>
+              roundData.nextRelevantAtMs >
+              nowMs,
+          );
+
+        let selectedData =
+          currentCandidate;
+
+        let skippedUnusableCurrentRound =
+          false;
+
+        if (
+          currentCandidate
             .nextRelevantAtMs <=
-          nowMs
-            ? 'current-round-in-progress'
-            : 'next-upcoming-round';
+            nowMs &&
+          nextUpcomingCandidate
+        ) {
+          const currentMultiple =
+            await getExistingMatchdayMultipleSnapshot({
+              season:
+                String(season),
+              historicalSeason:
+                String(
+                  supportedLeague
+                    .historicalSeason ??
+                  '2025',
+                ),
+              round:
+                currentCandidate.round,
+              leagueName:
+                supportedLeague
+                  .leagueName,
+              countryName:
+                supportedLeague
+                  .countryName,
+            });
+
+          const currentCandidateCount =
+            Number(
+              currentMultiple
+                ?.candidateCount ??
+              currentMultiple
+                ?.multipla5
+                ?.eventsCount ??
+              currentMultiple
+                ?.multipla3
+                ?.eventsCount ??
+              0,
+            );
+
+          const currentMultipleUsable =
+            currentCandidateCount >= 3 &&
+            Boolean(
+              currentMultiple
+                ?.multipla3
+                ?.ready,
+            ) &&
+            currentMultiple
+              ?.available !==
+              false;
+
+          if (!currentMultipleUsable) {
+            selectedData =
+              nextUpcomingCandidate;
+            skippedUnusableCurrentRound =
+              true;
+          }
+        }
+
+        selectedRound =
+          selectedData.round;
+
+        reason =
+          skippedUnusableCurrentRound
+            ? 'next-upcoming-round-after-unusable-current'
+            : selectedData
+                .nextRelevantAtMs <=
+              nowMs
+              ? 'current-round-in-progress'
+              : 'next-upcoming-round';
       }
 
       if (!selectedRound) {
