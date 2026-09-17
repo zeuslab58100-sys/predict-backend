@@ -28643,97 +28643,19 @@ app.get(
           .length >
         0
       ) {
-        const currentCandidate =
+        selectedRound =
+          relevantCandidates[0]
+            .round;
+
+        const selectedData =
           relevantCandidates[0];
 
-        // Manteniamo la giornata in corso quando esiste già una Multipla
-        // valida da mostrare. Passiamo alla prima giornata futura soltanto
-        // se la giornata corrente è già iniziata e la sua Multipla non è
-        // disponibile/utile (es. snapshot vuoto o chiuso). In questo modo
-        // correggiamo i casi sporchi senza cambiare il comportamento normale
-        // degli altri campionati durante le partite in corso.
-        const nextUpcomingCandidate =
-          relevantCandidates.find(
-            (roundData) =>
-              roundData.nextRelevantAtMs >
-              nowMs,
-          );
-
-        let selectedData =
-          currentCandidate;
-
-        let skippedUnusableCurrentRound =
-          false;
-
-        if (
-          currentCandidate
-            .nextRelevantAtMs <=
-            nowMs &&
-          nextUpcomingCandidate
-        ) {
-          const currentMultiple =
-            await getExistingMatchdayMultipleSnapshot({
-              season:
-                String(season),
-              historicalSeason:
-                String(
-                  supportedLeague
-                    .historicalSeason ??
-                  '2025',
-                ),
-              round:
-                currentCandidate.round,
-              leagueName:
-                supportedLeague
-                  .leagueName,
-              countryName:
-                supportedLeague
-                  .countryName,
-            });
-
-          const currentCandidateCount =
-            Number(
-              currentMultiple
-                ?.candidateCount ??
-              currentMultiple
-                ?.multipla5
-                ?.eventsCount ??
-              currentMultiple
-                ?.multipla3
-                ?.eventsCount ??
-              0,
-            );
-
-          const currentMultipleUsable =
-            currentCandidateCount >= 3 &&
-            Boolean(
-              currentMultiple
-                ?.multipla3
-                ?.ready,
-            ) &&
-            currentMultiple
-              ?.available !==
-              false;
-
-          if (!currentMultipleUsable) {
-            selectedData =
-              nextUpcomingCandidate;
-            skippedUnusableCurrentRound =
-              true;
-          }
-        }
-
-        selectedRound =
-          selectedData.round;
-
         reason =
-          skippedUnusableCurrentRound
-            ? 'next-upcoming-round-after-unusable-current'
-            : selectedData
-                .nextRelevantAtMs <=
-              nowMs
-              ? 'current-round-in-progress'
-              : 'next-upcoming-round';
+          selectedData
+            .nextRelevantAtMs <=
+          nowMs
+            ? 'current-round-in-progress'
+            : 'next-upcoming-round';
       }
 
       if (!selectedRound) {
