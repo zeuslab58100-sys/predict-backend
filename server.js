@@ -16935,13 +16935,122 @@ async function maintainCentralUefaMatchdayMultiples() {
       multiples?.frozen &&
       multiples?.available
     ) {
+      // Le multiple UEFA congelate restano immutabili, ma i mercati avanzati
+      // (Corner / Tiri in porta / Cartellini) richiedono le statistiche finali.
+      // Il job centrale può recuperarle dal provider SOLO per selezioni concluse
+      // ancora non settled e soltanto se il budget giornaliero è sopra la stessa
+      // soglia prudenziale usata dal precompute UEFA. getHistoricalMatchStatistics
+      // controlla prima RAM/disk, quindi una statistica già in cache non consuma
+      // nuove chiamate Highlightly.
+      const finishedMatchesById =
+        new Map(
+          roundMatches
+            .filter(
+              (match) =>
+                isFinishedMatch(
+                  match,
+                ),
+            )
+            .map(
+              (match) => [
+                String(
+                  match?.id ??
+                    '',
+                ),
+                match,
+              ],
+            ),
+        );
+
+      const multipleSelections =
+        [
+          ...(Array.isArray(
+            multiples
+              ?.multipla3
+              ?.selections,
+          )
+            ? multiples
+                .multipla3
+                .selections
+            : []),
+          ...(Array.isArray(
+            multiples
+              ?.multipla5
+              ?.selections,
+          )
+            ? multiples
+                .multipla5
+                .selections
+            : []),
+        ];
+
+      const advancedMarkets =
+        new Set([
+          'Corner',
+          'Tiri in porta',
+          'Cartellini',
+        ]);
+
+      const needsAdvancedStatistics =
+        multipleSelections.some(
+          (selection) =>
+            selection
+              ?.result
+              ?.settled !== true &&
+            advancedMarkets.has(
+              String(
+                selection
+                  ?.pick
+                  ?.market ??
+                  '',
+              ),
+            ) &&
+            finishedMatchesById.has(
+              String(
+                selection
+                  ?.matchId ??
+                  '',
+              ),
+            ),
+        );
+
+      let allowProviderForSettlement =
+        false;
+
+      if (needsAdvancedStatistics) {
+        try {
+          await ensureHighlightlyDailyBudgetLoaded();
+
+          const budget =
+            getHighlightlyDailyBudgetSnapshot();
+
+          allowProviderForSettlement =
+            budget.internalRemaining >
+            CENTRAL_UEFA_PRECOMPUTE_MIN_REMAINING;
+
+          if (
+            !allowProviderForSettlement
+          ) {
+            console.warn(
+              `PREDICT CENTRAL UEFA SETTLEMENT ${competition.leagueName}: statistiche avanzate rinviate, restano ${budget.internalRemaining} chiamate interne`,
+            );
+          }
+        } catch (error) {
+          console.warn(
+            `PREDICT CENTRAL UEFA SETTLEMENT ${competition.leagueName}: budget Highlightly non disponibile:`,
+            error?.message ??
+              error,
+          );
+        }
+      }
+
       multiples =
         await settleAndPersistMatchdayMultipleSnapshot({
           snapshot:
             multiples,
           roundMatches,
           allowProvider:
-            false,
+            allowProviderForSettlement,
         });
     }
 
