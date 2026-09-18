@@ -388,21 +388,21 @@ const MATCH_ANALYSIS_SNAPSHOT_LEGACY_VERSIONS = ['v1'];
 
 const BOOKMAKER_ONLY_FROM_ROUND = 3;
 
-// Blend ufficiale campionati nazionali, scelto dal backtest 11-13/09/2026:
-// 30% PREDICT / 70% bookmaker.
+// Blend ufficiale campionati nazionali, aggiornato dal backtest su 202 partite fino al 17/09/2026:
+// 82% PREDICT / 18% bookmaker.
 // La nuova versione invalida solo cache/snapshot provvisori del modello;
 // gli archivi permanenti già congelati restano invariati.
-const DOMESTIC_PREDICT_WEIGHT = 0.30;
-const DOMESTIC_BOOKMAKER_WEIGHT = 0.70;
-const MATCHDAY_PICK_DOMESTIC_BLEND_VERSION = 'v12-strength-p30-b70';
+const DOMESTIC_PREDICT_WEIGHT = 0.82;
+const DOMESTIC_BOOKMAKER_WEIGHT = 0.18;
+const MATCHDAY_PICK_DOMESTIC_BLEND_VERSION = 'v13-strength-p82-b18';
 
 // Blend ufficiale Multigol allineato al modello domestico:
-// 30% PREDICT / 70% bookmaker.
-const MULTIGOAL_PREDICT_WEIGHT = 0.30;
-const MULTIGOAL_BOOKMAKER_WEIGHT = 0.70;
+// 82% PREDICT / 18% bookmaker.
+const MULTIGOAL_PREDICT_WEIGHT = 0.82;
+const MULTIGOAL_BOOKMAKER_WEIGHT = 0.18;
 
 // Blend dedicato esclusivamente alle coppe UEFA.
-// Campionati nazionali: 30% PREDICT / 70% bookmaker.
+// Campionati nazionali: 82% PREDICT / 18% bookmaker.
 // Champions / Europa / Conference: 5% PREDICT / 95% bookmaker.
 const UEFA_CUP_PREDICT_WEIGHT = 0.05;
 const UEFA_CUP_BOOKMAKER_WEIGHT = 0.95;
@@ -467,7 +467,7 @@ function matchdayPicksAggregatePrefixForRound(
   round,
 ) {
   return bookmakerOnlyModeForRound(round)
-    ? 'matchday-picks-v12-strength-p30-b70'
+    ? 'matchday-picks-v13-strength-p82-b18'
     : 'matchday-picks-v2';
 }
 
@@ -14305,7 +14305,7 @@ async function precomputeUpcomingPredictData() {
               bookmakerOnlyModeForRound(
                 roundNumberOf(match),
               )
-                ? `predict30-bookmaker70-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+                ? `predict82-bookmaker18-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
                 : null,
               'hist2020to2025-allfamilies-v1',
             ]
@@ -14872,7 +14872,7 @@ async function archivePermanentAnalysisHistoryForFrozenMatches() {
               bookmakerOnlyModeForRound(
                 roundNumberOf(match),
               )
-                ? `predict30-bookmaker70-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
+                ? `predict82-bookmaker18-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`
                 : null,
               'hist2020to2025-allfamilies-v1',
             ]
@@ -18573,7 +18573,7 @@ app.get(
               .join('-')
           : bookmakerOnlyMode
             ? [
-                `predict30-bookmaker70-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`,
+                `predict82-bookmaker18-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`,
                 cumulativeHistoryCacheVariant,
               ]
                 .filter(Boolean)
@@ -20945,7 +20945,7 @@ async function getOrCreateMatchdayPickSnapshot({
       'serie-a';
 
   // Lo shortcut diretto esiste soltanto per l'eventuale regime 0/100.
-  // Con i blend ufficiali (30/70 nei campionati e 5/95 nelle coppe UEFA)
+  // Con i blend ufficiali (82/18 nei campionati e 5/95 nelle coppe UEFA)
   // passiamo dall'analisi completa, così ogni Top Signal usa realmente
   // entrambi i pesi.
   if (directBookmakerOnly) {
@@ -21620,7 +21620,7 @@ function multiGoalAnalysisCacheVariants({
     ) {
       variants.push(
         [
-          `predict30-bookmaker70-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`,
+          `predict82-bookmaker18-nullfix-analysisstats-v5-r${BOOKMAKER_ONLY_FROM_ROUND}plus`,
           cumulative,
         ].join('-'),
       );
